@@ -75,7 +75,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', app: 'RunaWay API' });
+  res.json({ status: 'ok', app: 'ServSoftBagm API' });
 });
 
 app.use('/api/auth', authRoutes);
@@ -107,5 +107,5 @@ app.use('/', whatsappWebhook);
 })();
 
 app.listen(PORT, () => {
-  console.log(`RunaWay API escuchando en http://localhost:${PORT}`);
+  console.log(`ServSoftBagm API escuchando en http://localhost:${PORT}`);
 });

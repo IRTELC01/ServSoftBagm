@@ -25,7 +25,7 @@ export default function Login() {
       }
       if (r.token) { setToken(r.token); setMsg('Acceso automático concedido'); window.location.href = '/dashboard' }
       else setMsg(r.error || 'No se pudo acceder automáticamente')
-    } catch (e) {
+    } catch {
       setMsg('No se pudo acceder automáticamente')
     }
   }

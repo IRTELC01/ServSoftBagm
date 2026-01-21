@@ -6,7 +6,7 @@ function InvoiceForm({ onCreated }) {
   const [customer_name, setCustomer] = useState('Cliente barrio')
   const [address, setAddress] = useState('Calle 1 # 2-3')
   const [phone, setPhone] = useState('3001234567')
-  const [service_type, setServiceType] = useState('revision')
+  const [service_type, setServiceType] = useState('soporte')
   const [service_value, setServiceValue] = useState(50000)
   const [line_items, setItems] = useState([])
   const [labor_cost, setLabor] = useState(0)
@@ -24,7 +24,7 @@ function InvoiceForm({ onCreated }) {
   const updateItem = (idx, key, val) => { const copy = [...line_items]; copy[idx] = { ...copy[idx], [key]: val }; setItems(copy) }
   const submit = async (e) => {
     e.preventDefault()
-    const baseItemName = ({revision:'Revisión mecánica', mecanica:'Mecánica general', aceite:'Cambio de aceite', repuestos:'Repuestos de moto'})[service_type] || 'Servicio'
+    const baseItemName = ({soporte:'Soporte técnico', mantenimiento:'Mantenimiento', desarrollo:'Desarrollo de software', licencias:'Licencias/Software'})[service_type] || 'Servicio'
     const payloadItems = [ { name: baseItemName, qty: 1, price: Number(service_value||0) }, ...line_items ]
     const r = await createInvoice({ customer_name, address, phone, line_items: payloadItems, labor_cost, vat_percent: vat_enabled ? vat_percent : 0, payment_method, notes })
     if (r.ok) onCreated();
@@ -54,10 +54,10 @@ function InvoiceForm({ onCreated }) {
       </div>
       <div className="grid md:grid-cols-4 gap-2">
         <select className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white" value={service_type} onChange={e=>setServiceType(e.target.value)}>
-          <option value="revision">Revisión mecánica</option>
-          <option value="mecanica">Mecánica general</option>
-          <option value="aceite">Cambio de aceite</option>
-          <option value="repuestos">Repuestos de moto</option>
+          <option value="soporte">Soporte técnico</option>
+          <option value="mantenimiento">Mantenimiento</option>
+          <option value="desarrollo">Desarrollo de software</option>
+          <option value="licencias">Licencias/Software</option>
         </select>
         <input type="number" className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/60" value={service_value} onChange={e=>setServiceValue(Number(e.target.value))} placeholder="Valor servicio" />
         <input type="number" className="px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/60" value={labor_cost} onChange={e=>setLabor(Number(e.target.value))} placeholder="Mano de obra" />
@@ -75,7 +75,7 @@ function InvoiceForm({ onCreated }) {
         </div>
       ))}
       <div className="flex gap-2">
-        <button type="button" className="px-3 py-1 rounded bg-white/10 border border-white/20" onClick={addItem}>Añadir repuesto</button>
+        <button type="button" className="px-3 py-1 rounded bg-white/10 border border-white/20" onClick={addItem}>Añadir ítem</button>
         <select className="px-3 py-1 rounded bg-white/10 border border-white/20 text-white" value={payment_method} onChange={e=>setPay(e.target.value)}>
           <option value="efectivo">Efectivo</option>
           <option value="tarjeta">Tarjeta</option>

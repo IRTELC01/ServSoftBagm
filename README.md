@@ -1,14 +1,13 @@
-# RunaWay — Montallantas Futurista
+# ServSoftBagm — Software, soporte e informática
 
-Aplicación web full‑stack para un taller de barrio (montallantas) con estilo futurista Norte Americano. Incluye:
+Aplicación web full‑stack para ofrecer servicios de desarrollo de software, soporte técnico, mantenimiento de equipos y recuperación de información. Conserva el estilo futurista con neon y tarjetas flotantes, e integra:
 
-- Landing pública con tarjetas flotantes y badges de vehículos.
+- Landing informativa con servicios de TI y casos de uso.
 - Acceso de administrador con registro y 2FA (TOTP).
 - Gestión de facturas y contabilidad básica (ingresos, gastos, activos y pasivos).
 - Backend Express + SQLite local.
 - Frontend React + Vite + Tailwind.
- - Enlaces a marcas oficiales y a marketplaces (OTRAS) desde la landing.
- - Integración inicial de WhatsApp: botón flotante y webhook básico de chatbot.
+- Integración inicial de WhatsApp: botón flotante y webhook básico de chatbot.
 
 ## Requisitos
 
@@ -31,7 +30,7 @@ Aplicación web full‑stack para un taller de barrio (montallantas) con estilo 
    - `cd client`
    - `npm run dev`
    - Abre `http://localhost:5173/`.
-   - Botón flotante de WhatsApp en la UI. Ajusta el número en `client/src/App.jsx`.
+   - Botón flotante de WhatsApp en la UI. Ajusta el número en `client/src/config.js` (CONTACT_WHATSAPP).
 
 ## Flujo de autenticación 2FA
 
@@ -59,28 +58,12 @@ Aplicación web full‑stack para un taller de barrio (montallantas) con estilo 
 - Inicializa git en el root:
   - `git init`
   - `git add .`
-  - `git commit -m "RunaWay: primera versión"`
+- `git commit -m "ServSoftBagm: primera versión"`
   - `git branch -M main`
-  - `git remote add origin https://github.com/<tu_usuario>/RunaWay.git`
+- `git remote add origin https://github.com/<tu_usuario>/ServSoftBagm.git`
   - `git push -u origin main`
 
 Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en una siguiente etapa.
-## Enlaces útiles (marketplace y distribuidores)
-
-- Landing incluye:
-  - Marcas oficiales (Carros): Renault, Hyundai, Honda, Nissan, y OTRAS → `https://listado.mercadolibre.com.co/repuestos-autos/`
-  - Marcas oficiales (Motos): Yamaha, Suzuki, Honda Motos, Bajaj (Pulsar/Discover), AKT, y OTRAS → `https://listado.mercadolibre.com.co/repuestos-motos/`
-  - Directorio regional (Bogotá, Medellín, Cali) con búsquedas prefiltradas a mayoristas de autopartes, repuestos de motos y distribuidores de llantas.
-
-- Distribuidores de Llantas:
-  - Michelin (localizador): `https://www.michelin.com.co/auto/dealer-locator`
-  - Bridgestone (red de tiendas): `https://www.bridgestone.com.co/llantera/`
-
-- Mayoristas Motos:
-  - KTO Partes: `https://www.ktopartes.com/`
-  - ELPO SAS: `https://elposas.com/`
-  - Mundimotos: `https://mundimotos.com/`
-  - Motozone Colombia: `https://motozonecolombia.com/`
 
 ## Integración WhatsApp (Chatbot básico)
 
@@ -94,10 +77,10 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
   2. Obtener `WHATSAPP_TOKEN` y `WHATSAPP_PHONE_NUMBER_ID`.
   3. Configurar `WHATSAPP_VERIFY_TOKEN` tanto en `.env` como en el panel de Meta.
   4. Exponer públicamente `GET/POST /webhooks/whatsapp` (ngrok o similar) y registrar el endpoint en Meta.
-  5. Probar enviando mensajes al número: el bot contesta a “hola”, “llanta”, “aceite”, “mecánica”.
+5. Probar enviando mensajes al número: el bot contesta a “hola”, “soporte”, “mantenimiento”, “desarrollo”.
 
 - Botón de WhatsApp en el frontend:
-  - Edita `client/src/App.jsx` y reemplaza `573001234567` por tu número real.
+  - Edita `client/src/config.js` y define `CONTACT_WHATSAPP` con tu número en formato internacional (ej. 57XXXXXXXXXX).
   - Puedes prellenar mensajes: `https://wa.me/57NUMERO?text=Hola%20quiero%20cotizar`.
 ## Arranque rápido (automatizado)
 
@@ -108,12 +91,12 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
   - Credenciales: `admin / runaway123`.
 
 - Verificar y estabilizar Render:
-  - `powershell -ExecutionPolicy Bypass -File .\scripts\render-verify.ps1 -BackendUrl 'https://<TU-BACKEND>.onrender.com' -FrontendUrl 'https://<TU-FRONTEND>.onrender.com'`
+- `powershell -ExecutionPolicy Bypass -File .\scripts\render-verify.ps1 -BackendUrl 'https://<TU-BACKEND>.onrender.com' -FrontendUrl 'https://<TU-FRONTEND>.onrender.com'`
   - Comprueba `/api/auth/health` del backend y resetea el admin con 2FA desactivado.
   - Abre `https://<TU-FRONTEND>.onrender.com/login` para probar.
 ## Instalación local de datos
 
 - Soporte de `DATA_DIR` en backend para ubicar la base de datos y archivos en directorio local preferido.
-- En Windows, se sugiere: `C:\Users\TU_USUARIO\Documents\RunaWay`.
+- En Windows, se sugiere: `C:\Users\TU_USUARIO\Documents\ServSoftBagm`.
 - Configura `DATA_DIR` en `server/.env` (copiar desde `.env.example`).
 - Opcional: usaremos un script PowerShell `scripts/setup-local.ps1` para crear carpetas y configurar `.env` automáticamente.

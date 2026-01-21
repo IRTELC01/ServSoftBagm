@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: servsoft
+      POSTGRES_PASSWORD: servsoft
+      POSTGRES_DB: servsoftbagm
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./server:/app
+    environment:
+      DB_DRIVER: pg
+      DATABASE_URL: postgresql://servsoft:servsoft@db:5432/servsoftbagm
+      JWT_SECRET: supersecreto_cambia_esto
+      FRONTEND_ORIGIN: http://localhost:5173
+      OPEN_ACCESS: "true"
+      DEFAULT_ADMIN_PASSWORD: runaway123
+    command: bash -lc "npm install && node index.js"
+    depends_on:
+      - db
+    ports:
+      - "3001:3001"
+
+  client:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./client:/app
+    environment:
+      VITE_API_URL: http://localhost:3001/api
+      VITE_OPEN_ACCESS: "true"
+    command: bash -lc "npm install && npm run dev -- --host"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+
+volumes:
+  pgdata:

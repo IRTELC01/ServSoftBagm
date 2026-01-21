@@ -27,10 +27,10 @@ router.post('/webhooks/whatsapp', async (req, res) => {
       const from = msg.from; // número del cliente (incluye prefijo país)
       const text = (msg.text?.body || '').toLowerCase();
 
-      let reply = 'Hola, somos RunaWay. ¿Qué servicio necesitas?\n1) Llantas\n2) Aceite\n3) Mecánica rápida';
-      if (text.includes('1') || text.includes('llanta')) reply = 'Para llantas, indícanos medida (ej. 205/55R16) y marca preferida.';
-      else if (text.includes('2') || text.includes('aceite')) reply = 'Para cambio de aceite, dinos tipo (10W40, 20W50) y marca.';
-      else if (text.includes('3') || text.includes('mecánica')) reply = 'Para mecánica rápida, cuéntanos el síntoma (frenos, suspensión, etc.).';
+      let reply = 'Hola, somos ServSoftBagm. ¿Qué servicio necesitas?\n1) Soporte\n2) Mantenimiento\n3) Desarrollo';
+      if (text.includes('1') || text.includes('soporte')) reply = 'Cuéntanos tu incidencia y el equipo afectado. Podemos asistir remoto o presencial.';
+      else if (text.includes('2') || text.includes('mantenimiento')) reply = 'Indica tipo de equipo (PC, impresora, móvil) y síntomas.';
+      else if (text.includes('3') || text.includes('desarrollo')) reply = 'Describe el proceso a automatizar y el entorno actual.';
 
       if (PHONE_NUMBER_ID && WHATSAPP_TOKEN) {
         await fetch(`https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`, {

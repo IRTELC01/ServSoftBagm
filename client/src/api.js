@@ -9,11 +9,11 @@ const API_URL = API_BASE
 // Helper: manejar 401 borrando token y redirigiendo a /login
 async function jsonWithAuth(response) {
   if (response.status === 401) {
-    try { localStorage.removeItem('runaway_token') } catch {}
+    try { localStorage.removeItem('runaway_token') } catch { void 0 }
     // Intentar leer mensaje de error, pero no bloquear si falla
     let body = null
-    try { body = await response.json() } catch {}
-    try { window.location.href = '/login' } catch {}
+    try { body = await response.json() } catch { void 0 }
+    try { window.location.href = '/login' } catch { void 0 }
     return body || { error: 'No autorizado' }
   }
   return response.json()

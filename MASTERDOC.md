@@ -1,10 +1,10 @@
-# MASTERDOC — RunaWay
+# MASTERDOC — ServSoftBagm
 
 ## Visión
-RunaWay es una app para un montallantas de barrio, con estética moderna futurista, que facilita:
-- Difusión de servicios (landing bonita).
-- Operación del taller (facturas locales y contabilidad básica).
-- Acceso seguro del propietario con 2FA.
+ServSoftBagm es una app para ofrecer servicios de software e informática, con estética moderna futurista, que facilita:
+- Difusión de servicios de TI (landing informativa).
+- Operación del negocio (facturas locales y contabilidad básica).
+- Acceso seguro del administrador con 2FA.
 
 ## Alcance de la primera etapa
 - Backend local con Express + SQLite (Better‑SQLite3).
@@ -41,7 +41,7 @@ RunaWay es una app para un montallantas de barrio, con estética moderna futuris
 Alta (80–90%) para operar localmente en Windows con Node y SQLite. Tecnología simple, sin dependencias externas complejas. Riesgos: manejo de datos sensibles en local, ausencia de respaldo, necesidad de buenas prácticas (backup DB, rotación de `JWT_SECRET`).
 
 ## Etapas futuras (sugeridas)
-- Etapa 2: Inventario de llantas/aceites; reportes por período; exportación CSV.
+- Etapa 2: Portafolio de servicios, casos de uso y testimonios; reportes y exportación CSV.
 - Etapa 3: Usuarios adicionales con roles; auditoría; impuestos y plantillas de factura.
 - Etapa 4: Docker; despliegue en servidor; TLS y dominios.
 
@@ -51,6 +51,6 @@ Alta (80–90%) para operar localmente en Windows con Node y SQLite. Tecnología
 - UI Tailwind con toques neon/glow y tarjetas flotantes.
 
 ## Notas de seguridad
-- Guardar `runaway.db` de forma segura y respaldarla.
+- Guardar la base de datos de forma segura y respaldarla.
 - `.env` no debe versionarse con secretos.
 - Limitar origen CORS al dominio real en producción.
