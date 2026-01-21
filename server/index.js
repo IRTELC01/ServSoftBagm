@@ -85,10 +85,11 @@ app.use('/api/accounting', accountingRoutes);
 app.use('/', whatsappWebhook);
 
 // Asegurar usuario admin con contraseña por defecto
-(() => {
+(async () => {
   try {
-    const DEFAULT_ADMIN_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD || 'runaway123';
+    const DEFAULT_ADMIN_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD || 'servsoft123';
     const RESET_ON_START = String(process.env.RESET_ADMIN_PASSWORD_ON_START || 'false') === 'true';
+    if (db.ready && typeof db.ready.then === 'function') await db.ready;
     const admin = db.prepare('SELECT id FROM users WHERE username = ?').get('admin');
     if (!admin) {
       const hash = bcrypt.hashSync(DEFAULT_ADMIN_PASSWORD, 10);

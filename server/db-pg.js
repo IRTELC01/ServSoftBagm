@@ -88,10 +88,11 @@ async function exec(sql) {
   }
 }
 
+const ready = initSchema().catch(() => {});
+
 module.exports = {
   prepare,
   exec,
   pragma() {},
+  ready,
 };
-
-initSchema().catch(() => {});

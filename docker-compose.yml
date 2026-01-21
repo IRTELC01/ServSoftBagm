@@ -22,7 +22,7 @@ services:
       JWT_SECRET: supersecreto_cambia_esto
       FRONTEND_ORIGIN: http://localhost:5173
       OPEN_ACCESS: "true"
-      DEFAULT_ADMIN_PASSWORD: runaway123
+      DEFAULT_ADMIN_PASSWORD: servsoft123
     command: bash -lc "npm install && node index.js"
     depends_on:
       - db
@@ -37,7 +37,7 @@ services:
     environment:
       VITE_API_URL: http://localhost:3001/api
       VITE_OPEN_ACCESS: "true"
-    command: bash -lc "npm install && npm run dev -- --host"
+    command: bash -lc "npm install && npm run build && npm run preview -- --host --port 5173"
     ports:
       - "5173:5173"
     depends_on:

@@ -8,6 +8,7 @@ import Register from './pages/Register'
 import Setup2FA from './pages/Setup2FA'
 import Dashboard from './pages/Dashboard'
 import LoginPhone from './pages/LoginPhone'
+import Service from './pages/Service'
 import { login, register, setToken } from './api'
 import { BRAND_NAME, CONTACT_EMAIL, CONTACT_WHATSAPP } from './config'
 
@@ -17,10 +18,11 @@ function Navbar() {
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="font-bold text-xl flex items-center gap-2">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ color: 'var(--color-neon-green)' }}>
-            <circle cx="8" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
-            <circle cx="8" cy="12" r="2.5" stroke="currentColor" strokeWidth="2" />
-            <circle cx="15.5" cy="12" r="5" stroke="currentColor" strokeWidth="2" opacity="0.7" />
-            <circle cx="15.5" cy="12" r="2.5" stroke="currentColor" strokeWidth="2" opacity="0.7" />
+            <rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" strokeWidth="2" />
+            <path d="M7 9h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M7 13h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M7 17h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="18" cy="17" r="1.2" fill="currentColor" />
           </svg>
           <span className="neon-title-green">{BRAND_NAME}</span>
         </Link>
@@ -81,18 +83,9 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/setup-2fa" element={<Setup2FA />} />
           <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+          <Route path="/servicio/:slug" element={<Service />} />
         </Routes>
         <Footer />
-        {CONTACT_WHATSAPP && (
-          <a
-            href={`https://wa.me/${CONTACT_WHATSAPP}?text=Hola%20quiero%20cotizar`}
-            target="_blank"
-            rel="noreferrer"
-            className="fixed bottom-16 right-4 px-4 py-2 rounded-full bg-green-500/80 hover:bg-green-500 shadow-lg border border-white/10"
-          >
-            WhatsApp
-          </a>
-        )}
       </div>
     </BrowserRouter>
   )

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createInvoice, listInvoices, getSummary, addTransaction } from '../api'
-import { WORKSHOP_NAME, WORKSHOP_PHONES, WORKSHOP_ADDRESS, WORKSHOP_NIT_LABEL } from '../config'
+import { WORKSHOP_NAME, WORKSHOP_PHONES, WORKSHOP_ADDRESS, WORKSHOP_NIT_LABEL, CONTACT_WHATSAPP, BRAND_NAME } from '../config'
 
 function InvoiceForm({ onCreated }) {
   const [customer_name, setCustomer] = useState('Cliente barrio')
@@ -181,6 +181,40 @@ export default function Dashboard() {
       </section>
 
       <section className="card-float p-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <div>
+            <h3 className="font-semibold">Ayuda y chat</h3>
+            <p className="text-sm text-white/80">¿Dudas? Elige una opción o escríbenos por WhatsApp.</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                className="px-3 py-1 rounded bg-white/10 border border-white/20"
+                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, necesito soporte técnico en ' + BRAND_NAME)}`,'_blank')}
+              >Soporte técnico</button>
+              <button
+                className="px-3 py-1 rounded bg-white/10 border border-white/20"
+                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, quiero mantenimiento de equipos con ' + BRAND_NAME)}`,'_blank')}
+              >Mantenimiento</button>
+              <button
+                className="px-3 py-1 rounded bg-white/10 border border-white/20"
+                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, deseo desarrollo de software a medida con ' + BRAND_NAME)}`,'_blank')}
+              >Desarrollo</button>
+            </div>
+          </div>
+          {CONTACT_WHATSAPP && (
+            <a
+              href={`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, vengo del Dashboard de ' + BRAND_NAME)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded bg-green-500/80 hover:bg-green-500 border border-white/20"
+            >
+              <span role="img" aria-label="whatsapp">💬</span>
+              <span>WhatsApp</span>
+            </a>
+          )}
+        </div>
+      </section>
+
+      <section className="card-float p-4">
         <h3 className="font-semibold">Transacción manual</h3>
         <form className="mt-3 grid md:grid-cols-5 gap-2" onSubmit={addTx}>
           <select className="px-2 py-1 rounded bg-white/10 border border-white/20 text-white" value={tx.type} onChange={e=>setTx(v=>({...v,type:e.target.value}))}>
@@ -255,6 +289,49 @@ export default function Dashboard() {
               >Descargar .txt</button>
             </div>
           ))}
+        </div>
+      </section>
+      
+      <section className="card-float p-6 mt-8">
+        <h3 className="text-lg font-semibold">Contacto y ubicación</h3>
+        <p className="mt-2 text-sm text-white/80">
+          Teléfonos: {WORKSHOP_PHONES.join(', ')}
+        </p>
+        <p className="text-sm text-white/80">
+          {WORKSHOP_ADDRESS}
+        </p>
+        <div className="mt-4 rounded-xl overflow-hidden border border-white/10 bg-white/5 aspect-[16/9]">
+          <iframe
+            title="Ubicación ServSoftBagm"
+            src="https://www.google.com/maps?q=Medell%C3%ADn%20Campo%20Vald%C3%A9s&output=embed"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <a
+            href="https://maps.app.goo.gl/Mcw71vw36SGgfT7J9"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded bg-white/10 hover:bg-white/15 border border-white/20"
+          >
+            <span role="img" aria-label="map">🗺️</span>
+            <span>Ver ubicación en Google Maps</span>
+          </a>
+          {CONTACT_WHATSAPP && (
+            <a
+              href={`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, quiero hablar con ' + BRAND_NAME)}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded bg-neon-cyan/60 hover:bg-neon-cyan/80 border border-white/20"
+            >
+              <span role="img" aria-label="whatsapp">💬</span>
+              <span>Hablar por WhatsApp</span>
+            </a>
+          )}
         </div>
       </section>
     </main>

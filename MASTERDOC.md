@@ -1,5 +1,43 @@
 # MASTERDOC — ServSoftBagm
 
+## Bitácora del proyecto
+
+- Fecha y hora: 2026-01-20 00:00 (UTC-5 aprox.)
+- Estado actual: rebranding completo a ServSoftBagm; frontend con landing y dashboard ajustados; backend conmutando entre SQLite y PostgreSQL; Docker Compose operativo; integración básica de WhatsApp (bot y botón) funcionando.
+- Cambios clave:
+  - Actualización del README con banners responsivos, estructura, ERD, Docker y Postgres.
+  - Configuración de contacto WhatsApp a `573127818103`; botón y panel de ayuda añadidos al final del Dashboard.
+  - `docker-compose.yml` ajustado para usar `DEFAULT_ADMIN_PASSWORD=servsoft123`.
+  - Esquema PostgreSQL validado y documentado (tablas: users, invoices, transactions, user_phones, user_otps).
+  - Scripts PowerShell listos para arranque rápido local.
+- Comandos utilizados y motivos:
+  - Desarrollo local:
+    - `cd server && npm run dev` — arranca backend Express.
+    - `cd client && npm run dev` — arranca frontend Vite.
+  - Configuración de entorno:
+    - Definir `DB_DRIVER=pg` y `DATABASE_URL` — activar PostgreSQL.
+    - `DEFAULT_ADMIN_PASSWORD=servsoft123` — establecer contraseña por defecto.
+    - `RESET_ADMIN_PASSWORD_ON_START=true` — forzar reseteo de contraseña admin al iniciar.
+  - Docker:
+    - `docker compose up` — orquestar Postgres, backend y frontend localmente.
+  - WhatsApp Cloud API:
+    - Exponer `GET/POST /webhooks/whatsapp` mediante túnel (ngrok) para pruebas con Meta.
+  - GitHub:
+    - `git init && git add . && git commit -m "ServSoftBagm: primera versión"` — inicialización de repo.
+    - `git branch -M main && git remote add origin https://github.com/IRTELC01/ServSoftBagm.git` — configurar rama principal y remoto.
+    - `git push -u origin main` — primer push al repositorio.
+    - En caso de remoto previo: `git remote set-url origin ...` — corregir URL de remoto.
+- Próximos pasos sugeridos:
+  - Añadir roles y usuarios adicionales; auditoría y registro de actividad.
+  - Exportación de reportes CSV/PDF y plantillas avanzadas de factura.
+  - Fortalecer chatbot con flujo conversacional y FAQ dinámicas; integrar base de conocimiento.
+  - Seguridad: gestión de secretos, CORS de producción, TLS y dominio real.
+  - Despliegue en servidor (Docker) y backups programados de la base de datos.
+- Estado del proyecto:
+  - Funcional para operación local con SQLite o PostgreSQL.
+  - UI neon estable; landing con servicios de TI y casos de uso; dashboard con facturación y contabilidad básica.
+  - Integración WhatsApp verificada en frontend; backend listo para Cloud API.
+
 ## Visión
 ServSoftBagm es una app para ofrecer servicios de software e informática, con estética moderna futurista, que facilita:
 - Difusión de servicios de TI (landing informativa).

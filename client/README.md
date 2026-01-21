@@ -1,4 +1,23 @@
-# React + Vite
+# Cliente (React + Vite)
+
+Frontend de ServSoftBagm construido con React 19, Vite 7 y Tailwind 4.
+
+## Scripts
+
+- `npm run dev`: arranca el servidor de desarrollo (puerto 5173 por defecto)
+- `npm run build`: construye la aplicación para producción
+- `npm run preview`: sirve la build localmente
+- `npm run lint`: revisa el código con ESLint
+
+## Configuración
+
+- API: `VITE_API_URL` (por defecto `http://localhost:3001/api`)
+- Acceso abierto opcional: `VITE_OPEN_ACCESS=true` (para desarrollo)
+- WhatsApp: edita `src/config.js` y define `CONTACT_WHATSAPP`
+
+## Guía completa
+
+Consulta el README principal en el root del proyecto para detalle de backend, base de datos y orquestación.
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
