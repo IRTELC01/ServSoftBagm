@@ -5,7 +5,7 @@ Aplicación web full‑stack para ofrecer servicios de desarrollo de software, s
 - Landing informativa con servicios de TI y casos de uso.
 - Acceso de administrador con registro y 2FA (TOTP).
 - Gestión de facturas y contabilidad básica (ingresos, gastos, activos y pasivos).
-- Backend Express + SQLite local.
+- Backend Express + SQLite/PG (conmutables por entorno).
 - Frontend React + Vite + Tailwind.
 - Integración inicial de WhatsApp: botón flotante y webhook básico de chatbot.
 
@@ -18,6 +18,8 @@ Aplicación web full‑stack para ofrecer servicios de desarrollo de software, s
 1. Backend:
    - `cd server`
    - Copia `.env.example` a `.env` y ajusta `JWT_SECRET`.
+   - Para SQLite local: dejar `DB_DRIVER` vacío.
+   - Para PostgreSQL: definir `DB_DRIVER=pg` y `DATABASE_URL`.
    - `npm run dev`
    - API en `http://localhost:3001/`.
    - Webhook de WhatsApp: `GET/POST http://localhost:3001/webhooks/whatsapp` (requiere exposición pública para Meta).
@@ -60,7 +62,7 @@ Aplicación web full‑stack para ofrecer servicios de desarrollo de software, s
   - `git add .`
 - `git commit -m "ServSoftBagm: primera versión"`
   - `git branch -M main`
-- `git remote add origin https://github.com/<tu_usuario>/ServSoftBagm.git`
+- `git remote add origin https://github.com/IRTELC01/ServSoftBagm.git`
   - `git push -u origin main`
 
 Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en una siguiente etapa.
@@ -82,6 +84,17 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
 - Botón de WhatsApp en el frontend:
   - Edita `client/src/config.js` y define `CONTACT_WHATSAPP` con tu número en formato internacional (ej. 57XXXXXXXXXX).
   - Puedes prellenar mensajes: `https://wa.me/57NUMERO?text=Hola%20quiero%20cotizar`.
+## Orquestación con Docker
+
+- Requiere Docker y Docker Compose.
+- En el root:
+  - `docker compose up`
+- Servicios:
+  - Base de datos Postgres (puerto 5432)
+  - Backend en `http://localhost:3001` (usa `DB_DRIVER=pg` y `DATABASE_URL`)
+  - Frontend en `http://localhost:5173`
+  - Variables clave ya definidas en `docker-compose.yml`.
+
 ## Arranque rápido (automatizado)
 
 - Local en un solo comando:
@@ -90,10 +103,10 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
   - Hace todo: prepara `server/.env` y datos, arranca backend, verifica salud, resetea admin, arranca frontend y abre `/login`.
   - Credenciales: `admin / runaway123`.
 
-- Verificar y estabilizar Render:
-- `powershell -ExecutionPolicy Bypass -File .\scripts\render-verify.ps1 -BackendUrl 'https://<TU-BACKEND>.onrender.com' -FrontendUrl 'https://<TU-FRONTEND>.onrender.com'`
-  - Comprueba `/api/auth/health` del backend y resetea el admin con 2FA desactivado.
-  - Abre `https://<TU-FRONTEND>.onrender.com/login` para probar.
+## Notas
+
+- El backend soporta `DATA_DIR` para ubicar la base de datos y archivos locales (SQLite).
+- En producción se recomienda PostgreSQL.
 ## Instalación local de datos
 
 - Soporte de `DATA_DIR` en backend para ubicar la base de datos y archivos en directorio local preferido.
