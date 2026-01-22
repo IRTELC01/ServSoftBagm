@@ -120,6 +120,7 @@ export default function Dashboard() {
   }
 
   return (
+    <div className="bg-black min-h-screen">
     <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       <section className="grid md:grid-cols-2 gap-6">
         <InvoiceForm onCreated={refresh} />
@@ -188,21 +189,21 @@ export default function Dashboard() {
             <div className="mt-2 flex flex-wrap gap-2">
               <button
                 className="px-3 py-1 rounded bg-white/10 border border-white/20"
-                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, necesito soporte técnico en ' + BRAND_NAME)}`,'_blank')}
+                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('soporte')}`,'_blank')}
               >Soporte técnico</button>
               <button
                 className="px-3 py-1 rounded bg-white/10 border border-white/20"
-                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, quiero mantenimiento de equipos con ' + BRAND_NAME)}`,'_blank')}
+                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('mantenimiento')}`,'_blank')}
               >Mantenimiento</button>
               <button
                 className="px-3 py-1 rounded bg-white/10 border border-white/20"
-                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, deseo desarrollo de software a medida con ' + BRAND_NAME)}`,'_blank')}
+                onClick={() => window.open(`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('desarrollo')}`,'_blank')}
               >Desarrollo</button>
             </div>
           </div>
           {CONTACT_WHATSAPP && (
             <a
-              href={`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('Hola, vengo del Dashboard de ' + BRAND_NAME)}`}
+              href={`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('menu')}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-3 py-2 rounded bg-green-500/80 hover:bg-green-500 border border-white/20"
@@ -292,7 +293,7 @@ export default function Dashboard() {
         </div>
       </section>
       
-      <section className="card-float p-6 mt-8">
+      <section className="card-float p-5 mt-8">
         <h3 className="text-lg font-semibold">Contacto y ubicación</h3>
         <p className="mt-2 text-sm text-white/80">
           Teléfonos: {WORKSHOP_PHONES.join(', ')}
@@ -300,7 +301,7 @@ export default function Dashboard() {
         <p className="text-sm text-white/80">
           {WORKSHOP_ADDRESS}
         </p>
-        <div className="mt-4 rounded-xl overflow-hidden border border-white/10 bg-white/5 aspect-[16/9]">
+        <div className="mt-4 rounded-xl overflow-hidden border border-white/10 bg-white/5 h-56">
           <iframe
             title="Ubicación ServSoftBagm"
             src="https://www.google.com/maps?q=Medell%C3%ADn%20Campo%20Vald%C3%A9s&output=embed"
@@ -335,5 +336,6 @@ export default function Dashboard() {
         </div>
       </section>
     </main>
+    </div>
   )
 }

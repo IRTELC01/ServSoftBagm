@@ -52,18 +52,9 @@ export default function Landing() {
           </Link>
         ))}
       </section>
+      
 
-      <section className="mt-12 card-float p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-bold">Administrador</h2>
-            <p className="text-white/80 text-sm">Acceda para registrar facturas y ver contabilidad.</p>
-          </div>
-          <a href="/login" className="px-4 py-2 rounded-md bg-neon-cyan/60 hover:bg-neon-cyan/80">Ir al acceso</a>
-        </div>
-      </section>
-
-      <section className="mt-12 card-float p-6">
+      <section className="mt-12 card-float p-5">
         <h3 className="text-lg font-semibold">Casos de uso</h3>
         <ul className="mt-3 text-sm text-white/80 list-disc ml-4">
           <li>Parqueaderos: software de control, reportes y facturación.</li>
@@ -74,11 +65,11 @@ export default function Landing() {
         </ul>
       </section>
 
-      <section className="mt-12 card-float p-6">
+      <section className="mt-12 card-float p-5">
         <h3 className="text-lg font-semibold">Contacto y ubicación</h3>
         <p className="mt-2 text-white/80 text-sm">{phonesText}</p>
         {addressText && <p className="text-white/80 text-sm">{addressText}</p>}
-        <div className="mt-4 rounded-xl overflow-hidden border border-white/10 aspect-[16/9]">
+        <div className="mt-4 rounded-xl overflow-hidden border border-white/10 h-56">
           <iframe
             title="Ubicación ServSoftBagm en Google Maps"
             src="https://www.google.com/maps?q=Medell%C3%ADn%20Campo%20Vald%C3%A9s&output=embed"
@@ -101,7 +92,7 @@ export default function Landing() {
           </a>
           {CONTACT_WHATSAPP && (
             <a
-              href={`https://wa.me/${CONTACT_WHATSAPP}?text=Hola%20quiero%20informaci%C3%B3n%20de%20servicios`}
+              href={`https://wa.me/${CONTACT_WHATSAPP}?text=${encodeURIComponent('menu')}`}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-3 py-2 rounded bg-neon-cyan/60 hover:bg-neon-cyan/80 border border-white/20 text-sm"

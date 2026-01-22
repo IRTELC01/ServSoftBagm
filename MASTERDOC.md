@@ -92,3 +92,38 @@ Alta (80â€“90%) para operar localmente en Windows con Node y SQLite. TecnologÃ­a
 - Guardar la base de datos de forma segura y respaldarla.
 - `.env` no debe versionarse con secretos.
 - Limitar origen CORS al dominio real en producciÃ³n.
+## Actualizaciones recientes (enero 2026)
+- Landing: héroe con título centrado sobre imagen full-width y tarjeta unificada de Contacto + Ubicación al final con mapa visible (iframe).
+- Servicios: textos descriptivos, secciones “lo que incluye” y galerías con imágenes locales fijas (Imagen2.png, Imagen3.png, etc.) evitando mezclas.
+- WhatsApp: enlaces estandarizados con palabras clave por servicio; chatbot ampliado con flujo “recuperación”; endpoint de prueba y sesiones con expiración.
+- Dashboard: fondo negro para mayor contraste con tarjetas neon y responsividad preservada.
+- Visibilidad: reconstrucción del cliente para evitar caché del preview al usar contenedores.
+
+## Comandos ejecutados y propósito
+- Desarrollo: cd client && npm run dev | cd server && npm run dev
+- Build/preview: cd client && npm run build | cd client && npm run preview
+- Lint: cd client && npm run lint
+- Docker (refrescar cambios del frontend): docker compose restart client | docker compose up -d --force-recreate client
+- Puertos (Vite): cambio automático a 5174 cuando 5173 está ocupado.
+- Git (remoto existente): git remote set-url origin https://github.com/IRTELC01/ServSoftBagm.git
+- Túnel para webhooks: 
+grok http 3000 (o el puerto real del backend) para probar WhatsApp Cloud.
+
+## Técnicas de diagnóstico y corrección
+- Ubicación correcta de componentes según referencia visual (Landing vs Dashboard).
+- Estandarizar palabras clave en mensajes prellenados de WhatsApp para disparar flujos del bot.
+- Asignar imágenes locales a cada servicio para eliminar mezclas en galerías.
+- Logging del bot y endpoint de prueba para validar recepción y respuestas.
+- Reinicio/forzado de recreación del contenedor para invalidar caché de build/preview.
+- Verificar puertos ocupados y aceptar el fallback automático de Vite.
+
+## WhatsApp Cloud (pendiente)
+- Requisitos: adquisición de SIM y activación del número en Meta.
+- Pasos previstos: configurar VERIFY_TOKEN y número; verificar webhook (GET); habilitar envío desde Cloud; actualizar CONTACT_WHATSAPP en client/src/config.js; probar con endpoint de prueba y flujos por palabras clave.
+- Estado: pendiente SIM; backend listo y enlaces del frontend coordinados.
+
+## Referencias de código
+- [Landing.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Landing.jsx)
+- [Service.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Service.jsx)
+- [Dashboard.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Dashboard.jsx)
+- [whatsapp.js](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/server/routes/whatsapp.js)
