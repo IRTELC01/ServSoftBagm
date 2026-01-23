@@ -23,6 +23,9 @@ services:
       FRONTEND_ORIGIN: http://localhost:5173
       OPEN_ACCESS: "true"
       DEFAULT_ADMIN_PASSWORD: servsoft123
+      WHATSAPP_VERIFY_TOKEN: change_me_verify
+      WHATSAPP_TOKEN: change_me_bearer_token
+      WHATSAPP_PHONE_NUMBER_ID: ""
     command: bash -lc "npm install && node index.js"
     depends_on:
       - db

@@ -23,13 +23,19 @@ router.post('/register', async (req, res) => {
   return res.json({ ok: true, userId: info.lastInsertRowid });
 });
 
-// Generar y mostrar QR para 2FA (TOTP)
-router.post('/setup-2fa', async (req, res) => {
+// Generar y mostrar QR para 2FA (TOTP) — requiere autenticación
+router.post('/setup-2fa', requireAuth, async (req, res) => {
   const { username } = req.body;
-  const user = await db.prepare('SELECT * FROM users WHERE username = ?').get(username);
-  if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-  const secret = speakeasy.generateSecret({ name: `ServSoftBagm (${username})` });
-  await db.prepare('UPDATE users SET twofa_secret = ? WHERE id = ?').run(secret.base32, user.id);
+  // Sólo el propio usuario puede configurar su 2FA; admin puede configurar el suyo o ayudar a otro
+  const requester = await db.prepare('SELECT id, username, role FROM users WHERE id = ?').get(req.user.id);
+  if (!requester) return res.status(401).json({ error: 'No autorizado' });
+  const target = await db.prepare('SELECT id, username FROM users WHERE username = ?').get(username);
+  if (!target) return res.status(404).json({ error: 'Usuario no encontrado' });
+  const isSelf = requester.username === target.username;
+  const isAdmin = String(requester.role || '') === 'admin';
+  if (!isSelf && !isAdmin) return res.status(403).json({ error: 'No tiene permisos para configurar 2FA de otro usuario' });
+  const secret = speakeasy.generateSecret({ name: `ServSoftBagm (${target.username})` });
+  await db.prepare('UPDATE users SET twofa_secret = ? WHERE id = ?').run(secret.base32, target.id);
   qrcode.toDataURL(secret.otpauth_url, (err, dataUrl) => {
     if (err) return res.status(500).json({ error: 'No se pudo generar QR' });
     return res.json({ qr: dataUrl, secret: secret.base32 });
@@ -87,8 +93,9 @@ router.post('/login', async (req, res) => {
   if (!user) return res.status(401).json({ error: 'Credenciales inválidas' });
   const ok = bcrypt.compareSync(password, user.password_hash);
   if (!ok) return res.status(401).json({ error: 'Credenciales inválidas' });
-  // 2FA ahora es opcional: si el usuario tiene secreto y envía token, verificar; si no, permitir acceso.
-  if (user.twofa_secret && token) {
+  // 2FA obligatorio cuando existe secreto configurado
+  if (user.twofa_secret) {
+    if (!token) return res.status(401).json({ error: 'Código 2FA requerido' });
     const verified = speakeasy.totp.verify({
       secret: user.twofa_secret,
       encoding: 'base32',
@@ -99,6 +106,13 @@ router.post('/login', async (req, res) => {
   }
   const jwtToken = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '12h' });
   return res.json({ token: jwtToken });
+});
+
+// Perfil del usuario actual
+router.get('/me', requireAuth, async (req, res) => {
+  const user = await db.prepare('SELECT id, username, role, plan FROM users WHERE id = ?').get(req.user.id);
+  if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+  return res.json({ user });
 });
 
 // Cambiar contraseña (requiere sesión)

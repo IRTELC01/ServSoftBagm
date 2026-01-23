@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createInvoice, listInvoices, getSummary, addTransaction } from '../api'
+import { createInvoice, listInvoices, getSummary, addTransaction, getMe } from '../api'
 import { WORKSHOP_NAME, WORKSHOP_PHONES, WORKSHOP_ADDRESS, WORKSHOP_NIT_LABEL, CONTACT_WHATSAPP, BRAND_NAME } from '../config'
 
 function InvoiceForm({ onCreated }) {
@@ -99,6 +99,7 @@ export default function Dashboard() {
   const [summary, setSummary] = useState({ income:0, expense:0, assets:0, liabilities:0, profit:0 })
   const [tx, setTx] = useState({ type:'expense', category:'insumos', amount: 10000, reference: 'compra de tornillos' })
   const [compactView, setCompactView] = useState(false)
+  const [me, setMe] = useState(null)
 
   const invoiceSummary = useMemo(() => {
     const count = invoices.length
@@ -113,7 +114,12 @@ export default function Dashboard() {
     const sum = await getSummary(); setSummary(sum || summary)
   }
 
-  useEffect(() => { refresh() }, [])
+  useEffect(() => {
+    (async () => {
+      try { const m = await getMe(); setMe(m?.user || null) } catch { setMe(null) }
+      await refresh()
+    })()
+  }, [])
 
   const addTx = async (e) => {
     e.preventDefault(); const r = await addTransaction({ ...tx, amount: Number(tx.amount) }); if (r.ok) refresh()
@@ -124,6 +130,7 @@ export default function Dashboard() {
     <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       <section className="grid md:grid-cols-2 gap-6">
         <InvoiceForm onCreated={refresh} />
+        {(me?.plan === 'premium' || me?.role === 'admin') ? (
         <div className="card-float p-4">
           <h3 className="font-semibold">Resumen de facturación</h3>
           <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
@@ -179,6 +186,12 @@ export default function Dashboard() {
             >Descargar .txt</button>
           </div>
         </div>
+        ) : (
+          <div className="card-float p-4">
+            <h3 className="font-semibold">Resumen de facturación</h3>
+            <p className="text-sm text-white/80 mt-2">Función premium. Realiza facturas simples e impresión sin límite. Para análisis y tablero avanzado, activa el plan.</p>
+          </div>
+        )}
       </section>
 
       <section className="card-float p-4">
@@ -215,6 +228,7 @@ export default function Dashboard() {
         </div>
       </section>
 
+      {(me?.plan === 'premium' || me?.role === 'admin') && (
       <section className="card-float p-4">
         <h3 className="font-semibold">Transacción manual</h3>
         <form className="mt-3 grid md:grid-cols-5 gap-2" onSubmit={addTx}>
@@ -230,6 +244,7 @@ export default function Dashboard() {
           <button className="px-3 py-1 rounded bg-neon-pink/60 hover:bg-neon-pink/80">Añadir</button>
         </form>
       </section>
+      )}
 
       <section className="card-float p-4">
         <div className="flex items-center justify-between">

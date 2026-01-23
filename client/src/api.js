@@ -103,3 +103,10 @@ export async function getSummary() {
   });
   return jsonWithAuth(r);
 }
+
+export async function getMe() {
+  const r = await fetch(`${API_URL}/auth/me`, {
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  return jsonWithAuth(r);
+}

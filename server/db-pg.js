@@ -11,6 +11,8 @@ async function initSchema() {
       username TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
       twofa_secret TEXT,
+      role TEXT,
+      plan TEXT,
       created_at TIMESTAMP DEFAULT NOW()
     )`,
     `CREATE TABLE IF NOT EXISTS invoices (
@@ -47,6 +49,8 @@ async function initSchema() {
     `ALTER TABLE invoices ADD COLUMN IF NOT EXISTS vat_amount REAL`,
     `ALTER TABLE invoices ADD COLUMN IF NOT EXISTS labor_cost REAL`,
     `ALTER TABLE invoices ADD COLUMN IF NOT EXISTS subtotal REAL`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT`,
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS plan TEXT`,
   ];
   for (const s of stmts) {
     try { await pool.query(s); } catch {}

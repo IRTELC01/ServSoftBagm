@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS users (
   username TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   twofa_secret TEXT,
+  role TEXT,
+  plan TEXT,
   created_at TEXT DEFAULT (datetime('now'))
 );
 
@@ -60,5 +62,7 @@ try { db.exec(`ALTER TABLE invoices ADD COLUMN vat_percent REAL`); } catch {}
 try { db.exec(`ALTER TABLE invoices ADD COLUMN vat_amount REAL`); } catch {}
 try { db.exec(`ALTER TABLE invoices ADD COLUMN labor_cost REAL`); } catch {}
 try { db.exec(`ALTER TABLE invoices ADD COLUMN subtotal REAL`); } catch {}
+try { db.exec(`ALTER TABLE users ADD COLUMN role TEXT`); } catch {}
+try { db.exec(`ALTER TABLE users ADD COLUMN plan TEXT`); } catch {}
 
 module.exports = db;

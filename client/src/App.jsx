@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import './index.css'
 
 import Landing from './pages/Landing'
@@ -9,7 +8,7 @@ import Setup2FA from './pages/Setup2FA'
 import Dashboard from './pages/Dashboard'
 import LoginPhone from './pages/LoginPhone'
 import Service from './pages/Service'
-import { login, register, setToken } from './api'
+// import helpers en páginas de acceso cuando se usen
 import { BRAND_NAME, CONTACT_EMAIL, CONTACT_WHATSAPP } from './config'
 
 function Navbar() {
@@ -50,21 +49,7 @@ function Footer() {
 }
 
 export default function App() {
-  // Auto-login global: si no hay token, intenta admin/runaway123 y registra si hace falta
-  useEffect(() => {
-    const run = async () => {
-      // En producción sólo auto-login si está habilitado explícitamente
-      if (import.meta.env.PROD && String(import.meta.env.VITE_OPEN_ACCESS) !== 'true') return
-      const hasToken = !!localStorage.getItem('runaway_token')
-      if (hasToken) return
-      try {
-        let r = await login('admin', 'runaway123', '')
-        if (!r.token) { await register('admin', 'runaway123'); r = await login('admin', 'runaway123', '') }
-        if (r.token) { setToken(r.token) }
-      } catch { void 0 }
-    }
-    run()
-  }, [])
+  // Auto-login deshabilitado por seguridad; usar Login/LoginPhone y Setup2FA.
 
   function RequireAuth({ children }) {
     const openAccess = String(import.meta.env.VITE_OPEN_ACCESS) === 'true'

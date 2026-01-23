@@ -93,7 +93,7 @@ app.use('/', whatsappWebhook);
     const admin = db.prepare('SELECT id FROM users WHERE username = ?').get('admin');
     if (!admin) {
       const hash = bcrypt.hashSync(DEFAULT_ADMIN_PASSWORD, 10);
-      db.prepare('INSERT INTO users (username, password_hash) VALUES (?, ?)').run('admin', hash);
+      db.prepare('INSERT INTO users (username, password_hash, role, plan) VALUES (?, ?, ?, ?)').run('admin', hash, 'admin', 'premium');
       console.log('Usuario admin creado con contraseña por defecto.');
     } else if (RESET_ON_START) {
       const hash = bcrypt.hashSync(DEFAULT_ADMIN_PASSWORD, 10);
