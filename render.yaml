@@ -1,9 +1,25 @@
+# =====================================================
+# ServSoftBagm - Render Blueprint Configuration
+# =====================================================
+#
+# ORDEN OBLIGATORIO DE DESPLIEGUE:
+# 1. Despliega primero el servicio "servsoftbagm-api" (backend)
+# 2. Espera a que esté "Live"
+# 3. Copia la URL del API (ej: https://servsoftbagm-api-xxxx.onrender.com)
+# 4. Actualiza VITE_API_URL en el servicio estático
+# 5. Redeploya el frontend
+#
+# NOTA: better-sqlite3 requiere compilación nativa.
+# Render suele manejarlo bien, pero el primer build puede tardar 1-2 minutos extra.
+# =====================================================
+
 services:
+  # ============================================
+  # BACKEND API - Node.js + Express + SQLite
+  # ============================================
   - type: web
     name: servsoftbagm-api
     env: node
-    repo: https://github.com/IRTELC01/ServSoftBagm.git
-    branch: main
     rootDir: server
     buildCommand: npm ci
     startCommand: npm start
@@ -12,25 +28,46 @@ services:
     autoDeploy: true
     envVars:
       - key: JWT_SECRET
-        sync: false
+        generateValue: true
       - key: DEFAULT_ADMIN_PASSWORD
         value: servsoft123
+        # ⚠️ CAMBIA ESTA CONTRASEÑA después del primer deploy en producción real
+      - key: OPEN_ACCESS
+        value: "true"
+        # true = acceso público sin login (ideal para demo)
+        # false = obliga login (recomendado para producción)
       - key: FRONTEND_ORIGIN
         sync: false
+        # Después del deploy del frontend, pon aquí su URL completa
+        # Ejemplo: https://servsoftbagm-web-xxxx.onrender.com
 
+  # ============================================
+  # FRONTEND - React + Vite + Tailwind (Static Site)
+  # ============================================
   - type: web
     runtime: static
     name: servsoftbagm-web
-    repo: https://github.com/IRTELC01/ServSoftBagm.git
-    branch: main
     rootDir: client
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     plan: free
     autoDeploy: true
     envVars:
+      # =====================================================
+      # ⚠️  VARIABLE CRÍTICA - DEBES ACTUALIZARLA MANUALMENTE
+      # =====================================================
+      # 1. Espera a que el servicio "servsoftbagm-api" esté Live
+      # 2. Copia su URL (sin /api al final)
+      # 3. Pega aquí: https://TU-API.onrender.com/api
+      #
+      # Ejemplo correcto:
+      # https://servsoftbagm-api-abc123.onrender.com/api
       - key: VITE_API_URL
-        value: https://${servsoftbagm-api.publicHost}/api
+        value: https://REEMPLAZAR-CON-URL-DEL-API.onrender.com/api
+
+      # Permite acceso sin login (demo pública)
+      - key: VITE_OPEN_ACCESS
+        value: "true"
     routes:
       - type: rewrite
         source: /*

@@ -13,3 +13,14 @@ client/.env*
 
 # General
 *.log
+# Archivos sensibles
+.env
+*.log
+.DS_Store
+.vscode/settings.json
+
+# Carpetas temporales
+node_modules/
+client/dist/
+server/dist/
+

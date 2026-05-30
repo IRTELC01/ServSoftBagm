@@ -101,7 +101,13 @@ ServSoftBagm/
 └─ MASTERDOC.md         # Documento de análisis y ruta técnica
 ```
 
-## Despliegue y GitHub
+## Despliegue Rápido en Render.com
+
+**Guía completa y actualizada**: Ver el archivo **[DEPLOY_RENDER.md](./DEPLOY_RENDER.md)**
+
+Contiene instrucciones detalladas paso a paso usando Blueprint + cómo configurar correctamente `VITE_API_URL` y `VITE_OPEN_ACCESS`.
+
+## Despliegue y GitHub (resumen rápido)
 
 - Inicializa git en el root:
   - `git init`
@@ -136,6 +142,65 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
 
 - Driver conmutable: `DB_DRIVER` (`''` para SQLite, `pg` para PostgreSQL).
 - En PostgreSQL se crean tablas equivalentes a SQLite con campos extra de facturación.
+
+---
+
+## 🚀 DESPLIEGUE RÁPIDO (Render / Railway) — 5 minutos
+
+### Opción recomendada: **Render** (gratis)
+
+1. Haz fork o push de este repo.
+2. En [render.com](https://render.com) → **New +** → **Blueprint** y selecciona `render.yaml` (o crea los dos servicios manualmente).
+3. **Primer deploy del API**:
+   - Espera a que el servicio `servsoftbagm-api` esté vivo.
+   - Copia su URL pública (ej: `https://servsoftbagm-api.onrender.com`).
+4. **Frontend estático**:
+   - Edita la variable `VITE_API_URL` en el servicio web estático y pon:  
+     `https://servsoftbagm-api.onrender.com/api`
+   - Añade también `VITE_OPEN_ACCESS=true` (para demo sin login).
+5. Redeploy el frontend.
+6. ¡Listo! Accede a `https://tu-frontend.onrender.com` y prueba el Dashboard con credenciales por defecto (`admin` / `servsoft123`).
+
+**Para producción real**:
+- Cambia `DEFAULT_ADMIN_PASSWORD` y `JWT_SECRET`.
+- Pon `OPEN_ACCESS=false` y `VITE_OPEN_ACCESS=false`.
+- Activa 2FA desde el panel de login.
+
+### Railway (alternativa más fácil para fullstack)
+
+```bash
+# En Railway
+railway init
+railway up
+# Configura las mismas variables de entorno que en render.yaml
+```
+
+### Probar localmente (desarrollo ultra-rápido)
+
+```powershell
+# Terminal 1 - Backend
+cd server
+npm install
+npm start
+
+# Terminal 2 - Frontend
+cd client
+npm install
+npm run dev
+```
+
+Abre http://localhost:5173 → Login → Dashboard.
+
+**Credenciales por defecto**: `admin` / `servsoft123`
+
+El Dashboard ahora tiene:
+- KPIs grandes con glow neón
+- Gráficos donut + barras animadas
+- Formulario premium de facturación
+- Búsqueda y export CSV de facturas
+- Diseño futurista dark + glassmorphism
+
+Listo para impresionar en demo o cliente.
 
 ```mermaid
 erDiagram
