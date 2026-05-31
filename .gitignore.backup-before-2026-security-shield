@@ -1,0 +1,26 @@
+# Root
+node_modules/
+dist/
+.DS_Store
+
+# Server
+server/.env
+server/runaway.db*
+
+# Client build
+client/dist/
+client/.env*
+
+# General
+*.log
+# Archivos sensibles
+.env
+*.log
+.DS_Store
+.vscode/settings.json
+
+# Carpetas temporales
+node_modules/
+client/dist/
+server/dist/
+

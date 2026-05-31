@@ -8,7 +8,7 @@ New-Item -ItemType Directory -Force -Path $TargetDir | Out-Null
 $envPath = "server\.env"
 if (-Not (Test-Path $envPath)) {
   Copy-Item "server\.env.example" $envPath -Force
-  Write-Host "Copiado server/.env.example a server/.env"
+  Write-Host "Copiado apps/server/.env.example a apps/server/.env"
 }
 
 # Escribir/actualizar DATA_DIR en .env

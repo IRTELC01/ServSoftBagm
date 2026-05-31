@@ -93,37 +93,54 @@ Alta (80â€“90%) para operar localmente en Windows con Node y SQLite. TecnologÃ­a
 - `.env` no debe versionarse con secretos.
 - Limitar origen CORS al dominio real en producciÃ³n.
 ## Actualizaciones recientes (enero 2026)
-- Landing: héroe con título centrado sobre imagen full-width y tarjeta unificada de Contacto + Ubicación al final con mapa visible (iframe).
-- Servicios: textos descriptivos, secciones “lo que incluye” y galerías con imágenes locales fijas (Imagen2.png, Imagen3.png, etc.) evitando mezclas.
-- WhatsApp: enlaces estandarizados con palabras clave por servicio; chatbot ampliado con flujo “recuperación”; endpoint de prueba y sesiones con expiración.
+- Landing: hï¿½roe con tï¿½tulo centrado sobre imagen full-width y tarjeta unificada de Contacto + Ubicaciï¿½n al final con mapa visible (iframe).
+- Servicios: textos descriptivos, secciones ï¿½lo que incluyeï¿½ y galerï¿½as con imï¿½genes locales fijas (Imagen2.png, Imagen3.png, etc.) evitando mezclas.
+- WhatsApp: enlaces estandarizados con palabras clave por servicio; chatbot ampliado con flujo ï¿½recuperaciï¿½nï¿½; endpoint de prueba y sesiones con expiraciï¿½n.
 - Dashboard: fondo negro para mayor contraste con tarjetas neon y responsividad preservada.
-- Visibilidad: reconstrucción del cliente para evitar caché del preview al usar contenedores.
+- Visibilidad: reconstrucciï¿½n del cliente para evitar cachï¿½ del preview al usar contenedores.
 
-## Comandos ejecutados y propósito
+## Comandos ejecutados y propï¿½sito
 - Desarrollo: cd client && npm run dev | cd server && npm run dev
 - Build/preview: cd client && npm run build | cd client && npm run preview
 - Lint: cd client && npm run lint
 - Docker (refrescar cambios del frontend): docker compose restart client | docker compose up -d --force-recreate client
-- Puertos (Vite): cambio automático a 5174 cuando 5173 está ocupado.
+- Puertos (Vite): cambio automï¿½tico a 5174 cuando 5173 estï¿½ ocupado.
 - Git (remoto existente): git remote set-url origin https://github.com/IRTELC01/ServSoftBagm.git
-- Túnel para webhooks: 
+- Tï¿½nel para webhooks: 
 grok http 3000 (o el puerto real del backend) para probar WhatsApp Cloud.
 
-## Técnicas de diagnóstico y corrección
-- Ubicación correcta de componentes según referencia visual (Landing vs Dashboard).
+## Tï¿½cnicas de diagnï¿½stico y correcciï¿½n
+- Ubicaciï¿½n correcta de componentes segï¿½n referencia visual (Landing vs Dashboard).
 - Estandarizar palabras clave en mensajes prellenados de WhatsApp para disparar flujos del bot.
-- Asignar imágenes locales a cada servicio para eliminar mezclas en galerías.
-- Logging del bot y endpoint de prueba para validar recepción y respuestas.
-- Reinicio/forzado de recreación del contenedor para invalidar caché de build/preview.
-- Verificar puertos ocupados y aceptar el fallback automático de Vite.
+- Asignar imï¿½genes locales a cada servicio para eliminar mezclas en galerï¿½as.
+- Logging del bot y endpoint de prueba para validar recepciï¿½n y respuestas.
+- Reinicio/forzado de recreaciï¿½n del contenedor para invalidar cachï¿½ de build/preview.
+- Verificar puertos ocupados y aceptar el fallback automï¿½tico de Vite.
 
 ## WhatsApp Cloud (pendiente)
-- Requisitos: adquisición de SIM y activación del número en Meta.
-- Pasos previstos: configurar VERIFY_TOKEN y número; verificar webhook (GET); habilitar envío desde Cloud; actualizar CONTACT_WHATSAPP en client/src/config.js; probar con endpoint de prueba y flujos por palabras clave.
+- Requisitos: adquisiciï¿½n de SIM y activaciï¿½n del nï¿½mero en Meta.
+- Pasos previstos: configurar VERIFY_TOKEN y nï¿½mero; verificar webhook (GET); habilitar envï¿½o desde Cloud; actualizar CONTACT_WHATSAPP en client/src/config.js; probar con endpoint de prueba y flujos por palabras clave.
 - Estado: pendiente SIM; backend listo y enlaces del frontend coordinados.
 
-## Referencias de código
+## Referencias de cï¿½digo
 - [Landing.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Landing.jsx)
 - [Service.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Service.jsx)
+
+### [2026-05] RefactorizaciÃ³n de Arquitectura Limpia y MÃ³dulo de TelemetrÃ­a
+- **Objetivo**: Introducir Centro de TelemetrÃ­a Operacional, Data Analytics y Asistente IA Predictivo bajo principios estrictos de Clean Architecture / Capas Separadas (Hexagonal).
+- **Capa de Dominio (agnÃ³stica)**:
+  - `server/services/analyticsService.js` â€” Data Mapper puro. Calcula SLA, Seguridad/Integridad, CSAT Predictivo y Data Science Readiness. Solo depende del adaptador `db`.
+  - `server/services/iaEngineService.js` â€” Motor de decisiones encapsulado. Hoy usa reglas de negocio determinÃ­sticas. MaÃ±ana se puede reemplazar por cualquier LLM sin tocar el resto del sistema.
+- **Capa de Adaptador**:
+  - `server/routes/leads.js` ahora expone `GET /api/leads/telemetry` y `POST /api/leads/telemetry/ask` como puentes delgados (solo orquestan y aplican requireAuth).
+- **Frontend (Dashboard.jsx)**:
+  - SecciÃ³n de Facturas reemplazada por tabla cyberpunk ultra-compacta + `.slice(0, 5)` + filtro local instantÃ¡neo por Ticket/Cliente (100% client-side, cero impacto en BD).
+  - Nuevo "Centro de TelemetrÃ­a Operacional & Data Analytics" con 4 micro-tarjetas consumiendo el endpoint agnÃ³stico.
+  - Nuevo "Asistente IA de Decisiones" conectado directamente al servicio `iaEngineService`.
+- **Blindaje**:
+  - Todo el trabajo se realizÃ³ primero en rama `feat/telemetry-clean-architecture` despuÃ©s del checkpoint de seguridad.
+  - .gitignore endurecido previamente para proteger datos bancarios, .env y backups personales.
+- **Resultado**: El sistema sigue 100% funcional localmente. La nueva funcionalidad es completamente swappable (DB o motor de IA) sin romper el negocio.
+- **PrÃ³ximo**: Cuando se desee, integrar Make.com/n8n para orquestar acciones automÃ¡ticas basadas en las mÃ©tricas de telemetrÃ­a.
 - [Dashboard.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Dashboard.jsx)
 - [whatsapp.js](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/server/routes/whatsapp.js)

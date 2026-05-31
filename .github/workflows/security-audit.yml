@@ -1,0 +1,60 @@
+name: Security & Dependency Audit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Corre todos los días a las 6:00 UTC
+    - cron: '0 6 * * *'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install server dependencies
+        working-directory: server
+        run: npm ci
+
+      - name: Run npm audit (HIGH and CRITICAL only)
+        working-directory: server
+        run: |
+          npm audit --audit-level=high --json > audit-report.json || true
+          node -e "
+            const report = require('./audit-report.json');
+            const vulns = report.metadata?.vulnerabilities || {};
+            const high = (vulns.high || 0) + (vulns.critical || 0);
+            console.log('High+Critical vulnerabilities:', high);
+            if (high > 0) {
+              console.error('❌ FAILED: High or Critical vulnerabilities found');
+              process.exit(1);
+            }
+            console.log('✅ No high/critical vulnerabilities');
+          "
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: server/audit-report.json
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

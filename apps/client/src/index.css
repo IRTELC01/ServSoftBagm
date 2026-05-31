@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/* ============================================
+   Tailwind v4 Custom Design Tokens
+   ============================================ */
+@theme {
+  --color-neon-pink: #ff3cac;
+  --color-neon-blue: #784ba0;
+  --color-neon-cyan: #2b86c5;
+  --color-neon-green: #39ff14;
+  --color-neon-yellow: #faff00;
+}
+
+/* Base */
+html, body, #root {
+  height: 100%;
+}
+
+.bg-future {
+  background: linear-gradient(135deg, #0a0a12 0%, #0f1324 45%, #0a1422 100%);
+}
+
+/* ============================================
+   CUSTOM UTILITIES - Tailwind v4 @utility syntax
+   This is the correct way in Tailwind v4 to define
+   reusable component classes that can be used with
+   @apply and in className.
+   ============================================ */
+
+@utility glass {
+  background: rgba(255,255,255,0.065);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+@utility neon-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(57, 255, 20, 0.25);
+  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(57,255,20,0.55);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(57,255,20,0.15);
+    transform: translateY(-3px);
+  }
+}
+
+/* Neon border accents */
+@utility neon-border-green { border-color: rgba(57,255,20,0.5); }
+@utility neon-border-pink  { border-color: rgba(255,60,172,0.5); }
+@utility neon-border-cyan  { border-color: rgba(43,134,197,0.5); }
+@utility neon-border-yellow{ border-color: rgba(250,255,0,0.5); }
+
+/* Glow effects */
+@utility glow-green { box-shadow: 0 0 25px rgba(57,255,20,0.5), 0 10px 30px rgba(0,0,0,0.4); }
+@utility glow-pink  { box-shadow: 0 0 25px rgba(255,60,172,0.45), 0 10px 30px rgba(0,0,0,0.4); }
+@utility glow-cyan  { box-shadow: 0 0 25px rgba(43,134,197,0.45), 0 10px 30px rgba(0,0,0,0.4); }
+
+/* Stat cards - now defined properly without recursive @apply */
+@utility stat-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(57, 255, 20, 0.25);
+  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.2s;
+
+  &:hover {
+    border-color: rgba(57,255,20,0.55);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(57,255,20,0.15);
+    transform: translateY(-4px) scale(1.01);
+  }
+}
+
+@utility stat-number {
+  font-size: 2.1rem;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+/* Neon text glow */
+@utility neon-text {
+  text-shadow: 0 0 8px rgba(255,60,172,0.6), 0 0 18px rgba(43,134,197,0.6);
+}
+
+/* Badge */
+@utility badge-neon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(57,255,20,0.6);
+  background-color: rgba(0,0,0,0.30);
+  color: #faff00;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(0,0,0,0.40);
+  }
+}
+
+/* Neon title with animation */
+@utility neon-title-green {
+  color: var(--color-neon-green);
+  text-shadow: 0 0 6px rgba(57,255,20,0.9),
+               0 0 12px rgba(57,255,20,0.7),
+               0 0 24px rgba(57,255,20,0.5);
+  animation: neonFloat 3s ease-in-out infinite;
+}
+
+@keyframes neonFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Premium inputs */
+@utility input-neon {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-radius: 0.75rem;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: rgba(255,255,255,0.5);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(57,255,20,0.6);
+    background-color: rgba(255,255,255,0.1);
+  }
+}
+
+/* Big glowing total display */
+@utility total-glow {
+  font-size: 2.35rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(90deg, #39ff14, #faff00, #39ff14);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(57,255,20,0.5);
+}
+
+/* Progress bars */
+@utility bar-track {
+  height: 0.75rem;
+  border-radius: 9999px;
+  background-color: rgba(255,255,255,0.10);
+  overflow: hidden;
+}
+
+@utility bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.7s ease-out;
+}
+
+/* Donut chart (CSS conic-gradient) */
+@utility donut {
+  width: 138px;
+  height: 138px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  background: conic-gradient(var(--c1) 0deg var(--p1), var(--c2) var(--p1) var(--p2), var(--c3) var(--p2) 360deg);
+  box-shadow: 0 0 0 12px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.15);
+
+  &::after {
+    content: '';
+    width: 82px;
+    height: 82px;
+    background: #0a0a12;
+    border-radius: 9999px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+  }
+}
+
+/* Invoice cards */
+@utility inv-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid rgba(57, 255, 20, 0.25);
+  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: rgba(255,60,172,0.4);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,60,172,0.15);
+  }
+}
+
+/* Payment method badges */
+@utility pay-badge {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  border: 1px solid;
+}
+
+.pay-efectivo    { background: rgba(57,255,20,0.15); border-color: rgba(57,255,20,0.5); color: #39ff14; }
+.pay-tarjeta     { background: rgba(43,134,197,0.15); border-color: rgba(43,134,197,0.5); color: #2b86c5; }
+.pay-transferencia { background: rgba(255,60,172,0.15); border-color: rgba(255,60,172,0.5); color: #ff3cac; }
+
+/* Fix for dark theme select options (used in lead registration form and other selects) */
+select.input-neon,
+.input-neon select {
+  background-color: #0f172a; /* dark background */
+  color: #f1f5f9; /* light text */
+}
+
+select.input-neon option,
+.input-neon select option {
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+
+/* When the select is focused, keep consistent */
+select.input-neon:focus option,
+.input-neon select:focus option {
+  background-color: #1e2937;
+  color: white;
+}

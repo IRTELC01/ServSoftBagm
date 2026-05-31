@@ -74,32 +74,51 @@ Aplicación web full‑stack para ofrecer servicios de desarrollo de software, s
 
 ## Estructura
 
-- `server/` Express + SQLite (Better‑SQLite3). Rutas: `auth`, `invoices`, `accounting`.
-- `server/routes/whatsapp.js` Webhook de WhatsApp (verificación y respuesta básica).
-- `client/` React + Tailwind. Páginas: Landing, Register, Setup2FA, Login, Dashboard.
+- `apps/server/` → Backend (Express + PostgreSQL/SQLite) — ahora parte del monorepo.
+- `apps/client/` → Frontend (React + Vite + Tailwind) — ahora parte del monorepo.
+- Estructura profesional con Turborepo + npm workspaces.
   - `LoginPhone.jsx`: Acceso por teléfono (OTP) y solicitud de código.
 
 ### Estructura del repositorio
 
 ```text
-ServSoftBagm/
-├─ client/              # Frontend React + Vite + Tailwind
-│  ├─ public/           # Estáticos
-│  └─ src/              # Código fuente
-│     ├─ pages/         # Páginas (Landing, Login, Dashboard, etc.)
-│     ├─ api.js         # Cliente API
-│     └─ config.js      # Configuración de marca y contacto
-├─ server/              # Backend Express
-│  ├─ routes/           # Rutas (auth, invoices, accounting, whatsapp)
-│  ├─ middleware/       # Middlewares
-│  ├─ db.js             # Conmutador SQLite/PG
-│  ├─ db-sqlite.js      # Esquema SQLite
-│  └─ db-pg.js          # Esquema PostgreSQL
-├─ scripts/             # Scripts PowerShell para desarrollo
-├─ docker-compose.yml   # Orquestación local con Docker (PG + backend + frontend)
+ServSoftBagm/ (Monorepo con Turborepo)
+├─ apps/
+│  ├─ client/           # Frontend React + Vite + Tailwind
+│  └─ server/           # Backend Express + PostgreSQL/SQLite
+│     ├─ routes/
+│     ├─ services/      # Lógica de negocio (Analytics, IA Engine, etc.)
+│     └─ db-pg.js / db-sqlite.js
+├─ packages/            # Código compartido (futuro)
+├─ scripts/             # Scripts de desarrollo y setup
+├─ docker-compose.yml   # PostgreSQL (principalmente)
 ├─ README.md            # Guía principal
 └─ MASTERDOC.md         # Documento de análisis y ruta técnica
 ```
+
+## Documentación
+
+Toda la documentación del proyecto está organizada en la carpeta `/docs`.
+
+**Índice principal**: **[docs/INDEX.md](./docs/INDEX.md)**
+
+### Documentación Técnica
+
+- [Diagrama Entidad-Relación (Base de Datos)](./docs/database/ENTITY_RELATIONSHIP_DIAGRAM.md)
+- [Diagrama de Clases](./docs/architecture/CLASS_DIAGRAM.md)
+- [Diagrama de Despliegue](./docs/deployment/DEPLOYMENT_DIAGRAM.md)
+- [Visión General de Arquitectura](./docs/architecture/ARCHITECTURE_OVERVIEW.md)
+- [Proceso: Intake de Cliente](docs/guides/PROCESS_CLIENT_INTAKE.md)
+
+### Guías y Procesos
+
+- [Portal del Cliente y 2FA](./CLIENT_PORTAL_AND_2FA_GUIDE.md)
+- [Plan de Automatización y Migración](./AUTOMATION_AND_MIGRATION_PLAN.md)
+- [Roadmap de Producción](./PRODUCTION_ROADMAP.md)
+
+**Nota importante:** Los documentos antiguos que estaban en la raíz del proyecto se conservan como referencia histórica. La documentación activa y actualizada se encuentra dentro de `/docs`.
+
+---
 
 ## Despliegue Rápido en Render.com
 
@@ -121,7 +140,7 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
 
 ## Integración WhatsApp (Chatbot básico)
 
-- Requisitos en `server/.env` (ver ejemplo en `.env.example`):
+- Requisitos en `apps/server/.env` (ver ejemplo en `.env.example`):
   - `WHATSAPP_TOKEN`: token de acceso de Meta (WhatsApp Cloud API).
   - `WHATSAPP_PHONE_NUMBER_ID`: ID del número de WhatsApp Business.
   - `WHATSAPP_VERIFY_TOKEN`: cadena propia para verificar el webhook.
@@ -134,7 +153,7 @@ Si necesitas pipeline de despliegue o empaquetado, se recomienda Dockerizar en u
 5. Probar enviando mensajes al número: el bot contesta a “hola”, “soporte”, “mantenimiento”, “desarrollo”.
 
 - Botón de WhatsApp en el frontend:
-  - Edita `client/src/config.js` y define `CONTACT_WHATSAPP` con tu número en formato internacional (ej. 573127818103).
+  - Edita `apps/client/src/config.js` y define `CONTACT_WHATSAPP` con tu número en formato internacional (ej. 573127818103).
   - Puedes prellenar mensajes: `https://wa.me/573127818103?text=Hola%20quiero%20cotizar`.
   - En el Dashboard encontrarás un panel de ayuda y un botón para contactar por WhatsApp.
 
@@ -267,7 +286,7 @@ erDiagram
 - Local en un solo comando:
   - Primero asegúrate de tener Node 20.19.0: `powershell -ExecutionPolicy Bypass -File .\scripts\install-node.ps1`
   - `powershell -ExecutionPolicy Bypass -File .\scripts\dev-all.ps1 -Disable2FA`
-  - Hace todo: prepara `server/.env` y datos, arranca backend, verifica salud, resetea admin, arranca frontend y abre `/login`.
+  - Hace todo: prepara `apps/server/.env` y datos, arranca backend, verifica salud, resetea admin, arranca frontend y abre `/login`.
   - Credenciales por defecto (Docker): `admin / servsoft123`.
 ## Notas
 
@@ -278,7 +297,7 @@ erDiagram
 
 - Soporte de `DATA_DIR` en backend para ubicar la base de datos y archivos en directorio local preferido.
 - En Windows, se sugiere: `C:\Users\TU_USUARIO\Documents\ServSoftBagm`.
-- Configura `DATA_DIR` en `server/.env` (copiar desde `.env.example`).
+- Configura `DATA_DIR` en `apps/server/.env` (copiar desde `.env.example`).
 - Opcional: usaremos un script PowerShell `scripts/setup-local.ps1` para crear carpetas y configurar `.env` automáticamente.
 - Opcional: usaremos un script PowerShell `scripts/setup-local.ps1` para crear carpetas y configurar `.env` automáticamente.
 

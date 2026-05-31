@@ -1,8 +1,22 @@
 {
+  "private": true,
+  "packageManager": "npm@10.8.2",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "dev:server": "turbo run dev --filter=@servsoftbagm/server",
+    "dev:client": "turbo run dev --filter=@servsoftbagm/client"
+  },
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.16"
+    "tailwindcss": "^4.1.16",
+    "turbo": "^2.9.16"
   },
   "dependencies": {
     "react-router-dom": "^7.9.5"

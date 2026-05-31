@@ -42,10 +42,10 @@ if (-not (($nv.Major -eq 20 -and $nv -ge $min20) -or ($nv.Major -ge 22 -and $nv 
 Write-Host "Creando directorio de datos: $DataDir" -ForegroundColor Yellow
 New-Item -ItemType Directory -Force -Path $DataDir | Out-Null
 
-$envPath = Join-Path 'server' '.env'
+$envPath = Join-Path 'apps/server' '.env'
 if (-Not (Test-Path $envPath)) {
-  Copy-Item (Join-Path 'server' '.env.example') $envPath -Force
-  Write-Host "Copiado server/.env.example a server/.env" -ForegroundColor Green
+  Copy-Item (Join-Path 'apps/server' '.env.example') $envPath -Force
+  Write-Host "Copiado apps/server/.env.example a apps/server/.env" -ForegroundColor Green
 }
 
 $envContent = Get-Content $envPath -Raw
@@ -58,7 +58,7 @@ $origins = "http://localhost:$FrontendPort,http://localhost:5174"
 $envContent = Ensure-EnvVar -Content $envContent -Key 'FRONTEND_ORIGIN' -Value $origins
 if ($ResetAdminOnStart) { $envContent = Ensure-EnvVar -Content $envContent -Key 'RESET_ADMIN_PASSWORD_ON_START' -Value 'true' }
 Set-Content $envPath $envContent
-Write-Host "Configurado server/.env" -ForegroundColor Green
+Write-Host "Configurado apps/server/.env" -ForegroundColor Green
 
 # 2) Arrancar backend en ventana separada
 Write-Host "Arrancando backend (puerto $ApiPort)..." -ForegroundColor Yellow

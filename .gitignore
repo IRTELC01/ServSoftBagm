@@ -1,26 +1,201 @@
-# Root
+# ============================================================
+# ServSoftBagm — Professional .gitignore (Hardened 2026)
+# ============================================================
+# This repository will eventually handle real financial transactions,
+# customer personal data, bank transfer instructions (QR + account),
+# WhatsApp automation secrets, and production database credentials.
+#
+# RULE: When in doubt, DO NOT COMMIT IT.
+# Every secret that reaches GitHub history is leaked forever.
+#
+# Philosophy:
+# - Never commit real .env, real bank data, real tokens, or personal images.
+# - Only commit EXAMPLE / TEMPLATE files with obvious placeholders.
+# - Real operational secrets live only on the machine that needs them
+#   (developer laptop, Render, VPS, Docker secrets, etc.).
+#
+# Backup of previous version: .gitignore.backup-before-2026-security-shield
+# ============================================================
+
+# ============================================================
+# DEPENDENCIES & BUILDS
+# ============================================================
 node_modules/
 dist/
-.DS_Store
+build/
+*.local
+
+# Client (Vite/React)
+apps/client/dist/
+apps/client/.vite/
+apps/client/.cache/
 
 # Server
-server/.env
-server/runaway.db*
+apps/server/dist/
+apps/server/.cache/
 
-# Client build
-client/dist/
-client/.env*
-
-# General
-*.log
-# Archivos sensibles
+# ============================================================
+# ENVIRONMENT & SECRETS (CRITICAL FOR MONEY-HANDLING APP)
+# ============================================================
+# All real environment files
 .env
+.env.*
+!.env.example
+!.env.*.example
+!.env.*.template
+
+# Server secrets (database, JWT, WhatsApp, Make.com, etc.)
+apps/server/.env
+apps/server/.env.*
+!apps/server/.env.example
+!apps/server/.env.*.example
+
+# Client secrets
+apps/client/.env
+apps/client/.env.*
+!apps/client/.env.example
+!apps/client/.env.*.example
+
+# Root level (sometimes used for docker-compose overrides)
+.env.local
+.env.development
+.env.production
+.env.test
+
+# ============================================================
+# FINANCIAL & BANK DATA — NEVER COMMIT REAL INFORMATION
+# ============================================================
+# Real bank account details and QR codes for customer transfers
+apps/client/public/Ayudas/REAL/
+apps/client/public/Ayudas/real/
+apps/client/public/Ayudas/*real*
+apps/client/public/Ayudas/*REAL*
+apps/client/public/Ayudas/Cuenta*.txt
+apps/client/public/Ayudas/*cuenta*.txt
+apps/client/public/Ayudas/*QR*.*
+apps/client/public/Ayudas/*qr*.*
+apps/client/public/Ayudas/*banco*.*
+apps/client/public/Ayudas/*transferencia*.*
+
+# Only allow clearly marked EXAMPLE files (these are safe to commit)
+!apps/client/public/Ayudas/EJEMPLO_*
+!apps/client/public/Ayudas/README.md
+!apps/client/public/Ayudas/.gitkeep
+
+# Future payment processor credentials (Stripe, PayU, Mercado Pago, etc.)
+stripe*.json
+payu*.json
+*.pem
+*.key
+*.crt
+
+# ============================================================
+# PERSONAL MEDIA & BACKUPS (NEVER COMMIT ORIGINAL PHOTOS)
+# ============================================================
+apps/client/backup/
+apps/client/backup/**
+apps/client/public/personal-images/
+apps/client/src/assets/images/personal/
+*.original
+*.backup
+
+# ============================================================
+# DATABASE FILES (LOCAL DEVELOPMENT)
+# ============================================================
+# SQLite
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+server/runaway.db*
+server/*.sqlite*
+server/*.sqlite3*
+
+# Local Postgres data (when using docker volumes)
+postgres-data/
+pgdata/
+*.pgdata
+
+# ============================================================
+# LOGS, CACHES, TEMPORARY
+# ============================================================
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+server/logs/
+client/logs/
+*.tmp
+*.temp
+.cache/
+
+# ============================================================
+# IDE / EDITOR / OS
+# ============================================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 .DS_Store
-.vscode/settings.json
+Thumbs.db
+desktop.ini
 
-# Carpetas temporales
-node_modules/
-client/dist/
-server/dist/
+# ============================================================
+# DOCKER & CONTAINER ARTIFACTS
+# ============================================================
+docker-compose.override.yml
+docker-compose.*.local.yml
+*.dockerenv
+volumes/
+data/
 
+# ============================================================
+# AUTOMATION & EXTERNAL SERVICES SECRETS
+# ============================================================
+# Make.com / n8n webhook URLs and scenarios (real ones)
+make-*.json
+n8n-*.json
+*.webhook
+
+# WhatsApp Cloud / Evolution API permanent tokens
+whatsapp-*.json
+wa-*.key
+
+# Future: Google Calendar service account, email SMTP passwords, etc.
+google-*.json
+service-account*.json
+
+# ============================================================
+# DOCUMENTATION & TEMPORARY ANALYSIS FILES (optional)
+# ============================================================
+# You can choose to commit or ignore these. Current policy: allow
+# because they are useful for onboarding, but never put secrets inside.
+# ANALYSIS.md
+# PRODUCTION_ROADMAP.md
+# etc. are currently committed — this is acceptable.
+
+# ============================================================
+# MISCELLANEOUS
+# ============================================================
+# Render / deployment specific
+render.yaml.bak
+.vercel/
+.netlify/
+
+# Large media that should be served from CDN or Git LFS later
+*.mp4
+*.mov
+*.zip
+*.tar.gz
+
+# ============================================================
+# END OF HARDENED .gitignore
+# ============================================================
+# Last updated: 2026 — Security shield activated before any money features.
+# Review this file every time you add a new secret type (new payment gateway, new automation, etc.).
