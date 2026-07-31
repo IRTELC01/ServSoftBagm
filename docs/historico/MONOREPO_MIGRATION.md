@@ -45,4 +45,4 @@ Se eligió **Nivel 3 (Full profesional)**:
 
 ---
 
-Este cambio representa un avance importante hacia un proyecto mantenible, escalable y profesional, alineado con los principios de Clean Architecture que se han venido aplicando en el código.
+Este cambio representa un avance importante hacia un proyecto mantenible, escalable y profesional a nivel de estructura de repositorio (monorepo). **Nota (auditoría 2026-07-31)**: esto es una separación a nivel de proyecto (`apps/server` vs `apps/client`), no una implementación de Clean Architecture dentro del backend — `apps/server` sigue siendo un monolito Express por capas técnicas, en transición hacia Clean Architecture / Hexagonal (ver Fase 3 del roadmap).

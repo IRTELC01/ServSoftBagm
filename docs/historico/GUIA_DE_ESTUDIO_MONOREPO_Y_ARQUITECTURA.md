@@ -28,10 +28,10 @@ ServSoftBagm/
 └── docs/                       → Documentación y guías de estudio
 ```
 
-## 3. Principios Aplicados
+## 3. Principios Aplicados (a nivel de proyecto) y en transición (a nivel de backend)
 
-- **Clean Architecture / Hexagonal** en el código (ver `apps/apps/server/services/`).
-- **Separación de concerns** a nivel de proyecto (monorepo).
+- **Separación de concerns a nivel de proyecto (monorepo)**: aplicado — `apps/server` y `apps/client` son apps independientes.
+- **Clean Architecture / Hexagonal dentro del backend**: NO aplicado todavía. `apps/server/services/` contiene algunos módulos con separación parcial (ej. `analyticsService.js` no depende de Express), pero no existen carpetas `domain/`, `application/` ni `infrastructure/`, y los routers (ej. `apps/server/routes/leads.js`) siguen mezclando HTTP + reglas de negocio + SQL crudo. Es un objetivo en transición (ver Fase 3 del roadmap: extraer `LeadService` + `LeadRepository` reales).
 - **Developer Experience (DX)** profesional: comandos simples desde la raíz.
 - **Documentación como código**: Decisiones registradas en `docs/decisions/` y guías de estudio.
 
@@ -57,7 +57,8 @@ npm run dev:client
 
 ## 6. Documentos Relacionados
 
-- `docs/MONOREPO_MIGRATION.md` — Registro detallado de la migración.
+- `docs/MONOREPO.md` — **Documento consolidado y vigente** sobre el monorepo (estructura real, cómo instalar/correr/build). Este documento (la guía de estudio) quedó archivado como referencia histórica en `docs/historico/`.
+- `docs/historico/MONOREPO_MIGRATION.md` — Registro histórico detallado de la migración.
 - `docs/decisions/` — Architecture Decision Records (ADRs).
 - `DEVELOPMENT.md` — Guía práctica de desarrollo.
 - `docs/security/REPOSITORY_SECURITY_GIT_HYGIENE_AND_PRE_COMMIT_CHECKLIST.md`
