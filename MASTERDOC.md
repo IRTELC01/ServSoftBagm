@@ -126,13 +126,13 @@ grok http 3000 (o el puerto real del backend) para probar WhatsApp Cloud.
 - [Landing.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/client/src/pages/Landing.jsx)
 - [Service.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/client/src/pages/Service.jsx)
 
-### [2026-05] Refactorización de Arquitectura Limpia y Módulo de Telemetría
-- **Objetivo**: Introducir Centro de Telemetría Operacional, Data Analytics y Asistente IA Predictivo bajo principios estrictos de Clean Architecture / Capas Separadas (Hexagonal).
-- **Capa de Dominio (agnóstica)**:
+### [2026-05] Módulo de Telemetría con separación inspirada en Clean Architecture (en transición, no Clean Architecture completa)
+- **Objetivo**: Introducir Centro de Telemetría Operacional, Data Analytics y Asistente IA Predictivo separando el cálculo de métricas del transporte HTTP, como primer paso en transición hacia Clean Architecture / Hexagonal (ver Fase 3 del roadmap). Esto es un patrón puntual aplicado a este módulo, no una migración estructural del backend: no existen carpetas `domain/`, `application/` ni `infrastructure/`, y la mayoría de los demás routers (ej. `apps/server/routes/leads.js` en sus endpoints CRUD) siguen mezclando HTTP + reglas de negocio + SQL crudo ("fat controllers").
+- **Módulo de cálculo (agnóstico de HTTP, aún dependiente de la capa `db`)**:
   - `apps/server/services/analyticsService.js` — Data Mapper puro. Calcula SLA, Seguridad/Integridad, CSAT Predictivo y Data Science Readiness. Solo depende del adaptador `db`.
   - `apps/server/services/iaEngineService.js` — Motor de decisiones encapsulado. Hoy usa reglas de negocio determinísticas. Mañana se puede reemplazar por cualquier LLM sin tocar el resto del sistema.
-- **Capa de Adaptador**:
-  - `apps/server/routes/leads.js` ahora expone `GET /api/leads/telemetry` y `POST /api/leads/telemetry/ask` como puentes delgados (solo orquestan y aplican requireAuth).
+- **Endpoints delgados**:
+  - `apps/server/routes/leads.js` expone `GET /api/leads/telemetry` y `POST /api/leads/telemetry/ask` como puentes delgados (solo orquestan y aplican requireAuth) — a diferencia de los endpoints CRUD del mismo archivo, que sí contienen SQL crudo directamente.
 - **Frontend (Dashboard.jsx)**:
   - Sección de Facturas reemplazada por tabla cyberpunk ultra-compacta + `.slice(0, 5)` + filtro local instantáneo por Ticket/Cliente (100% client-side, cero impacto en BD).
   - Nuevo "Centro de Telemetría Operacional & Data Analytics" con 4 micro-tarjetas consumiendo el endpoint agnóstico.

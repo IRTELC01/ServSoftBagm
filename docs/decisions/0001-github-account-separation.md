@@ -73,3 +73,7 @@ This decision prioritizes **long-term clarity and risk separation** over short-t
 ---
 
 **Signed**: 2026-05
+
+---
+
+**Nota (auditoría 2026-07-31)**: este ADR menciona "Clean Architecture" como parte de los estándares de ingeniería aspirados para el proyecto. Esto describe la intención original, no el estado real de implementación: hoy `apps/server` es un monolito Express organizado por capas técnicas (routers con SQL crudo y lógica de negocio mezclada), sin capas domain/application/infrastructure. La migración hacia Clean Architecture / Hexagonal sigue siendo un objetivo futuro (ver Fase 3 del roadmap), no un hecho consumado.

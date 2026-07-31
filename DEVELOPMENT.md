@@ -36,7 +36,7 @@ npm run lint
 ## Why This Structure?
 
 This is the professional setup you asked for (Nivel 3):
-- Clear separation of concerns (Clean Architecture at project level)
+- Clear separation of concerns at the **project level** (`apps/client` vs `apps/server` as independent apps) — this is *not* the same as Clean Architecture/Hexagonal inside the backend. Internally, `apps/server` is still a classic Express monolith organized by technical layers (`routes/`, `services/`), with business logic and raw SQL mixed into the routers ("fat controllers"). The project is transitioning toward Clean Architecture / Hexagonal for the backend internals (see Phase 3 of the roadmap: extract a real `LeadService` + `LeadRepository` out of the routers), but that has not happened yet.
 - Independent apps that can be built/deployed separately
 - Shared tooling and pipelines via Turborepo
 - Excellent developer experience from one place (the root)

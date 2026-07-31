@@ -2,7 +2,7 @@
 
 ## 1. Visión General
 
-ServSoftBagm sigue un enfoque de **Arquitectura Limpia (Clean Architecture)** combinado con **Hexagonal Architecture (Ports & Adapters)** a nivel de backend, sobre una base de **Monorepo profesional con Turborepo**.
+ServSoftBagm está en transición hacia un enfoque de **Arquitectura Limpia (Clean Architecture)** combinado con **Hexagonal Architecture (Ports & Adapters)** a nivel de backend, sobre una base de **Monorepo profesional con Turborepo**. **Estado actual (auditoría 2026-07-31)**: esto todavía es el objetivo, no el estado implementado. Hoy `apps/server` es un monolito Express organizado por capas técnicas (`routes/`, `services/`), donde los routers (ej. `apps/server/routes/leads.js`) mezclan HTTP + reglas de negocio + SQL crudo ("fat controllers"). No existen carpetas `domain/`, `application/` ni `infrastructure/`. El primer paso real hacia esta arquitectura está planeado para la Fase 3 del roadmap (extraer `LeadService` + `LeadRepository` reales sacando el SQL de los routers).
 
 El objetivo es lograr:
 - Alta mantenibilidad
