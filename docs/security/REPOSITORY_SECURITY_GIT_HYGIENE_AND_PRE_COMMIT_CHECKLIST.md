@@ -34,8 +34,8 @@ Se ejecutó una auditoría completa **antes** de cualquier commit de checkpoint.
 
 Estos archivos **NO estaban siendo ignorados** correctamente por el .gitignore anterior:
 
-- `client/backup/personal-images-originales/` → 17 archivos PNG (imágenes personales originales del proyecto anterior).
-- `client/public/Ayudas/Cuenta.txt` → Archivo con datos bancarios (actualmente placeholders, pero el usuario planea poner datos reales + QR).
+- `apps/client/backup/personal-images-originales/` → 17 archivos PNG (imágenes personales originales del proyecto anterior).
+- `apps/client/public/Ayudas/Cuenta.txt` → Archivo con datos bancarios (actualmente placeholders, pero el usuario planea poner datos reales + QR).
 
 **Consecuencia si no se hubiera corregido**: Al ejecutar el commit del PASO 1, todo esto habría entrado al historial de Git para siempre.
 
@@ -43,16 +43,16 @@ Estos archivos **NO estaban siendo ignorados** correctamente por el .gitignore a
 
 | Archivo                        | Contenido sensible detectado                  | Estado en Git (antes del blindaje) |
 |--------------------------------|-----------------------------------------------|------------------------------------|
-| `server/.env`                  | DATABASE_URL, JWT_SECRET, DEFAULT_ADMIN_PASSWORD | Ignorado (bueno)                  |
+| `apps/server/.env`                  | DATABASE_URL, JWT_SECRET, DEFAULT_ADMIN_PASSWORD | Ignorado (bueno)                  |
 | `root .env`                    | DB_PASSWORD                                   | Ignorado (bueno)                  |
-| `client/.env.production`       | (vacío, pero estructura)                      | **¡TRACKED!** (riesgo)            |
-| `server/.env.example`          | Ejemplos de tokens y URLs                     | Tracked (aceptable si se mantiene como ejemplo) |
+| `apps/client/.env.production`       | (vacío, pero estructura)                      | **¡TRACKED!** (riesgo)            |
+| `apps/server/.env.example`          | Ejemplos de tokens y URLs                     | Tracked (aceptable si se mantiene como ejemplo) |
 
 **Lección**: El .gitignore anterior era insuficiente para la carpeta `Ayudas/` y backups personales.
 
 ### 2.3 Archivos ya trackeados que contienen riesgo potencial
 
-- `client/.env.production` estaba en el índice de Git.
+- `apps/client/.env.production` estaba en el índice de Git.
 - Esto se documenta aquí para que el propietario decida si hacer `git rm --cached` + agregar nota en el commit de limpieza (nunca borrar historial).
 
 ---
@@ -82,7 +82,7 @@ Se creó `.gitignore` endurecido + backup del anterior (` .gitignore.backup-befo
 
 ### Opción recomendada y obligatoria:
 
-1. En `client/public/Ayudas/` solo vivirán archivos **claramente marcados como ejemplo**:
+1. En `apps/client/public/Ayudas/` solo vivirán archivos **claramente marcados como ejemplo**:
    - `EJEMPLO_Cuenta.txt`
    - `EJEMPLO_QRBanco.jpeg` (puede ser un QR falso o de prueba)
    - `README.md` explicando exactamente cómo el desarrollador debe crear su propia carpeta `REAL/`
@@ -92,7 +92,7 @@ Se creó `.gitignore` endurecido + backup del anterior (` .gitignore.backup-befo
    - Si no existe, mostrar un banner grande de advertencia + usar los archivos de ejemplo.
    - Nunca hardcodear rutas a archivos reales.
 
-3. El archivo real `Cuenta.txt` y el QR real **nunca** deben estar dentro de `client/public/Ayudas/` con nombres normales.
+3. El archivo real `Cuenta.txt` y el QR real **nunca** deben estar dentro de `apps/client/public/Ayudas/` con nombres normales.
 
 4. Documentación: El `README.md` dentro de Ayudas debe explicar el procedimiento exacto para el propietario.
 
@@ -131,9 +131,9 @@ git status
 
 ### 5.2 Checklist humano (marca cada ítem)
 
-- [ ] Revisé que `server/.env` no aparezca en `git add -A --dry-run`
-- [ ] Revisé que `client/public/Ayudas/Cuenta.txt` o cualquier QR real esté bloqueado
-- [ ] Revisé que la carpeta `client/backup/` completa esté bloqueada
+- [ ] Revisé que `apps/server/.env` no aparezca en `git add -A --dry-run`
+- [ ] Revisé que `apps/client/public/Ayudas/Cuenta.txt` o cualquier QR real esté bloqueado
+- [ ] Revisé que la carpeta `apps/client/backup/` completa esté bloqueada
 - [ ] No hay archivos .log grandes o con datos de clientes
 - [ ] No hay capturas de pantalla con datos sensibles en la carpeta del proyecto
 - [ ] Los archivos .example y EJEMPLO_* tienen solo datos falsos/obvios
@@ -161,7 +161,7 @@ git status
 ## 7. ESTRUCTURA RECOMENDADA DE CARPETAS SENSIBLES (Futuro)
 
 ```
-client/public/
+apps/client/public/
 ├── Ayudas/
 │   ├── README.md                    ← Instrucciones obligatorias
 │   ├── EJEMPLO_Cuenta.txt
@@ -178,7 +178,7 @@ El código del frontend debe preferir la carpeta `REAL/` cuando exista.
 ## 8. LECCIONES PERMANENTES PARA ESTE PROYECTO
 
 1. **El .gitignore es código vivo**. Cada vez que agregues una nueva integración (pasarela de pago, nuevo proveedor de WhatsApp, n8n, etc.), debes actualizarlo el mismo día.
-2. **Los backups personales siempre van a `client/backup/`** y esa carpeta está prohibida en Git.
+2. **Los backups personales siempre van a `apps/client/backup/`** y esa carpeta está prohibida en Git.
 3. **Nunca confíes en "ya lo tengo en .gitignore"**. Siempre haz dry-run antes de commits grandes.
 4. **La documentación de seguridad también es parte del producto**. Este archivo es tan importante como el código del motor de IA.
 5. **Cuando el proyecto maneje dinero real**, considera agregar un script de pre-commit hook (husky o similar) que ejecute automáticamente parte de este checklist.

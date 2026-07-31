@@ -8,8 +8,8 @@ Por favor lee **obligatoriamente** el documento completo de higiene de repositor
 
 ## Resumen rápido de reglas inquebrantables
 
-1. **Nunca commitees** archivos reales `.env`, `server/.env`, tokens de WhatsApp, URLs de Make.com, contraseñas, ni datos bancarios.
-2. Los datos bancarios reales (cuenta + QR) **solo** pueden existir dentro de `client/public/Ayudas/REAL/`. Todo lo demás está bloqueado por `.gitignore`.
+1. **Nunca commitees** archivos reales `.env`, `apps/server/.env`, tokens de WhatsApp, URLs de Make.com, contraseñas, ni datos bancarios.
+2. Los datos bancarios reales (cuenta + QR) **solo** pueden existir dentro de `apps/client/public/assets/bank/`. Todo lo demás está bloqueado por `.gitignore`.
 3. Siempre ejecuta el **Checklist Pre-Commit** (sección 5 del documento de seguridad) antes de hacer `git add` en ramas importantes.
 4. El backup del .gitignore anterior está en: `.gitignore.backup-before-2026-security-shield`
 

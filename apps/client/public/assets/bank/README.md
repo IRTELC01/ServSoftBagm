@@ -17,6 +17,6 @@ Esta carpeta contiene los activos relacionados con pagos por transferencia banca
 - Esta información solo se muestra en el Panel Administrativo (Dashboard).
 - No se expone en el sitio público ni en el Client Portal.
 - Los datos de la cuenta (banco, número, titular, etc.) viven en código en:
-  `client/src/config/bank.ts`
+  `apps/client/src/config/bank.ts`
 
 Mantener los datos de cuenta en código (en vez de archivos .txt) es más profesional, versionable y fácil de mantener.

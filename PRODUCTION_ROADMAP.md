@@ -43,10 +43,10 @@
 
 - [x] Auditoría completa (este documento + ANALYSIS.md).
 - [ ] Crear `.github/ISSUE_TEMPLATE/` y `PULL_REQUEST_TEMPLATE.md`.
-- [ ] Añadir `.gitignore` mejoras (node_modules ya está, pero asegurar `client/dist`, `.env*`, `*.db`, `security/*.log`).
+- [ ] Añadir `.gitignore` mejoras (node_modules ya está, pero asegurar `apps/client/dist`, `.env*`, `*.db`, `security/*.log`).
 - [ ] Ejecutar `npm audit fix` donde sea seguro + documentar excepciones.
-- [ ] Mover `client/dist` a `.gitignore` y eliminar del repo (commit de limpieza).
-- [ ] Actualizar `server/.env.example` con advertencias fuertes sobre MASTER_PASSWORD.
+- [ ] Mover `apps/client/dist` a `.gitignore` y eliminar del repo (commit de limpieza).
+- [ ] Actualizar `apps/server/.env.example` con advertencias fuertes sobre MASTER_PASSWORD.
 - [ ] Crear script `scripts/audit-security.ps1` y `scripts/audit-security.sh`.
 
 ### Automatización
@@ -82,12 +82,12 @@ jobs:
 
 **Opción B (más segura):** Eliminar completamente la funcionalidad de master password en producción (solo dejarla en desarrollo).
 
-**Entregable:** PR con cambios en `server/routes/auth.js`.
+**Entregable:** PR con cambios en `apps/server/routes/auth.js`.
 
 ### 1.2 Resolver Vulnerabilidades
 
 ```bash
-# En server/
+# En apps/server/
 npm audit
 npm audit fix --force   # donde sea seguro
 ```
@@ -175,10 +175,10 @@ Este es el **feature más importante** para que el negocio pueda usar el sistema
 
 | Tipo | Herramienta | Cobertura objetivo | Ubicación |
 |------|-------------|--------------------|---------|
-| Unit (backend) | Jest + Supertest | Rutas críticas (auth, invoices) | `server/__tests__/` |
-| Integration | Jest | Flujo completo factura + accounting | `server/__tests__/integration` |
-| E2E (frontend) | Playwright | Login → crear factura → ver resumen | `client/e2e/` |
-| Component | React Testing Library | Formularios clave | `client/src/**/*.test.jsx` |
+| Unit (backend) | Jest + Supertest | Rutas críticas (auth, invoices) | `apps/server/__tests__/` |
+| Integration | Jest | Flujo completo factura + accounting | `apps/server/__tests__/integration` |
+| E2E (frontend) | Playwright | Login → crear factura → ver resumen | `apps/client/e2e/` |
+| Component | React Testing Library | Formularios clave | `apps/client/src/**/*.test.jsx` |
 
 ### 3.2 CI Pipeline (`.github/workflows/ci.yml`)
 
@@ -214,7 +214,7 @@ Flujo obligatorio en todo PR:
 
 ### 4.1 Dockerfiles de Producción
 
-**Backend (`server/Dockerfile.prod`):**
+**Backend (`apps/server/Dockerfile.prod`):**
 - `node:20-alpine`
 - Multi-stage: install deps → build → runtime solo producción
 - No exponer puertos innecesarios

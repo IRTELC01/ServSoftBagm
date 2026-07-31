@@ -107,9 +107,9 @@ apps/client/src/assets/images/personal/
 *.db-journal
 *.db-shm
 *.db-wal
-server/runaway.db*
-server/*.sqlite*
-server/*.sqlite3*
+apps/server/runaway.db*
+apps/server/*.sqlite*
+apps/server/*.sqlite3*
 
 # Local Postgres data (when using docker volumes)
 postgres-data/
@@ -124,8 +124,8 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
-server/logs/
-client/logs/
+apps/server/logs/
+apps/client/logs/
 *.tmp
 *.temp
 .cache/

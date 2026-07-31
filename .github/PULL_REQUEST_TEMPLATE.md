@@ -11,7 +11,7 @@ Breve explicación de qué hace este PR y por qué es necesario.
 - [ ] Probado manualmente en local (SQLite)
 - [ ] Probado con PostgreSQL (docker compose)
 - [ ] Añadí/actualicé tests
-- [ ] Pasó `npm audit --audit-level=high` en `server/`
+- [ ] Pasó `npm audit --audit-level=high` en `apps/server/`
 
 ## Checklist de seguridad (obligatorio)
 - [ ] No dejé credenciales, tokens ni secretos en el código

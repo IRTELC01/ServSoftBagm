@@ -81,7 +81,7 @@ ServSoftBagm es una aplicación full-stack para una empresa de servicios de TI (
 | **Sin HTTPS enforcement** | Media | |
 | **Secretos en código/docs** | Alta | Múltiples valores por defecto documentados públicamente. |
 
-**Archivo clave:** `server/routes/auth.js:55-84` (master password logic).
+**Archivo clave:** `apps/server/routes/auth.js:55-84` (master password logic).
 
 ### 4.2 Calidad y Testing (CRÍTICO)
 
@@ -126,7 +126,7 @@ ServSoftBagm es una aplicación full-stack para una empresa de servicios de TI (
 - Dashboard.jsx es un monolito gigante (>340 líneas).
 - Client no tiene manejo de errores global ni ErrorBoundary.
 - Sin optimistic updates ni React Query/SWR.
-- `client/dist` está commiteado (anti-patrón).
+- `apps/client/dist` está commiteado (anti-patrón).
 - Múltiples hardcodes de credenciales en scripts y docs.
 - Falta de tipos (sin TypeScript).
 
@@ -145,14 +145,14 @@ ServSoftBagm es una aplicación full-stack para una empresa de servicios de TI (
 
 ## 6. Análisis de Código Específico
 
-### Backend (`server/`)
+### Backend (`apps/server/`)
 - `index.js`: Buen manejo de CORS con múltiples capas (defensivo pero frágil).
 - `auth.js`: Lógica de master password + OTP + 2FA todo en un solo archivo (debería separarse).
 - `invoices.js`: Cálculos correctos pero sin transacciones DB.
 - `whatsapp.js`: Buen flujo conversacional, pero 0 persistencia.
 - `db-pg.js`: Truco ingenioso de `prepare()` para emular better-sqlite3, pero frágil.
 
-### Frontend (`client/src/`)
+### Frontend (`apps/client/src/`)
 - `App.jsx`: Auto-login agresivo en desarrollo (útil pero riesgoso).
 - `Dashboard.jsx`: Demasiada lógica en un componente.
 - `api.js`: Manejo básico de 401, pero sin reintentos ni refresh token.
@@ -177,9 +177,9 @@ ServSoftBagm es una aplicación full-stack para una empresa de servicios de TI (
 
 ## 8. Archivos Clave Revisados
 
-- `server/index.js`, `routes/auth.js`, `routes/invoices.js`, `routes/whatsapp.js`
-- `server/db*.js` y `middleware/auth.js`
-- `client/src/App.jsx`, `pages/Dashboard.jsx`, `api.js`, `config.js`
+- `apps/server/index.js`, `routes/auth.js`, `routes/invoices.js`, `routes/whatsapp.js`
+- `apps/server/db*.js` y `middleware/auth.js`
+- `apps/client/src/App.jsx`, `pages/Dashboard.jsx`, `api.js`, `config.js`
 - `docker-compose.yml`, `render.yaml`
 - `scripts/*.ps1`
 - `README.md`, `MASTERDOC.md`

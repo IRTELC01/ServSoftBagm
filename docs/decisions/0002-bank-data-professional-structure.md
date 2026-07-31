@@ -4,13 +4,13 @@
 **Status**: Accepted
 
 ## Context
-The original approach for showing bank transfer details in the admin Dashboard used a loose `.txt` file inside `client/public/Ayudas/`, combined with ad-hoc folders like `REAL/` and complex `.gitignore` rules. This was inconsistent with the project's push toward Clean Architecture and professional standards.
+The original approach for showing bank transfer details in the admin Dashboard used a loose `.txt` file inside `apps/client/public/Ayudas/`, combined with ad-hoc folders like `REAL/` and complex `.gitignore` rules. This was inconsistent with the project's push toward Clean Architecture and professional standards.
 
 ## Decision
 We migrated the bank transfer information to a proper configuration module:
 
-- **Text data** (bank, account number, holder, CC, instructions): `client/src/config/bank.ts`
-- **QR Code image**: `client/public/assets/bank/QRBanco.jpeg`
+- **Text data** (bank, account number, holder, CC, instructions): `apps/client/src/config/bank.ts`
+- **QR Code image**: `apps/client/public/assets/bank/QRBanco.jpeg`
 
 This follows the same philosophy applied to other parts of the system (e.g. telemetry services, IA engine):
 - Configuration is centralized and typed.
@@ -29,7 +29,7 @@ This follows the same philosophy applied to other parts of the system (e.g. tele
 - Account details are now edited in `src/config/bank.ts`.
 
 ## Verification Checklist (for owner)
-- [ ] Real QR placed in `client/public/assets/bank/QRBanco.jpeg`
+- [ ] Real QR placed in `apps/client/public/assets/bank/QRBanco.jpeg`
 - [ ] Dashboard shows correct bank information from the config
 - [ ] QR image loads correctly in the admin panel
 - [ ] No console errors related to bank data

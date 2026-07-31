@@ -30,7 +30,7 @@ export const BANK_TRANSFER: BankTransferDetails = {
 
 /**
  * Ruta pública del código QR.
- * Archivo físico: client/public/assets/bank/QRBanco.jpeg
+ * Archivo físico: apps/client/public/assets/bank/QRBanco.jpeg
  */
 export const BANK_QR_PATH = '/assets/bank/QRBanco.jpeg' as const;
 

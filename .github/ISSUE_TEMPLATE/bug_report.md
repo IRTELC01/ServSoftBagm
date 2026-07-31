@@ -19,7 +19,7 @@ Descripción clara y concisa del bug.
 Qué debería pasar en su lugar.
 
 ## Capturas / Logs
-Si aplica, pega logs del backend (`server/*.log` o consola) o capturas.
+Si aplica, pega logs del backend (`apps/server/logs` o consola) o capturas.
 
 ## Entorno
 - Ambiente: Local / Staging / Producción

@@ -4,7 +4,7 @@ Usa esta lista antes de cada despliegue a producción real.
 
 ## 1. Seguridad
 
-- [ ] `npm audit --audit-level=high` limpio en `server/`
+- [ ] `npm audit --audit-level=high` limpio en `apps/server/`
 - [ ] `MASTER_ENABLE=false` en el entorno de producción
 - [ ] `JWT_SECRET` es un valor aleatorio fuerte (64+ caracteres), diferente de cualquier default
 - [ ] `DEFAULT_ADMIN_PASSWORD` cambiado y 2FA activado para la cuenta admin real

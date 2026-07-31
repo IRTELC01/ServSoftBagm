@@ -20,8 +20,8 @@
 ```
 ServSoftBagm/
 ├── apps/
-│   ├── server/                 → Backend (Express + PostgreSQL/SQLite)
-│   └── client/                 → Frontend (React + Vite + Tailwind)
+│   ├── apps/server/                 → Backend (Express + PostgreSQL/SQLite)
+│   └── apps/client/                 → Frontend (React + Vite + Tailwind)
 ├── packages/                   → (Futuro) Código compartido
 ├── turbo.json                  → Configuración de tareas y caché
 ├── package.json (raíz)         → Workspaces + scripts de Turborepo
@@ -30,7 +30,7 @@ ServSoftBagm/
 
 ## 3. Principios Aplicados
 
-- **Clean Architecture / Hexagonal** en el código (ver `apps/server/services/`).
+- **Clean Architecture / Hexagonal** en el código (ver `apps/apps/server/services/`).
 - **Separación de concerns** a nivel de proyecto (monorepo).
 - **Developer Experience (DX)** profesional: comandos simples desde la raíz.
 - **Documentación como código**: Decisiones registradas en `docs/decisions/` y guías de estudio.

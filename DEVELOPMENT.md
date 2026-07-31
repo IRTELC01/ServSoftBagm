@@ -7,8 +7,8 @@ This project has been refactored into a professional **Turborepo monorepo**.
 ```
 ServSoftBagm/
 ├── apps/
-│   ├── server/          # Backend (Node + Express)
-│   └── client/          # Frontend (React + Vite)
+│   ├── apps/server/          # Backend (Node + Express)
+│   └── apps/client/          # Frontend (React + Vite)
 ├── packages/            # (Future) Shared code
 ├── turbo.json
 └── package.json         # Root with workspaces + turbo scripts
@@ -44,7 +44,7 @@ This is the professional setup you asked for (Nivel 3):
 ## Database
 
 - The project supports both **PostgreSQL** (recommended for production-like work) and **SQLite**.
-- Schema initialization and migrations happen automatically when the backend starts (`server/db-pg.js` → `initSchema()`).
+- Schema initialization and migrations happen automatically when the backend starts (`apps/server/db-pg.js` → `initSchema()`).
 - If you see errors like "column X does not exist", it usually means your local database was created with an older schema. Restarting the backend should run the necessary `ALTER TABLE` statements.
 
 ## Docker
@@ -58,7 +58,7 @@ If you want a fully containerized experience in the future, let me know and we c
 ## Important Notes
 
 - Never run `npm run dev` from the root expecting only the frontend — it will do nothing useful unless you use the scripts we configured.
-- The project is deliberately split into `server/` and `client/` for architectural clarity. This is a feature, not a bug.
+- The project is deliberately split into `apps/server/` and `apps/client/` for architectural clarity. This is a feature, not a bug.
 - When you make changes to the backend schema (`db-pg.js`), always restart the backend process so migrations run.
 
 ## Need Help?

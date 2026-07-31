@@ -1084,7 +1084,7 @@ export default function Dashboard() {
                 )}
               </div>
             )}
-            {!iaResponse && <div className="text-xs text-white/40 mt-auto pt-2">El asistente usa el motor de IA agnóstico (sin costo). Cambia la lógica en server/services/iaEngineService.js cuando quieras integrar un LLM real.</div>}
+            {!iaResponse && <div className="text-xs text-white/40 mt-auto pt-2">El asistente usa el motor de IA agnóstico (sin costo). Cambia la lógica en apps/server/services/iaEngineService.js cuando quieras integrar un LLM real.</div>}
           </div>
         </div>
 

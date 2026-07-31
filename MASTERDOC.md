@@ -45,7 +45,7 @@ ServSoftBagm es una app para ofrecer servicios de software e informática, con e
 - Acceso seguro del administrador con 2FA.
 
 ## Alcance de la primera etapa
-- Backend local con Express + SQLite (Better‑SQLite3).
+- Backend (ahora en `apps/server/`) con Express + PostgreSQL/SQLite.
 - Autenticación de administrador con 2FA TOTP.
 - CRUD mínimo de facturas y registro contable simple.
 - Frontend React (Vite) con Tailwind y UI futurista.
@@ -54,7 +54,7 @@ ServSoftBagm es una app para ofrecer servicios de software e informática, con e
 ## Plan de acción (Etapa 1)
 1) Backend
 - Estructura Express, CORS, rate limit.
-- DB SQLite: tablas `users`, `invoices`, `transactions`.
+- DB: PostgreSQL (principal) / SQLite (desarrollo local). Tablas principales: `users`, `invoices`, `transactions`, `leads`.
 - Rutas:
   - `POST /api/auth/register`
   - `POST /api/auth/setup-2fa` (QR TOTP)
@@ -119,20 +119,20 @@ grok http 3000 (o el puerto real del backend) para probar WhatsApp Cloud.
 
 ## WhatsApp Cloud (pendiente)
 - Requisitos: adquisici�n de SIM y activaci�n del n�mero en Meta.
-- Pasos previstos: configurar VERIFY_TOKEN y n�mero; verificar webhook (GET); habilitar env�o desde Cloud; actualizar CONTACT_WHATSAPP en client/src/config.js; probar con endpoint de prueba y flujos por palabras clave.
+- Pasos previstos: configurar VERIFY_TOKEN y n�mero; verificar webhook (GET); habilitar env�o desde Cloud; actualizar CONTACT_WHATSAPP en apps/client/src/config.js; probar con endpoint de prueba y flujos por palabras clave.
 - Estado: pendiente SIM; backend listo y enlaces del frontend coordinados.
 
 ## Referencias de c�digo
-- [Landing.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Landing.jsx)
-- [Service.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Service.jsx)
+- [Landing.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/client/src/pages/Landing.jsx)
+- [Service.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/client/src/pages/Service.jsx)
 
 ### [2026-05] Refactorización de Arquitectura Limpia y Módulo de Telemetría
 - **Objetivo**: Introducir Centro de Telemetría Operacional, Data Analytics y Asistente IA Predictivo bajo principios estrictos de Clean Architecture / Capas Separadas (Hexagonal).
 - **Capa de Dominio (agnóstica)**:
-  - `server/services/analyticsService.js` — Data Mapper puro. Calcula SLA, Seguridad/Integridad, CSAT Predictivo y Data Science Readiness. Solo depende del adaptador `db`.
-  - `server/services/iaEngineService.js` — Motor de decisiones encapsulado. Hoy usa reglas de negocio determinísticas. Mañana se puede reemplazar por cualquier LLM sin tocar el resto del sistema.
+  - `apps/server/services/analyticsService.js` — Data Mapper puro. Calcula SLA, Seguridad/Integridad, CSAT Predictivo y Data Science Readiness. Solo depende del adaptador `db`.
+  - `apps/server/services/iaEngineService.js` — Motor de decisiones encapsulado. Hoy usa reglas de negocio determinísticas. Mañana se puede reemplazar por cualquier LLM sin tocar el resto del sistema.
 - **Capa de Adaptador**:
-  - `server/routes/leads.js` ahora expone `GET /api/leads/telemetry` y `POST /api/leads/telemetry/ask` como puentes delgados (solo orquestan y aplican requireAuth).
+  - `apps/server/routes/leads.js` ahora expone `GET /api/leads/telemetry` y `POST /api/leads/telemetry/ask` como puentes delgados (solo orquestan y aplican requireAuth).
 - **Frontend (Dashboard.jsx)**:
   - Sección de Facturas reemplazada por tabla cyberpunk ultra-compacta + `.slice(0, 5)` + filtro local instantáneo por Ticket/Cliente (100% client-side, cero impacto en BD).
   - Nuevo "Centro de Telemetría Operacional & Data Analytics" con 4 micro-tarjetas consumiendo el endpoint agnóstico.
@@ -142,5 +142,5 @@ grok http 3000 (o el puerto real del backend) para probar WhatsApp Cloud.
   - .gitignore endurecido previamente para proteger datos bancarios, .env y backups personales.
 - **Resultado**: El sistema sigue 100% funcional localmente. La nueva funcionalidad es completamente swappable (DB o motor de IA) sin romper el negocio.
 - **Próximo**: Cuando se desee, integrar Make.com/n8n para orquestar acciones automáticas basadas en las métricas de telemetría.
-- [Dashboard.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/client/src/pages/Dashboard.jsx)
-- [whatsapp.js](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/server/routes/whatsapp.js)
+- [Dashboard.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/client/src/pages/Dashboard.jsx)
+- [whatsapp.js](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/server/routes/whatsapp.js)

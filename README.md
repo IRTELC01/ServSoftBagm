@@ -56,7 +56,7 @@ Aplicación web full‑stack para ofrecer servicios de desarrollo de software, s
    - `cd client`
    - `npm run dev`
    - Abre `http://localhost:5173/` (si el puerto está ocupado, Vite usa otro).
-   - Botón de WhatsApp y sección de ayuda al final del Dashboard. Ajusta el número en `client/src/config.js` (CONTACT_WHATSAPP).
+   - Botón de WhatsApp y sección de ayuda al final del Dashboard. Ajusta el número en `apps/client/src/config.js` (CONTACT_WHATSAPP).
 
 ## Flujo de autenticación 2FA
 
@@ -82,18 +82,18 @@ Aplicación web full‑stack para ofrecer servicios de desarrollo de software, s
 ### Estructura del repositorio
 
 ```text
-ServSoftBagm/ (Monorepo con Turborepo)
+ServSoftBagm/ (Turborepo Monorepo)
 ├─ apps/
-│  ├─ client/           # Frontend React + Vite + Tailwind
-│  └─ server/           # Backend Express + PostgreSQL/SQLite
+│  ├─ client/           # Frontend (React + Vite + Tailwind)
+│  └─ server/           # Backend (Express + PostgreSQL/SQLite)
 │     ├─ routes/
-│     ├─ services/      # Lógica de negocio (Analytics, IA Engine, etc.)
+│     ├─ services/      # Business logic (Analytics, IA Engine, etc.)
 │     └─ db-pg.js / db-sqlite.js
-├─ packages/            # Código compartido (futuro)
-├─ scripts/             # Scripts de desarrollo y setup
-├─ docker-compose.yml   # PostgreSQL (principalmente)
-├─ README.md            # Guía principal
-└─ MASTERDOC.md         # Documento de análisis y ruta técnica
+├─ packages/            # Shared code (future)
+├─ scripts/             # Development & setup scripts
+├─ docker-compose.yml   # PostgreSQL (mainly)
+├─ turbo.json
+└─ package.json         # Root with Turborepo + workspaces
 ```
 
 ## Documentación
