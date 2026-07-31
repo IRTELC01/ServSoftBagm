@@ -4,6 +4,10 @@
  * Configuración de cuenta para pagos por transferencia.
  * Esta información se muestra únicamente en el Panel Administrativo.
  *
+ * Los valores reales viven en variables de entorno (VITE_BANK_*), nunca en
+ * este archivo, para que no queden datos personales/bancarios en el repo.
+ * Configúralas en apps/client/.env (ver apps/client/.env.example).
+ *
  * Principios aplicados:
  * - Datos de configuración centralizados (no dispersos en componentes)
  * - Fácil de actualizar sin tocar UI
@@ -20,12 +24,12 @@ export interface BankTransferDetails {
 }
 
 export const BANK_TRANSFER: BankTransferDetails = {
-  banco: 'Bancolombia',
-  tipoCuenta: 'Ahorros',
-  numeroCuenta: '[CUENTA-BANCARIA-REDACTADA]',
-  titular: 'Bernardo Adolfo Gómez Montoya',
-  cc: '[CEDULA-REDACTADA]',
-  instrucciones: 'Realiza la transferencia y envía el comprobante por WhatsApp.',
+  banco: import.meta.env.VITE_BANK_NAME || '',
+  tipoCuenta: import.meta.env.VITE_BANK_ACCOUNT_TYPE || '',
+  numeroCuenta: import.meta.env.VITE_BANK_ACCOUNT_NUMBER || '',
+  titular: import.meta.env.VITE_BANK_HOLDER_NAME || '',
+  cc: import.meta.env.VITE_BANK_HOLDER_ID || '',
+  instrucciones: import.meta.env.VITE_BANK_INSTRUCTIONS || 'Realiza la transferencia y envía el comprobante por WhatsApp.',
 };
 
 /**
