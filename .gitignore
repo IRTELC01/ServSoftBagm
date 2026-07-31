@@ -65,22 +65,15 @@ apps/client/.env.*
 # ============================================================
 # FINANCIAL & BANK DATA — NEVER COMMIT REAL INFORMATION
 # ============================================================
-# Real bank account details and QR codes for customer transfers
-apps/client/public/Ayudas/REAL/
-apps/client/public/Ayudas/real/
-apps/client/public/Ayudas/*real*
-apps/client/public/Ayudas/*REAL*
-apps/client/public/Ayudas/Cuenta*.txt
-apps/client/public/Ayudas/*cuenta*.txt
-apps/client/public/Ayudas/*QR*.*
-apps/client/public/Ayudas/*qr*.*
-apps/client/public/Ayudas/*banco*.*
-apps/client/public/Ayudas/*transferencia*.*
+# Real bank account details live only in apps/client/.env (see above).
+# The QR image encodes the real account, so the actual file is never
+# committed either — only local/deploy-time, like any other secret.
+apps/client/public/assets/bank/*
 
-# Only allow clearly marked EXAMPLE files (these are safe to commit)
-!apps/client/public/Ayudas/EJEMPLO_*
-!apps/client/public/Ayudas/README.md
-!apps/client/public/Ayudas/.gitkeep
+# Only allow clearly marked non-sensitive files (safe to commit)
+!apps/client/public/assets/bank/README.md
+!apps/client/public/assets/bank/.gitkeep
+!apps/client/public/assets/bank/EJEMPLO_*
 
 # Future payment processor credentials (Stripe, PayU, Mercado Pago, etc.)
 stripe*.json
