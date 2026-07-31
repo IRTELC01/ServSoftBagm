@@ -96,13 +96,11 @@ app.use('/', whatsappWebhook);
     if (!admin) {
       const hash = bcrypt.hashSync(DEFAULT_ADMIN_PASSWORD, 10);
       db.prepare('INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)').run('admin', hash, 'superadmin');
-      console.log('\n✅ Usuario admin creado correctamente.');
-      console.log(`   Usuario: admin`);
-      console.log(`   Contraseña: ${DEFAULT_ADMIN_PASSWORD}\n`);
+      console.log('\n✅ Usuario admin creado correctamente. La contraseña es la definida en DEFAULT_ADMIN_PASSWORD (.env).\n');
     } else {
       // Actualizar rol si no lo tiene (compatible con SQLite y PostgreSQL)
       db.prepare(`UPDATE users SET role = ? WHERE username = ? AND (role IS NULL OR role = '')`).run('superadmin', 'admin');
-      console.log('Usuario admin existente. Puedes entrar con: admin / servsoft123 (o el valor de DEFAULT_ADMIN_PASSWORD)');
+      console.log('Usuario admin existente.');
     }
   } catch (e) {
     console.warn('No se pudo garantizar usuario admin por defecto:', e?.message || e);
