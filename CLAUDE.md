@@ -86,14 +86,18 @@ desactualizado — confía en el código, no en el doc.
    creó `.mailmap` consolidando las 5 identidades históricas.
 3. ✅ Carpeta `_local/` creada (ignorada) con subcarpetas `seguimiento/`,
    `backups-db/`, `evidencias/`, `secretos/`.
-4. 🔄 Alineación de documentación: corregir afirmaciones de que el backend
-   "es" hexagonal/Clean Architecture (debe decir "en transición hacia") y
-   consolidar ~8 documentos redundantes de monorepo
-   (`MONOREPO_MIGRATION`, `CLEANUP_MONOREPO_REFERENCES`,
+4. ✅ Alineación de documentación: corregidas las afirmaciones de que el
+   backend "es" hexagonal/Clean Architecture (ahora dicen "en transición
+   hacia", con nota de estado real y referencia a Fase 3) en
+   `DEVELOPMENT.md`, `MASTERDOC.md`, `docs/architecture/ARCHITECTURE_PRINCIPLES.md`
+   y `docs/decisions/0001-github-account-separation.md`. Los 5 documentos
+   redundantes de monorepo (`MONOREPO_MIGRATION`, `CLEANUP_MONOREPO_REFERENCES`,
    `MONOREPO_CLEANUP_SUMMARY`, `MONOREPO_FINAL_STATUS`,
-   `GUIA_DE_ESTUDIO_MONOREPO_Y_ARQUITECTURA`, etc.) en un solo doc
-   (`docs/MONOREPO.md`), moviendo los originales a `docs/historico/` en vez de
-   borrarlos.
+   `GUIA_DE_ESTUDIO_MONOREPO_Y_ARQUITECTURA`) se consolidaron en
+   `docs/MONOREPO.md` (verificado contra el repo real) y se movieron a
+   `docs/historico/` sin borrarlos.
+
+**Fase 1 completa.** Pendiente: OK explícito del usuario antes de iniciar Fase 2.
 
 ### Fase 2 — NO ejecutar aún (pendiente de OK del usuario)
 Partir `apps/client/src/pages/Dashboard.jsx` (~1.121 líneas, God Component) en
