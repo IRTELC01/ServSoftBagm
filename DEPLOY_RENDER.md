@@ -1,28 +1,31 @@
-# 🚀 Guía de Despliegue en Render.com (Paso a Paso)
+# 🚀 Guía de Despliegue en Render.com + Neon (Paso a Paso)
 
-Esta guía te permite tener **ServSoftBagm en producción hoy mismo** de forma gratuita.
+Esta guía despliega **ServSoftBagm en producción** gratis en Render (backend +
+frontend) usando **Postgres en Neon** como base de datos (Render tiene disco
+efímero: SQLite se borraría en cada deploy/restart).
+
+> ⚠️ **NUNCA despliegues desde `main`**. `main` todavía contiene datos
+> bancarios reales expuestos en el historial de git (ver `CLAUDE.md`, sección
+> "Cómo continuar"). El despliegue debe salir de una rama de fixes
+> (`chore/pre-deploy-hardening` o la que la reemplace tras mergearse) hasta
+> que se resuelva ese pendiente.
 
 ---
 
 ## ✅ Requisitos Previos
 
 1. Cuenta en [Render.com](https://render.com) (gratis)
-2. El código en un repositorio de GitHub (puedes hacer fork o usar tu propio repo)
-3. Haber probado localmente que funciona (recomendado)
+2. Cuenta en [Neon.tech](https://neon.tech) (gratis) con una base de datos Postgres creada
+3. El código en un repositorio de GitHub, desplegado desde la rama correcta (no `main`)
+4. Haber probado localmente que funciona (recomendado)
 
 ---
 
-## 📌 Paso 1: Prepara tu repositorio en GitHub
+## 📌 Paso 1: Crea la base de datos en Neon
 
-```bash
-# Asegúrate de estar en la rama main con los últimos cambios
-git status
-git add .
-git commit -m "chore: preparar despliegue en Render"
-git push origin main
-```
-
-> **Recomendación**: Haz un **fork** del repositorio original si no quieres modificar el tuyo todavía.
+1. Entra a [Neon.tech](https://neon.tech) y crea un proyecto/base de datos nueva
+2. Copia la **connection string** (formato `postgresql://usuario:password@host/dbname?sslmode=require`)
+3. Guárdala: la necesitarás en el Paso 4 para `DATABASE_URL`
 
 ---
 
@@ -42,10 +45,28 @@ Render creará **dos servicios** automáticamente:
 
 ---
 
-## 📌 Paso 3: Espera el primer deploy del Backend
+## 📌 Paso 3: Configura las variables obligatorias del Backend
+
+En `render.yaml` varias variables quedaron marcadas como `sync: false`
+(Render no les pone valor automáticamente; hay que pegarlas a mano en el
+dashboard antes de que el servicio funcione):
+
+En el servicio **servsoftbagm-api** → pestaña **Environment**:
+
+1. `DATABASE_URL` → pega la connection string de Neon del Paso 1
+2. `DEFAULT_ADMIN_PASSWORD` → una contraseña fuerte y única (NUNCA
+   `servsoft123` ni ningún valor de ejemplo del repo)
+3. `FRONTEND_ORIGIN` → se completa en el Paso 6, una vez exista la URL del frontend
+
+El resto (`DB_DRIVER=pg`, `OPEN_ACCESS=false`, `MASTER_ENABLE=false`,
+`JWT_SECRET`) ya vienen fijados en `render.yaml`.
+
+---
+
+## 📌 Paso 4: Espera el primer deploy del Backend
 
 - Ve a la sección **"servsoftbagm-api"**
-- Espera a que el estado cambie a **"Live"** (puede tardar 2-4 minutos la primera vez por la compilación de better-sqlite3)
+- Espera a que el estado cambie a **"Live"**
 - Una vez que esté Live, **copia la URL** que aparece arriba (ejemplo):
   ```
   https://servsoftbagm-api-abc123.onrender.com
@@ -55,7 +76,7 @@ Render creará **dos servicios** automáticamente:
 
 ---
 
-## 📌 Paso 4: Configura la variable crítica del Frontend (VITE_API_URL)
+## 📌 Paso 5: Configura la variable crítica del Frontend (VITE_API_URL)
 
 Este es el paso **más importante**.
 
@@ -74,24 +95,10 @@ Este es el paso **más importante**.
 
 ---
 
-## 📌 Paso 5: Configura VITE_OPEN_ACCESS (para Demo Pública)
+## 📌 Paso 6: Configura FRONTEND_ORIGIN en el Backend
 
-Mientras tengas la variable `VITE_OPEN_ACCESS=true`, cualquier persona podrá entrar al Dashboard sin login.
-
-**Recomendado para hoy (demo):**
-
-1. En el servicio **servsoftbagm-web**, ve a **Environment**
-2. Asegúrate que exista esta variable:
-   - `VITE_OPEN_ACCESS` = `true`
-
-3. En el servicio **servsoftbagm-api**, ve a **Environment** y verifica:
-   - `OPEN_ACCESS` = `true`
-
----
-
-## 📌 Paso 6: (Opcional pero recomendado) Configura FRONTEND_ORIGIN
-
-Para mayor seguridad (aunque uses `OPEN_ACCESS=true`):
+Con `OPEN_ACCESS=false`, el backend solo acepta peticiones desde orígenes
+explícitamente permitidos.
 
 1. En el servicio **servsoftbagm-api** → pestaña **Environment**
 2. Edita (o crea) la variable:
@@ -100,7 +107,6 @@ Para mayor seguridad (aunque uses `OPEN_ACCESS=true`):
      ```
      https://servsoftbagm-web-xyz123.onrender.com
      ```
-
 3. Guarda y redeploya el **API**.
 
 ---
@@ -109,30 +115,27 @@ Para mayor seguridad (aunque uses `OPEN_ACCESS=true`):
 
 1. Abre la URL de tu frontend (`servsoftbagm-web`)
 2. Haz clic en "Acceso Admin"
-3. Usa las credenciales por defecto:
+3. Ingresa con:
    - Usuario: `admin`
-   - Contraseña: `servsoft123`
-4. Deberías entrar al **Dashboard** mejorado
+   - Contraseña: la que definiste como `DEFAULT_ADMIN_PASSWORD` en el Paso 3
+4. Deberías entrar al **Dashboard**
 5. Crea una factura de prueba
 6. Verifica que aparezca en la lista y que los gráficos se actualicen
 
 ---
 
-## 🔐 Pasos de Seguridad (Después de la Demo)
+## 🔐 Notas de Seguridad
 
-Cuando quieras pasar a producción real:
-
-### En `servsoftbagm-api`:
-- Cambia `DEFAULT_ADMIN_PASSWORD` a una contraseña fuerte
-- Cambia `OPEN_ACCESS` a `false`
-- Asegúrate de tener un `JWT_SECRET` fuerte (ya se genera automáticamente)
-
-### En `servsoftbagm-web`:
-- Cambia `VITE_OPEN_ACCESS` a `false`
-
-### Recomendado:
-- Activa 2FA para el usuario `admin` desde el panel de Login
-- Cambia el nombre de los servicios si lo deseas (desde Settings)
+- `OPEN_ACCESS` / `VITE_OPEN_ACCESS` deben quedar en `false` en producción
+  real. `render.yaml` ya trae ese valor por defecto — solo actívalos en
+  `true` para una demo temporal y desactívalos después.
+- `DEFAULT_ADMIN_PASSWORD` es obligatorio configurarlo manualmente (no tiene
+  valor por defecto en `render.yaml`). Nunca reutilices `servsoft123` ni
+  ningún placeholder de `.env.example`.
+- `JWT_SECRET` se genera automáticamente (`generateValue: true`), no hace
+  falta tocarlo.
+- Recomendado: activa 2FA para el usuario `admin` desde el panel de Login
+  después del primer acceso.
 
 ---
 
@@ -143,7 +146,8 @@ Cuando quieras pasar a producción real:
 | Frontend no se conecta al API | Verifica que `VITE_API_URL` termine en `/api` y que el API esté Live |
 | Error CORS | Asegúrate de tener `FRONTEND_ORIGIN` configurado correctamente en el API |
 | Build falla en backend | Revisa los logs del servicio `servsoftbagm-api`. A veces hay que hacer "Clear build cache" + Manual Deploy |
-| better-sqlite3 falla | En Render normalmente funciona. Si falla, ve a la config del servicio y agrega en Build Command: `npm ci --build-from-source` |
+| Error de conexión a la base de datos | Verifica que `DATABASE_URL` esté bien pegada (incluye `?sslmode=require`) y que la base de Neon esté activa |
+| No puedo iniciar sesión | Verifica que configuraste `DEFAULT_ADMIN_PASSWORD` manualmente en el Paso 3 antes del primer deploy |
 | Cambios no se ven | Siempre haz "Manual Deploy" después de cambiar variables de entorno |
 
 ---
@@ -159,5 +163,3 @@ Cuando quieras pasar a producción real:
 ## ¿Listo?
 
 Sigue los pasos en orden. Si te atoras en algún punto, copia el error exacto de los logs de Render y pégalo aquí.
-
-**¡Hoy puedes tener tu aplicación pública!** 🔥

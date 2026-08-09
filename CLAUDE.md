@@ -99,6 +99,39 @@ desactualizado — confía en el código, no en el doc.
 
 **Fase 1 completa.** Pendiente: OK explícito del usuario antes de iniciar Fase 2.
 
+## ⚠️ Despliegue — orden obligatorio
+
+> **El despliegue SIEMPRE sale de una rama de fixes, NUNCA de `main`.**
+> `main` todavía contiene datos bancarios reales expuestos en el historial de
+> git (commit `89be154`, pusheado a `origin/main`) — ver "Pendiente de
+> decisión del usuario" en Fase 0 arriba.
+
+Orden pendiente:
+1. **[EN CURSO]** Endurecer para producción en `chore/pre-deploy-hardening`
+   (partió de `chore/auditoria-2026`): `render.yaml` corregido a rutas
+   monorepo + Postgres/Neon + acceso cerrado por defecto, auto-login
+   inseguro eliminado del cliente, variables de deploy documentadas
+   (`.env.example`, `DEPLOY_RENDER.md`).
+2. **[PENDIENTE]** Resolver `main`: decidir entre reescribir historia
+   (`git filter-repo` + force-push), privatizar el repo, o invalidar/cambiar
+   los datos bancarios reales expuestos.
+3. **[PENDIENTE]** Desplegar (Render + Neon), solo después de 1 y 2.
+
+### Fase pre-deploy — endurecimiento (EN CURSO en `chore/pre-deploy-hardening`)
+1. ✅ `render.yaml`: `rootDir` corregido a `apps/server` / `apps/client`;
+   backend movido a Postgres/Neon (`DB_DRIVER=pg`, `DATABASE_URL` con
+   `sync: false`); `OPEN_ACCESS`/`VITE_OPEN_ACCESS` a `"false"`;
+   `DEFAULT_ADMIN_PASSWORD` sin valor por defecto (`sync: false`,
+   obligatorio manual); `MASTER_ENABLE="false"` explícito.
+2. ✅ Eliminado el auto-login inseguro (`admin`/`servsoft123`) de
+   `apps/client/src/App.jsx`; quitados los valores por defecto de
+   usuario/contraseña en `Login.jsx` y `Register.jsx`. El flujo manual de
+   `/login` sigue intacto.
+3. ✅ Documentación de variables de deploy actualizada en
+   `apps/server/.env.example`, `apps/client/.env.production.example` y
+   `DEPLOY_RENDER.md` (ya no recomienda `OPEN_ACCESS=true` ni credenciales
+   por defecto como flujo normal).
+
 ### Fase 2 — NO ejecutar aún (pendiente de OK del usuario)
 Partir `apps/client/src/pages/Dashboard.jsx` (~1.121 líneas, God Component) en
 componentes: `InvoicesPanel`, `TelemetryCenter`, `IAAssistant`, `BankTransferCard`.
