@@ -25,6 +25,9 @@ dist/
 build/
 *.local
 
+# Turborepo cache
+.turbo/
+
 # Client (Vite/React)
 apps/client/dist/
 apps/client/.vite/
