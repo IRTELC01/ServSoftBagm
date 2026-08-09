@@ -73,56 +73,9 @@ export default function Service() {
         <div className="mt-4 card-float p-5 border border-white/10">
           <h3 className="font-semibold mb-2">Incluye</h3>
           <ul className="space-y-1.5 text-sm">
-            {data.features.map((feature, i) => {
-              // Enlaces reales y serios según el tipo de feature
-              const links = {
-                'Conectores y ETL ligeros': 'https://airbyte.com/',
-                'Sincronización bidireccional': 'https://firebase.google.com/docs/firestore/solutions/offline',
-                'Webhooks y mensajería (WhatsApp, email)': 'https://developers.facebook.com/docs/whatsapp/cloud-api',
-                'Observabilidad y monitoreo': 'https://grafana.com/',
-                'Seguridad y trazabilidad de datos': 'https://owasp.org/',
-                'Análisis y modelado de procesos': 'https://www.bpmn.org/',
-                'Arquitectura modular y APIs REST/GraphQL': 'https://graphql.org/',
-                'UI/UX con enfoque productivo': 'https://www.nngroup.com/',
-                'Pruebas y despliegue automatizado': 'https://www.cypress.io/',
-                'Integración con sistemas existentes': 'https://n8n.io/',
-                'Diseño de flujo y dispositivos': 'https://www.arduino.cc/',
-                'Integración de acceso y registro': 'https://www.home-assistant.io/',
-                'Paneles de control y alertas': 'https://grafana.com/',
-                'Logística y trazabilidad operacional': 'https://www.odoo.com/',
-                'Soporte e instalación': 'https://www.home-assistant.io/',
-                'Diagnóstico guiado': 'https://www.teamviewer.com/',
-                'Asistencia remota segura': 'https://anydesk.com/',
-                'Visitas en sitio': 'https://www.teamviewer.com/',
-                'Documentación y recomendaciones': 'https://docs.microsoft.com/',
-                'Planes de soporte': 'https://www.zendesk.com/',
-                'Mantenimiento preventivo y correctivo': 'https://www.dell.com/support/home',
-                'Actualización de software y drivers': 'https://www.intel.com/content/www/us/en/support.html',
-                'Reemplazo de partes': 'https://www.ifixit.com/',
-                'Optimización de rendimiento': 'https://www.passmark.com/',
-                'Checklist y reporte': 'https://www.atlassian.com/software/confluence',
-                'Diagnóstico del medio': 'https://www.easeus.com/datarecoverywizard/',
-                'Clonado y extracción de datos': 'https://www.clonezilla.org/',
-                'Recuperación por particiones': 'https://www.cgsecurity.org/wiki/TestDisk',
-                'Informe y recomendaciones': 'https://www.sleuthkit.org/',
-                'Opciones de respaldo': 'https://www.backblaze.com/',
-              };
-
-              const url = links[feature] || '#';
-
-              return (
-                <li key={i}>
-                  <a 
-                    href={url} 
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="text-white/80 hover:text-neon-cyan hover:underline transition-colors"
-                  >
-                    {feature} →
-                  </a>
-                </li>
-              );
-            })}
+            {data.features.map((feature, i) => (
+              <li key={i} className="text-white/80">{feature}</li>
+            ))}
           </ul>
         </div>
       )}
