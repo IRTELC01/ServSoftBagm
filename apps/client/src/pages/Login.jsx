@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { login, register, setToken } from '../api'
 
 export default function Login() {
-  const [username, setUsername] = useState('admin')
-  const [password, setPassword] = useState('servsoft123')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [code, setCode] = useState('')
   const [msg, setMsg] = useState('')
 

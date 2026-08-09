@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { register } from '../api'
 
 export default function Register() {
-  const [username, setUsername] = useState('admin')
-  const [password, setPassword] = useState('servsoft123')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [msg, setMsg] = useState('')
 
   const onSubmit = async (e) => {

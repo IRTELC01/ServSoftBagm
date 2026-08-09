@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Link, Navigate, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
 import './index.css'
 
 import Landing from './pages/Landing'
@@ -12,7 +11,6 @@ import Service from './pages/Service'
 import WhatsAppButton from './components/WhatsAppButton'
 import Chatbot from './components/Chatbot'
 import ClientPortal from './pages/ClientPortal'
-import { login, register, setToken } from './api'
 import { BRAND_NAME, CONTACT_EMAIL, CONTACT_WHATSAPP } from './config'
 
 function Navbar() {
@@ -67,22 +65,6 @@ function WhatsAppButtonWrapper() {
 }
 
 export default function App() {
-  // Auto-login global (solo dev): intenta admin/servsoft123 y registra si hace falta
-  useEffect(() => {
-    const run = async () => {
-      // En producción sólo auto-login si está habilitado explícitamente
-      if (import.meta.env.PROD && String(import.meta.env.VITE_OPEN_ACCESS) !== 'true') return
-      const hasToken = !!localStorage.getItem('runaway_token')
-      if (hasToken) return
-      try {
-        let r = await login('admin', 'servsoft123', '')
-        if (!r.token) { await register('admin', 'servsoft123'); r = await login('admin', 'servsoft123', '') }
-        if (r.token) { setToken(r.token) }
-      } catch { void 0 }
-    }
-    run()
-  }, [])
-
   function RequireAuth({ children }) {
     const openAccess = String(import.meta.env.VITE_OPEN_ACCESS) === 'true'
     const token = localStorage.getItem('runaway_token')
