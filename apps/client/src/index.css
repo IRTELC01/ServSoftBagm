@@ -233,22 +233,21 @@ html, body, #root {
 .pay-tarjeta     { background: rgba(43,134,197,0.15); border-color: rgba(43,134,197,0.5); color: #2b86c5; }
 .pay-transferencia { background: rgba(255,60,172,0.15); border-color: rgba(255,60,172,0.5); color: #ff3cac; }
 
-/* Fix for dark theme select options (used in lead registration form and other selects) */
-select.input-neon,
-.input-neon select {
+/* Fix for dark theme select options: native <option> ignores the parent's
+   dark background and renders white-on-white until hovered. Applies to
+   every <select> in the app (all of them live on the dark/neon theme). */
+select {
   background-color: #0f172a; /* dark background */
   color: #f1f5f9; /* light text */
 }
 
-select.input-neon option,
-.input-neon select option {
+select option {
   background-color: #0f172a;
   color: #f1f5f9;
 }
 
 /* When the select is focused, keep consistent */
-select.input-neon:focus option,
-.input-neon select:focus option {
+select:focus option {
   background-color: #1e2937;
   color: white;
 }
