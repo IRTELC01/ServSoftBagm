@@ -9,33 +9,42 @@
 # 4. Actualiza VITE_API_URL en el servicio estático
 # 5. Redeploya el frontend
 #
-# NOTA: better-sqlite3 requiere compilación nativa.
-# Render suele manejarlo bien, pero el primer build puede tardar 1-2 minutos extra.
+# NOTA: el backend usa Postgres (Neon) en producción vía DB_DRIVER=pg +
+# DATABASE_URL. NO usar SQLite en Render: el disco es efímero y los datos
+# se pierden en cada deploy/restart.
 # =====================================================
 
 services:
   # ============================================
-  # BACKEND API - Node.js + Express + SQLite
+  # BACKEND API - Node.js + Express + Postgres (Neon)
   # ============================================
   - type: web
     name: servsoftbagm-api
     env: node
-    rootDir: server
+    rootDir: apps/server
     buildCommand: npm ci
     startCommand: npm start
     healthCheckPath: /
     plan: free
     autoDeploy: true
     envVars:
+      - key: DB_DRIVER
+        value: pg
+      - key: DATABASE_URL
+        sync: false
+        # Pega aquí la connection string de Neon (formato postgresql://...)
       - key: JWT_SECRET
         generateValue: true
       - key: DEFAULT_ADMIN_PASSWORD
-        value: servsoft123
-        # ⚠️ CAMBIA ESTA CONTRASEÑA después del primer deploy en producción real
+        sync: false
+        # OBLIGATORIO: define manualmente una contraseña fuerte antes del deploy.
+        # NUNCA dejar el valor por defecto servsoft123 en producción.
+      - key: MASTER_ENABLE
+        value: "false"
       - key: OPEN_ACCESS
-        value: "true"
-        # true = acceso público sin login (ideal para demo)
-        # false = obliga login (recomendado para producción)
+        value: "false"
+        # true = acceso público sin login (solo demo)
+        # false = obliga login (obligatorio en producción)
       - key: FRONTEND_ORIGIN
         sync: false
         # Después del deploy del frontend, pon aquí su URL completa
@@ -47,7 +56,7 @@ services:
   - type: web
     runtime: static
     name: servsoftbagm-web
-    rootDir: client
+    rootDir: apps/client
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     plan: free
@@ -65,9 +74,9 @@ services:
       - key: VITE_API_URL
         value: https://REEMPLAZAR-CON-URL-DEL-API.onrender.com/api
 
-      # Permite acceso sin login (demo pública)
+      # false = obliga login (obligatorio en producción)
       - key: VITE_OPEN_ACCESS
-        value: "true"
+        value: "false"
     routes:
       - type: rewrite
         source: /*
