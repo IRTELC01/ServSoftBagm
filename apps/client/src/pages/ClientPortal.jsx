@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { API_URL } from '../api'
+import { API_URL, resolvePhotoUrl } from '../api'
 
 export default function ClientPortal() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -257,10 +257,10 @@ export default function ClientPortal() {
               <div className="grid grid-cols-2 gap-2">
                 {clientData.photos.map((photo, i) => (
                   <div key={i} className="relative group">
-                    <img 
-                      src={photo.startsWith('/') ? photo : `/assets/images/${photo}`} 
-                      alt={`Equipo ${i+1}`} 
-                      className="rounded-lg border border-white/10 object-cover h-32 w-full" 
+                    <img
+                      src={resolvePhotoUrl(photo)}
+                      alt={`Equipo ${i+1}`}
+                      className="rounded-lg border border-white/10 object-cover h-32 w-full"
                     />
                   </div>
                 ))}
