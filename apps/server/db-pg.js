@@ -1,7 +1,14 @@
 const { Pool } = require('pg');
 
+// Neon (y la mayoría de Postgres administrados) exigen SSL. Postgres local
+// (docker-compose, localhost) normalmente no lo soporta, así que solo lo
+// activamos cuando el host no es local.
+const connectionString = process.env.DATABASE_URL;
+const isLocalHost = /(^|@)(localhost|127\.0\.0\.1)/.test(connectionString || '');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
+  ssl: isLocalHost ? false : { rejectUnauthorized: false },
 });
 
 async function initSchema() {
