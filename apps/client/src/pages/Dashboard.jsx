@@ -993,7 +993,12 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <div className="text-neon-cyan text-xs tracking-[2px] font-semibold">OPERACIONAL EN TIEMPO REAL</div>
-                <h3 className="text-xl font-bold tracking-tight">Centro de Telemetría & Analytics</h3>
+                <h3 className="text-xl font-bold tracking-tight flex items-center gap-2 flex-wrap">
+                  Centro de Telemetría & Analytics
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-yellow-400/15 border border-yellow-400/40 text-yellow-300">
+                    Beta — datos de demostración
+                  </span>
+                </h3>
               </div>
               <button 
                 onClick={loadTelemetry} 
@@ -1044,7 +1049,12 @@ export default function Dashboard() {
           {/* Asistente IA de Decisiones */}
           <div className="lg:col-span-2 neon-card p-5 border-neon-pink/30 flex flex-col">
             <div className="text-neon-pink text-xs tracking-[2px] font-semibold mb-1">INTELIGENCIA OPERATIVA</div>
-            <h3 className="text-xl font-bold tracking-tight mb-3">Asistente IA de Decisiones</h3>
+            <h3 className="text-xl font-bold tracking-tight mb-3 flex items-center gap-2 flex-wrap">
+              Asistente IA de Decisiones
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-yellow-400/15 border border-yellow-400/40 text-yellow-300">
+                Beta — datos de demostración
+              </span>
+            </h3>
 
             <div className="flex gap-2 mb-3">
               <input
