@@ -101,10 +101,8 @@ desactualizado — confía en el código, no en el doc.
 
 ## ⚠️ Despliegue — orden obligatorio
 
-> **El despliegue SIEMPRE sale de una rama de fixes, NUNCA de `main`.**
-> `main` todavía contiene datos bancarios reales expuestos en el historial de
-> git (commit `89be154`, pusheado a `origin/main`) — ver "Pendiente de
-> decisión del usuario" en Fase 0 arriba.
+> **El despliegue SIEMPRE sale de una rama de fixes, NUNCA directamente de
+> decisiones sin verificar.** Ver estado real de `main` abajo.
 
 Orden pendiente:
 1. **[EN CURSO]** Endurecer para producción en `chore/pre-deploy-hardening`
@@ -112,10 +110,25 @@ Orden pendiente:
    monorepo + Postgres/Neon + acceso cerrado por defecto, auto-login
    inseguro eliminado del cliente, variables de deploy documentadas
    (`.env.example`, `DEPLOY_RENDER.md`).
-2. **[PENDIENTE]** Resolver `main`: decidir entre reescribir historia
-   (`git filter-repo` + force-push), privatizar el repo, o invalidar/cambiar
-   los datos bancarios reales expuestos.
-3. **[PENDIENTE]** Desplegar (Render + Neon), solo después de 1 y 2.
+2. **[COMPLETADO]** Resolver `main`: se hizo backup mirror completo
+   (`../ServSoftBagm-backup-pre-filter-repo`), se corrió `git filter-repo`
+   sobre las 4 ramas (purga de número de cuenta, cédula y `QRBanco.jpeg` del
+   historial completo — el nombre del titular se dejó intacto a propósito,
+   ver detalle en el historial de esta conversación), verificado con
+   búsquedas `-S`/`--objects` en cero resultados, y se hizo force-push de
+   `main`, `chore/auditoria-2026` y `chore/pre-deploy-hardening` a
+   `origin`. `feature/secure-billing-2fa-monetizacion` no necesitó push
+   (nunca tuvo el contenido filtrado). **Nota:** los datos ya estuvieron
+   públicos antes del force-push — si alguien clonó el repo antes de eso,
+   todavía los tiene.
+3. **[PENDIENTE]** Desplegar (Render + Neon).
+
+> ⚠️ **Antes de ir a producción en Render:** migrar el almacenamiento de
+> fotos de leads (`apps/server/services/photoStorage.js`) de disco local a
+> un proveedor persistente (ej. Cloudinary free tier) — el disco de Render
+> es efímero y las fotos subidas se perderían en cada redeploy. El módulo
+> ya está detrás de una interfaz (`savePhoto()`) pensada para que este
+> cambio sea solo reescribir ese archivo, sin tocar rutas ni frontend.
 
 ### Fase pre-deploy — endurecimiento (EN CURSO en `chore/pre-deploy-hardening`)
 1. ✅ `render.yaml`: `rootDir` corregido a `apps/server` / `apps/client`;
@@ -131,6 +144,18 @@ Orden pendiente:
    `apps/server/.env.example`, `apps/client/.env.production.example` y
    `DEPLOY_RENDER.md` (ya no recomienda `OPEN_ACCESS=true` ni credenciales
    por defecto como flujo normal).
+4. ✅ SSL habilitado en el pool de Postgres (`db-pg.js`) para conectar con
+   Neon (condicionado a que el host no sea localhost, para no romper
+   Postgres local vía docker-compose).
+5. ✅ Bugs de QA manual encontrados y corregidos: `<option>` invisibles en
+   selects del tema oscuro; enlaces externos de relleno quitados de las
+   tarjetas de servicio (`Service.jsx`); Telemetría y Asistente IA
+   etiquetados como Beta/demo; `POST /api/leads/verify` estaba roto (500
+   siempre, variable `clientMessage` no definida) y el `PATCH /:id` de
+   leads tenía un handler duplicado inalcanzable que impedía guardar
+   imágenes — ambos corregidos en `routes/leads.js`. Subida de fotos de
+   evidencia construida de punta a punta (admin sube, cliente ve tras OTP)
+   — ver advertencia de storage arriba.
 
 ### Fase 2 — NO ejecutar aún (pendiente de OK del usuario)
 Partir `apps/client/src/pages/Dashboard.jsx` (~1.121 líneas, God Component) en
