@@ -1,8 +1,15 @@
 const express = require('express');
+const multer = require('multer');
 const db = require('../db');
 const { requireAuth } = require('../middleware/auth');
+const photoStorage = require('../services/photoStorage');
 
 const router = express.Router();
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024, files: 5 },
+});
 
 // Public endpoint - anyone can submit a lead from the chatbot/landing
 router.post('/', async (req, res) => {
@@ -99,6 +106,34 @@ router.patch('/:id', requireAuth, async (req, res) => {
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar lead' });
+  }
+});
+
+// Protected - Subir foto(s) de evidencia (diagnóstico/reparación) asociadas a un lead
+router.post('/:id/photos', requireAuth, upload.array('photos', 5), async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'No se recibió ninguna foto' });
+  }
+
+  try {
+    const lead = await db.prepare('SELECT images FROM leads WHERE id = ?').get(id);
+    if (!lead) return res.status(404).json({ error: 'Lead no encontrado' });
+
+    const current = lead.images ? JSON.parse(lead.images) : [];
+    const uploaded = [];
+    for (const file of req.files) {
+      const { url } = await photoStorage.savePhoto(file, { leadId: id });
+      uploaded.push(url);
+    }
+    const updated = [...current, ...uploaded];
+
+    await db.prepare('UPDATE leads SET images = ? WHERE id = ?').run(JSON.stringify(updated), id);
+    res.json({ success: true, images: updated });
+  } catch (error) {
+    console.error('Error subiendo fotos del lead:', error);
+    res.status(error.status || 500).json({ error: error.message || 'Error al subir fotos' });
   }
 });
 

@@ -112,6 +112,10 @@ postgres-data/
 pgdata/
 *.pgdata
 
+# Fotos de evidencia subidas por el admin (disco local, temporal - ver
+# apps/server/services/photoStorage.js para el aviso de migracion pendiente)
+apps/server/uploads/
+
 # ============================================================
 # LOGS, CACHES, TEMPORARY
 # ============================================================

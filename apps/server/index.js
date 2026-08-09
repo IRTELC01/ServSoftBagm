@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
+const path = require('path');
 dotenv.config();
 
 const authRoutes = require('./routes/auth');
@@ -77,6 +78,10 @@ app.use('/api', limiter);
 app.get('/', (req, res) => {
   res.json({ status: 'ok', app: 'ServSoftBagm API' });
 });
+
+// Fotos de evidencia subidas por el admin (disco local, ver services/photoStorage.js
+// para el aviso de migración pendiente antes de producción en Render)
+app.use('/uploads', express.static(process.env.UPLOADS_DIR || path.join(__dirname, 'uploads')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/invoices', invoiceRoutes);
