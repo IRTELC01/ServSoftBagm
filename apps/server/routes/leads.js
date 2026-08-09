@@ -58,18 +58,44 @@ router.get('/', requireAuth, async (req, res) => {
   }
 });
 
-// Protected - Update lead status
+// Protected - Update lead (status, images, equipment_description, client_notes)
 router.patch('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { status, images, equipment_description, client_notes } = req.body;
 
   const validStatuses = ['Pendiente', 'Contactado', 'Agendado', 'Finalizado', 'Cancelado'];
-  if (!status || !validStatuses.includes(status)) {
+  if (status && !validStatuses.includes(status)) {
     return res.status(400).json({ error: 'Estado inválido' });
   }
 
   try {
-    db.prepare('UPDATE leads SET status = ? WHERE id = ?').run(status, id);
+    const updates = [];
+    const values = [];
+
+    if (status) {
+      updates.push('status = ?');
+      values.push(status);
+    }
+    if (images) {
+      updates.push('images = ?');
+      values.push(JSON.stringify(images));
+    }
+    if (equipment_description) {
+      updates.push('equipment_description = ?');
+      values.push(equipment_description);
+    }
+    if (client_notes) {
+      updates.push('client_notes = ?');
+      values.push(client_notes);
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: 'No hay campos para actualizar' });
+    }
+
+    values.push(id);
+
+    db.prepare(`UPDATE leads SET ${updates.join(', ')} WHERE id = ?`).run(...values);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar lead' });
@@ -151,6 +177,10 @@ router.post('/verify', async (req, res) => {
       console.log(`(Configura MAKE_LEAD_OTP_WEBHOOK_URL en .env para enviar por WhatsApp vía Make.com)\n`);
     }
 
+    const clientMessage = MAKE_WEBHOOK_URL
+      ? 'Código de verificación enviado por WhatsApp.'
+      : 'Código de verificación generado (modo desarrollo, revisa la consola del servidor).';
+
     // Mientras configuras Make.com, mostramos el código en consola (solo desarrollo)
     console.log(`\n=== OTP PARA CLIENTE ===`);
     console.log(`Nombre: ${lead.name}`);
@@ -230,45 +260,6 @@ router.post('/confirm-otp', async (req, res) => {
   } catch (error) {
     console.error('Error confirmando OTP:', error);
     res.status(500).json({ error: 'Error al verificar el código' });
-  }
-});
-
-// Protected - Update lead (incluyendo imágenes)
-router.patch('/:id', requireAuth, async (req, res) => {
-  const { id } = req.params;
-  const { status, images, equipment_description, client_notes } = req.body;
-
-  try {
-    const updates = [];
-    const values = [];
-
-    if (status) {
-      updates.push('status = ?');
-      values.push(status);
-    }
-    if (images) {
-      updates.push('images = ?');
-      values.push(JSON.stringify(images));
-    }
-    if (equipment_description) {
-      updates.push('equipment_description = ?');
-      values.push(equipment_description);
-    }
-    if (client_notes) {
-      updates.push('client_notes = ?');
-      values.push(client_notes);
-    }
-
-    if (updates.length === 0) {
-      return res.status(400).json({ error: 'No hay campos para actualizar' });
-    }
-
-    values.push(id);
-
-    db.prepare(`UPDATE leads SET ${updates.join(', ')} WHERE id = ?`).run(...values);
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar lead' });
   }
 });
 
