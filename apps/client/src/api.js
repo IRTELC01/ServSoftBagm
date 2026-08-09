@@ -6,6 +6,23 @@ if (!/\/api\/?$/.test(API_BASE)) {
 }
 export const API_URL = API_BASE
 
+// Origen del backend (sin el /api final), para armar URLs de archivos
+// servidos por el server (ej. /uploads/foto.jpg) que no viven en /api.
+const ASSET_BASE = API_URL.replace(/\/api\/?$/, '')
+
+// Resuelve la URL visible de una foto de lead. Soporta:
+// - URL absoluta (http/https): tal cual (ej. futuro proveedor externo)
+// - /uploads/...: foto real subida, servida por el backend
+// - otra ruta con /: se deja tal cual (compat con rutas propias del cliente)
+// - nombre de archivo suelto: demo antigua servida desde apps/client/public/assets/images
+export function resolvePhotoUrl(photo) {
+  if (!photo) return ''
+  if (/^https?:\/\//.test(photo)) return photo
+  if (photo.startsWith('/uploads/')) return `${ASSET_BASE}${photo}`
+  if (photo.startsWith('/')) return photo
+  return `/assets/images/${photo}`
+}
+
 // Helper: manejar 401 borrando token y redirigiendo a /login
 async function jsonWithAuth(response) {
   if (response.status === 401) {

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createInvoice, listInvoices, getSummary, addTransaction, API_URL } from '../api'
+import { createInvoice, listInvoices, getSummary, addTransaction, API_URL, resolvePhotoUrl } from '../api'
 import { WORKSHOP_NAME, WORKSHOP_PHONES, WORKSHOP_ADDRESS, WORKSHOP_NIT_LABEL, CONTACT_WHATSAPP, BRAND_NAME } from '../config'
 import { BANK_TRANSFER_TEXT, BANK_QR_PATH } from '../config/bank'
 
@@ -184,6 +184,7 @@ export default function Dashboard() {
   // Leads from backend
   const [leads, setLeads] = useState([])
   const [isLoadingLeads, setIsLoadingLeads] = useState(false)
+  const [uploadingLeadId, setUploadingLeadId] = useState(null)
 
   // === NUEVO: Estado para Telemetría e IA (Clean Architecture - solo UI) ===
   const [telemetry, setTelemetry] = useState(null)
@@ -351,26 +352,30 @@ export default function Dashboard() {
     }
   }
 
-  // Agregar/actualizar imágenes de un lead (B)
-  const updateLeadImages = async (id, imagesArray) => {
+  // Subir foto(s) de evidencia (diagnóstico/reparación) de un lead
+  const uploadLeadPhotos = async (id, files) => {
+    if (!files || files.length === 0) return
+    setUploadingLeadId(id)
     try {
-      const res = await fetch(`${API_URL}/leads/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}`
-        },
-        body: JSON.stringify({ images: imagesArray })
+      const formData = new FormData()
+      Array.from(files).forEach(f => formData.append('photos', f))
+
+      const res = await fetch(`${API_URL}/leads/${id}/photos`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}` },
+        body: formData
       })
 
+      const data = await res.json().catch(() => ({}))
       if (res.ok) {
-        setLeads(leads.map(l => l.id === id ? { ...l, images: JSON.stringify(imagesArray) } : l))
+        setLeads(leads.map(l => l.id === id ? { ...l, images: JSON.stringify(data.images) } : l))
       } else {
-        alert('Error al guardar las imágenes')
+        alert(data.error || 'Error al subir las fotos')
       }
     } catch (err) {
-      alert('Error de conexión al guardar imágenes')
+      alert('Error de conexión al subir las fotos')
     }
+    setUploadingLeadId(null)
   }
 
   // Limpiar todos los leads de prueba (solo para desarrollo local)
@@ -730,33 +735,32 @@ export default function Dashboard() {
                       Copiar datos
                     </button>
 
-                    {/* Agregar imágenes al lead (B) */}
-                    <div className="mt-2 flex gap-1">
-                      <input
-                        type="text"
-                        placeholder="Imagen (ej: Imagen5.png)"
-                        className="flex-1 text-[10px] bg-white/5 border border-white/10 rounded px-1.5 py-0.5"
-                        id={`img-input-${lead.id}`}
-                      />
-                      <button
-                        onClick={() => {
-                          const input = document.getElementById(`img-input-${lead.id}`);
-                          if (input && input.value.trim()) {
-                            const current = lead.images ? JSON.parse(lead.images) : [];
-                            const updated = [...current, input.value.trim()];
-                            updateLeadImages(lead.id, updated);
-                            input.value = '';
-                          }
-                        }}
-                        className="text-[10px] px-2 py-0.5 bg-neon-cyan/70 text-black rounded hover:bg-neon-cyan"
-                      >
-                        + Foto
-                      </button>
+                    {/* Subir foto(s) de evidencia (diagnóstico/reparación) al lead */}
+                    <div className="mt-2">
+                      <label className="inline-block text-[10px] px-2 py-0.5 bg-neon-cyan/70 text-black rounded hover:bg-neon-cyan cursor-pointer">
+                        {uploadingLeadId === lead.id ? 'Subiendo...' : '+ Foto'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          disabled={uploadingLeadId === lead.id}
+                          onChange={(e) => { uploadLeadPhotos(lead.id, e.target.files); e.target.value = '' }}
+                        />
+                      </label>
                     </div>
 
                     {lead.images && JSON.parse(lead.images).length > 0 && (
-                      <div className="mt-1 text-[9px] text-white/60">
-                        Fotos: {JSON.parse(lead.images).join(', ')}
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        {JSON.parse(lead.images).map((photo, i) => (
+                          <a key={i} href={resolvePhotoUrl(photo)} target="_blank" rel="noreferrer" title={photo}>
+                            <img
+                              src={resolvePhotoUrl(photo)}
+                              alt={`Evidencia ${i + 1}`}
+                              className="w-10 h-10 object-cover rounded border border-white/15 hover:border-neon-cyan/60"
+                            />
+                          </a>
+                        ))}
                       </div>
                     )}
                   </div>
