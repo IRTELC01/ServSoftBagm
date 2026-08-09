@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createInvoice, listInvoices, getSummary, addTransaction } from '../api'
+import { createInvoice, listInvoices, getSummary, addTransaction, API_URL } from '../api'
 import { WORKSHOP_NAME, WORKSHOP_PHONES, WORKSHOP_ADDRESS, WORKSHOP_NIT_LABEL, CONTACT_WHATSAPP, BRAND_NAME } from '../config'
 import { BANK_TRANSFER_TEXT, BANK_QR_PATH } from '../config/bank'
 
@@ -265,7 +265,7 @@ export default function Dashboard() {
     const buttonWasDisabled = false // for future loading state
 
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch(`${API_URL}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -314,7 +314,7 @@ export default function Dashboard() {
   const loadLeads = async () => {
     setIsLoadingLeads(true)
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch(`${API_URL}/leads`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}`
         }
@@ -332,7 +332,7 @@ export default function Dashboard() {
   // Cambiar estado de un lead
   const updateLeadStatus = async (id, newStatus) => {
     try {
-      const res = await fetch(`/api/leads/${id}`, {
+      const res = await fetch(`${API_URL}/leads/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -354,7 +354,7 @@ export default function Dashboard() {
   // Agregar/actualizar imágenes de un lead (B)
   const updateLeadImages = async (id, imagesArray) => {
     try {
-      const res = await fetch(`/api/leads/${id}`, {
+      const res = await fetch(`${API_URL}/leads/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -399,7 +399,7 @@ export default function Dashboard() {
     setIsLoadingTelemetry(true)
     try {
       const token = localStorage.getItem('runaway_token')
-      const res = await fetch('/api/leads/telemetry', {
+      const res = await fetch(`${API_URL}/leads/telemetry`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
       if (res.ok) {
@@ -426,7 +426,7 @@ export default function Dashboard() {
     setIaResponse(null)
     try {
       const token = localStorage.getItem('runaway_token')
-      const res = await fetch('/api/leads/telemetry/ask', {
+      const res = await fetch(`${API_URL}/leads/telemetry/ask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

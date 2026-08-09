@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CONTACT_WHATSAPP, BRAND_NAME } from '../config'
+import { API_URL } from '../api'
 
 /**
  * Chatbot Web - Fase Validación (100% Gratis)
@@ -166,7 +167,7 @@ export default function Chatbot() {
     // Guardar lead en backend (público, sin autenticación)
     let ticketNumber = null;
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch(`${API_URL}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(leadData)

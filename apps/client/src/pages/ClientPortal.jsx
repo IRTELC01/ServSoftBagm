@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { API_URL } from '../api'
 
 export default function ClientPortal() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -17,7 +18,7 @@ export default function ClientPortal() {
     setError('')
 
     try {
-      const res = await fetch('/api/leads/verify', {
+      const res = await fetch(`${API_URL}/leads/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, ticket_number: ticket })
@@ -51,7 +52,7 @@ export default function ClientPortal() {
     setError('')
 
     try {
-      const res = await fetch('/api/leads/confirm-otp', {
+      const res = await fetch(`${API_URL}/leads/confirm-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -95,7 +96,7 @@ export default function ClientPortal() {
     setError('')
 
     try {
-      const res = await fetch('/api/leads/verify', {
+      const res = await fetch(`${API_URL}/leads/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, ticket_number: ticket })

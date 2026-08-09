@@ -4,7 +4,7 @@ let API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 if (!/\/api\/?$/.test(API_BASE)) {
   API_BASE = API_BASE.replace(/\/+$/, '') + '/api'
 }
-const API_URL = API_BASE
+export const API_URL = API_BASE
 
 // Helper: manejar 401 borrando token y redirigiendo a /login
 async function jsonWithAuth(response) {
