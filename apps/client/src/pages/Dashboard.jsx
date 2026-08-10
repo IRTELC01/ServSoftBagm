@@ -319,6 +319,8 @@ export default function Dashboard() {
         return
       }
 
+      const data = await res.json()
+
       // Recargar desde backend para actualizar la lista y el contador
       await loadLeads()
 
@@ -332,8 +334,12 @@ export default function Dashboard() {
         notes: ''
       })
 
-      // Feedback visual
-      alert('Lead registrado correctamente. La lista y el contador se actualizaron.')
+      // Feedback visual (incluye el ticket para que el admin lo copie y se lo envíe al cliente)
+      if (data.ticket_number) {
+        alert(`Lead registrado correctamente. Ticket: ${data.ticket_number} — cópialo y envíaselo al cliente.`)
+      } else {
+        alert('Lead registrado correctamente. La lista y el contador se actualizaron.')
+      }
     } catch (e) {
       console.error('Error registrando lead:', e)
       alert('No se pudo registrar el lead. Revisa la consola.')
@@ -728,6 +734,9 @@ export default function Dashboard() {
                         <div className="font-semibold">{lead.name}</div>
                         <div className="text-white/70 text-xs">{lead.phone} • {lead.service}</div>
                         <div className="text-white/60 text-xs mt-1">{lead.address}</div>
+                        {lead.ticket_number && (
+                          <div className="text-neon-cyan/80 text-[11px] font-mono mt-1">Ticket: {lead.ticket_number}</div>
+                        )}
                       </div>
                       <div>
                         <select 
@@ -758,6 +767,10 @@ export default function Dashboard() {
                           direccion: lead.address,
                           servicio: lead.service,
                           requerimiento: lead.requirement || '',
+                          ticket: lead.ticket_number || '',
+                          mensaje_para_cliente: lead.ticket_number
+                            ? `Tu ticket es ${lead.ticket_number}, guárdalo para consultar el estado de tu equipo en nuestro Portal del Cliente.`
+                            : '',
                           origen: 'WhatsApp / Chatbot'
                         };
                         navigator.clipboard.writeText(JSON.stringify(structured, null, 2));
