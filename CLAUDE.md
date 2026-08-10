@@ -121,7 +121,8 @@ Orden pendiente:
    (nunca tuvo el contenido filtrado). **Nota:** los datos ya estuvieron
    públicos antes del force-push — si alguien clonó el repo antes de eso,
    todavía los tiene.
-3. **[PENDIENTE]** Desplegar (Render + Neon).
+3. **[BLOQUEADO]** Desplegar (Render + Neon) — bloqueado por la integración
+   WhatsApp OTP, ver sección de abajo.
 
 > ⚠️ **Antes de ir a producción en Render:** migrar el almacenamiento de
 > fotos de leads (`apps/server/services/photoStorage.js`) de disco local a
@@ -129,6 +130,43 @@ Orden pendiente:
 > es efímero y las fotos subidas se perderían en cada redeploy. El módulo
 > ya está detrás de una interfaz (`savePhoto()`) pensada para que este
 > cambio sea solo reescribir ese archivo, sin tocar rutas ni frontend.
+
+## ⚠️ Integración WhatsApp OTP — en curso
+
+> Bloqueante para el paso 3 de "Despliegue — orden obligatorio" (desplegar en
+> Render + Neon). No hacer push ni deploy hasta resolver esto.
+
+**Hecho:**
+- Escenario en Make.com creado: "Integration Webhooks"
+  (`us2.make.com/2670443/scenarios/5900302`), módulo Webhooks guardado con la
+  URL en `_local/secretos/make-otp-webhook.txt`, módulo WhatsApp Business
+  Cloud ("Send a Message") agregado pero sin conexión guardada aún.
+- En Meta: Portfolio "Servsoftbagm" creado. Número real 3015045982 (Tigo) con
+  la app WhatsApp Business instalada y perfil básico completo. El usuario
+  necesita seguir usando este número normal desde el celular además de la
+  API — por eso el modo correcto es **Coexistence**, no Regular.
+
+**Bloqueado:** tanto en modo Regular como Coexistence, Meta devuelve *"Este
+número ya está registrado con una cuenta de WhatsApp"* al conectar desde
+Make/navegador.
+
+**Próximo paso a probar:** iniciar el flujo de Coexistence DESDE la app del
+celular (WhatsApp Business → Ajustes → Cuenta → buscar "Plataforma
+empresarial"/"Business Platform"), no solo desde la ventana web de Meta.
+
+**Después de resolver eso, en orden:**
+1. Crear la plantilla de mensaje categoría "Authentication" en Meta WhatsApp
+   Manager para el texto del OTP (necesaria porque el negocio inicia la
+   conversación, el cliente no escribe primero).
+2. Cablear `MAKE_LEAD_OTP_WEBHOOK_URL` en `.env.example` y `render.yaml`.
+3. Probar el envío real de OTP de punta a punta.
+4. Solo entonces: push de `chore/pre-deploy-hardening` a GitHub + deploy en
+   Render, usando la `DATABASE_URL` de Neon ya guardada en
+   `_local/secretos/neon-servsoftbagm.txt`.
+
+**No perdido:** Neon, el escenario de Make, el Portfolio de Meta y el número
+con WhatsApp Business instalado quedan intactos — no hay que repetir nada de
+lo ya hecho.
 
 ### Fase pre-deploy — endurecimiento (EN CURSO en `chore/pre-deploy-hardening`)
 1. ✅ `render.yaml`: `rootDir` corregido a `apps/server` / `apps/client`;
