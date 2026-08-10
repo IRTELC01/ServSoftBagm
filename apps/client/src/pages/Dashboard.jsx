@@ -9,9 +9,9 @@ function InvoiceForm({ onCreated }) {
   const [address, setAddress] = useState('Medellín')
   const [phone, setPhone] = useState('3001234567')
   const [service_type, setServiceType] = useState('soporte')
-  const [service_value, setServiceValue] = useState(65000)
+  const [service_value, setServiceValue] = useState(0)
   const [line_items, setItems] = useState([])
-  const [labor_cost, setLabor] = useState(15000)
+  const [labor_cost, setLabor] = useState(0)
   const [vat_enabled, setVatEnabled] = useState(true)
   const [vat_percent, setVatPercent] = useState(19)
   const [payment_method, setPay] = useState('efectivo')
@@ -30,6 +30,13 @@ function InvoiceForm({ onCreated }) {
   const submit = async (e) => {
     e.preventDefault()
     if (isSubmitting) return // evita doble-submit (doble clic / Enter repetido)
+
+    const parsedServiceValue = Number(service_value)
+    if (!service_value || Number.isNaN(parsedServiceValue) || parsedServiceValue <= 0) {
+      alert('Ingresa el valor del servicio antes de guardar')
+      return
+    }
+
     setIsSubmitting(true)
     try {
       const baseItemName = ({soporte:'Soporte técnico', mantenimiento:'Mantenimiento', desarrollo:'Desarrollo de software', licencias:'Licencias/Software'})[service_type] || 'Servicio técnico'
@@ -49,9 +56,9 @@ function InvoiceForm({ onCreated }) {
     setAddress('Medellín')
     setPhone('3001234567')
     setServiceType('soporte')
-    setServiceValue(65000)
+    setServiceValue(0)
     setItems([])
-    setLabor(15000)
+    setLabor(0)
     setVatEnabled(true)
     setVatPercent(19)
     setPay('efectivo')
