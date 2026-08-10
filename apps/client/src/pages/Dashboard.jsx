@@ -16,6 +16,7 @@ function InvoiceForm({ onCreated }) {
   const [vat_percent, setVatPercent] = useState(19)
   const [payment_method, setPay] = useState('efectivo')
   const [notes, setNotes] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const items_total = (service_value || 0) + line_items.reduce((s,i)=> s + Number(i.price) * Number(i.qty||1), 0)
   const subtotal = items_total + Number(labor_cost||0)
@@ -28,14 +29,18 @@ function InvoiceForm({ onCreated }) {
 
   const submit = async (e) => {
     e.preventDefault()
-    const baseItemName = ({soporte:'Soporte técnico', mantenimiento:'Mantenimiento', desarrollo:'Desarrollo de software', licencias:'Licencias/Software'})[service_type] || 'Servicio técnico'
-    const payloadItems = [ { name: baseItemName, qty: 1, price: Number(service_value||0) }, ...line_items ]
-    const r = await createInvoice({ customer_name, address, phone, line_items: payloadItems, labor_cost, vat_percent: vat_enabled ? vat_percent : 0, payment_method, notes })
-    if (r.ok) {
-      onCreated()
-      // reset suave
-      setItems([])
-      setNotes('')
+    if (isSubmitting) return // evita doble-submit (doble clic / Enter repetido)
+    setIsSubmitting(true)
+    try {
+      const baseItemName = ({soporte:'Soporte técnico', mantenimiento:'Mantenimiento', desarrollo:'Desarrollo de software', licencias:'Licencias/Software'})[service_type] || 'Servicio técnico'
+      const payloadItems = [ { name: baseItemName, qty: 1, price: Number(service_value||0) }, ...line_items ]
+      const r = await createInvoice({ customer_name, address, phone, line_items: payloadItems, labor_cost, vat_percent: vat_enabled ? vat_percent : 0, payment_method, notes })
+      if (r.ok) {
+        onCreated()
+        clearForm()
+      }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -165,8 +170,10 @@ function InvoiceForm({ onCreated }) {
             Subtotal <span className="text-white/90 font-medium">${subtotal.toLocaleString()}</span> · IVA <span className="text-white/90 font-medium">${vat.toLocaleString()}</span>
           </div>
           <div className="flex gap-2">
-            <button type="button" onClick={clearForm} className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-sm">Limpiar</button>
-            <button type="submit" className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-neon-green to-[#2aff4a] text-black font-bold text-sm active:scale-[0.985] transition">GUARDAR FACTURA</button>
+            <button type="button" onClick={clearForm} disabled={isSubmitting} className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-sm disabled:opacity-50">Limpiar</button>
+            <button type="submit" disabled={isSubmitting} className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-neon-green to-[#2aff4a] text-black font-bold text-sm active:scale-[0.985] transition disabled:opacity-50 disabled:cursor-not-allowed">
+              {isSubmitting ? 'GUARDANDO...' : 'GUARDAR FACTURA'}
+            </button>
           </div>
         </div>
       </form>
