@@ -713,7 +713,7 @@ export default function Dashboard() {
                 <p className="text-xs text-white/50">No hay leads registrados aún.</p>
               )}
 
-              <div className="space-y-3">
+              <div className="space-y-3 max-h-[640px] overflow-y-auto pr-1">
                 {leads.map((lead) => (
                   <div key={lead.id} className="bg-white/5 border border-white/10 rounded-xl p-3 text-sm">
                     <div className="flex justify-between items-start">
@@ -792,6 +792,9 @@ export default function Dashboard() {
                   </div>
                 ))}
               </div>
+              {leads.length > 3 && (
+                <div className="text-[10px] text-white/40 mt-2">Mostrando los 3 más recientes primero — desplázate dentro de la lista para ver el resto.</div>
+              )}
             </div>
           </div>
 
