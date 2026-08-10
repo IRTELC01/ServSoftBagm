@@ -59,4 +59,14 @@ router.get('/:id', requireAuth, async (req, res) => {
   return res.json(r);
 });
 
+// Eliminar una factura (utilidad de administración interna, para corregir
+// errores de captura - no reemplaza el proceso de anulación DIAN)
+router.delete('/:id', requireAuth, async (req, res) => {
+  const id = Number(req.params.id);
+  const existing = await db.prepare('SELECT id FROM invoices WHERE id = ?').get(id);
+  if (!existing) return res.status(404).json({ error: 'No encontrada' });
+  await db.prepare('DELETE FROM invoices WHERE id = ?').run(id);
+  return res.json({ ok: true });
+});
+
 module.exports = router;

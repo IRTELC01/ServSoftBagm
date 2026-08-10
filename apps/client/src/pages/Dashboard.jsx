@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { createInvoice, listInvoices, getSummary, addTransaction, API_URL, resolvePhotoUrl } from '../api'
+import { createInvoice, listInvoices, getSummary, addTransaction, deleteInvoice, API_URL, resolvePhotoUrl } from '../api'
 import { WORKSHOP_NAME, WORKSHOP_PHONES, WORKSHOP_ADDRESS, WORKSHOP_NIT_LABEL, CONTACT_WHATSAPP, BRAND_NAME } from '../config'
 import { BANK_TRANSFER_TEXT, BANK_QR_PATH } from '../config/bank'
 
@@ -250,6 +250,21 @@ export default function Dashboard() {
   const refresh = async () => {
     const inv = await listInvoices(); setInvoices(inv || [])
     const sum = await getSummary(); setSummary(sum || summary)
+  }
+
+  // Eliminar factura (admin, para corregir errores de captura - no anula ante la DIAN)
+  const handleDeleteInvoice = async (id) => {
+    if (!confirm('¿Eliminar esta factura? Esta acción no se puede deshacer.')) return
+    try {
+      const r = await deleteInvoice(id)
+      if (r.ok) {
+        await refresh()
+      } else {
+        alert(r.error || 'Error al eliminar la factura')
+      }
+    } catch (err) {
+      alert('Error de conexión al eliminar la factura')
+    }
   }
 
   useEffect(() => { 
@@ -988,6 +1003,12 @@ export default function Dashboard() {
                           className="text-[10px] px-2 py-0.5 rounded border border-white/15 hover:bg-white/10"
                         >
                           TXT
+                        </button>
+                        <button
+                          onClick={() => handleDeleteInvoice(inv.id)}
+                          className="text-[10px] px-2 py-0.5 rounded border border-red-500/30 text-red-400 hover:bg-red-500/10 ml-1"
+                        >
+                          Eliminar
                         </button>
                       </td>
                     </tr>

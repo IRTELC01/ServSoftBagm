@@ -104,6 +104,14 @@ export async function listInvoices() {
   return jsonWithAuth(r);
 }
 
+export async function deleteInvoice(id) {
+  const r = await fetch(`${API_URL}/invoices/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${getToken()}` },
+  });
+  return jsonWithAuth(r);
+}
+
 export async function addTransaction(payload) {
   const r = await fetch(`${API_URL}/accounting/transactions`, {
     method: 'POST', headers: {
