@@ -65,6 +65,21 @@ router.get('/', requireAuth, async (req, res) => {
   }
 });
 
+// Protected - Eliminar TODOS los leads (botón "Limpiar datos de prueba")
+router.delete('/', requireAuth, async (req, res) => {
+  try {
+    // Los OTP referencian leads.id - se borran primero para no violar la
+    // FK en Postgres (SQLite no la exige por defecto, pero mantenemos el
+    // mismo orden en ambos drivers).
+    await db.prepare('DELETE FROM lead_otps').run();
+    await db.prepare('DELETE FROM leads').run();
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error eliminando leads:', error);
+    res.status(500).json({ error: 'Error al eliminar leads' });
+  }
+});
+
 // Protected - Update lead (status, images, equipment_description, client_notes)
 router.patch('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;

@@ -378,24 +378,28 @@ export default function Dashboard() {
     setUploadingLeadId(null)
   }
 
-  // Limpiar todos los leads de prueba (solo para desarrollo local)
+  // Limpiar todos los leads de prueba (borra en el backend, no solo la UI)
   const clearAllLeads = async () => {
     if (!confirm('¿Estás seguro de que quieres eliminar TODOS los leads de prueba? Esta acción no se puede deshacer.')) {
       return;
     }
 
     try {
-      // Opción simple para desarrollo: limpiar localmente + recargar
-      // En el futuro se puede agregar un endpoint DELETE /api/leads/all (protegido)
-      setLeads([]);
-      localStorage.removeItem('servsoftbagm_leads');
+      const res = await fetch(`${API_URL}/leads`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}` }
+      })
 
-      // Intentar limpiar del backend (si existe un endpoint futuro)
-      // Por ahora solo limpiamos la UI
-      alert('Leads de prueba limpiados. Recarga la página para ver el estado limpio.');
-      window.location.reload();
+      if (res.ok) {
+        localStorage.removeItem('servsoftbagm_leads');
+        await loadLeads();
+        alert('Leads eliminados correctamente.');
+      } else {
+        const data = await res.json().catch(() => ({}))
+        alert(data.error || 'Error al eliminar leads');
+      }
     } catch (err) {
-      alert('Error al limpiar leads');
+      alert('Error de conexión al eliminar leads');
     }
   }
 
