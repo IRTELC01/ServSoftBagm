@@ -21,7 +21,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error('Error en login:', err)
-      setMsg('No se pudo conectar con el servidor. ¿Está corriendo el backend en puerto 3001?')
+      setMsg('No se pudo conectar con el servidor. ¿Está corriendo el backend en puerto 3004?')
     }
   }
 
@@ -47,7 +47,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error('Error en autoLogin:', err)
-      setMsg('No se pudo conectar con el servidor (¿backend en 3001?).')
+      setMsg('No se pudo conectar con el servidor (¿backend en 3004?).')
     }
   }
 

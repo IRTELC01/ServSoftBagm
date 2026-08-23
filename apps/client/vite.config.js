@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    port: 5173,
+    port: 5174,
+    strictPort: true,
   },
   // Ensure CSS is processed correctly with Tailwind v4 PostCSS plugin
   css: {

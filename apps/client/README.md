@@ -11,7 +11,7 @@ Frontend de ServSoftBagm construido con React 19, Vite 7 y Tailwind 4.
 
 ## Configuración
 
-- API: `VITE_API_URL` (por defecto `http://localhost:3001/api`)
+- API: `VITE_API_URL` (por defecto `http://localhost:3004/api`)
 - Acceso abierto opcional: `VITE_OPEN_ACCESS=true` (para desarrollo)
 - WhatsApp: edita `src/config.js` y define `CONTACT_WHATSAPP`
 
