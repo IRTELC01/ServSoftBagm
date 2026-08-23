@@ -145,6 +145,14 @@ apps/client/logs/
 .DS_Store
 Thumbs.db
 desktop.ini
+# Claude Code local settings
+.claude/
+
+# Local backups generated during edits
+*.orig
+
+# Local screenshots
+mintty*.png
 
 # ============================================================
 # DOCKER & CONTAINER ARTIFACTS
