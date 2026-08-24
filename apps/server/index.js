@@ -13,6 +13,7 @@ const db = require('./db');
 const bcrypt = require('bcryptjs');
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3001;
 const OPEN_ACCESS = String(process.env.OPEN_ACCESS || 'false') === 'true';
 
