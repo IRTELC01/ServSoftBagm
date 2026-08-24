@@ -1,5 +1,5 @@
 Param(
-  [string]$TargetDir = "$env:USERPROFILE\Documents\RunaWay"
+  [string]$TargetDir = "$env:USERPROFILE\Documents\ServSoftBagm"
 )
 
 Write-Host "Creando directorio de datos en: $TargetDir"

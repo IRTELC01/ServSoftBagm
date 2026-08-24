@@ -53,7 +53,7 @@ export default function Login() {
 
   useEffect(() => {
     const isProd = import.meta.env.MODE === 'production'
-    const hasToken = !!localStorage.getItem('runaway_token')
+    const hasToken = !!localStorage.getItem('servsoftbagm_token')
     if (!isProd && !hasToken) autoLogin()
   }, [])
 

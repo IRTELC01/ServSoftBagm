@@ -67,7 +67,7 @@ function WhatsAppButtonWrapper() {
 export default function App() {
   function RequireAuth({ children }) {
     const openAccess = String(import.meta.env.VITE_OPEN_ACCESS) === 'true'
-    const token = localStorage.getItem('runaway_token')
+    const token = localStorage.getItem('servsoftbagm_token')
     const urlParams = new URLSearchParams(window.location.search);
     const justLoggedOut = urlParams.get('loggedOut') === 'true';
 

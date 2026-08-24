@@ -1,5 +1,5 @@
 Param(
-  [string]$DataDir = "$env:USERPROFILE\Documents\RunaWay",
+  [string]$DataDir = "$env:USERPROFILE\Documents\ServSoftBagm",
   [string]$MasterPassword = 'local_master',
   [switch]$Disable2FA,
   [switch]$ResetAdminOnStart,
@@ -24,7 +24,7 @@ function Ensure-EnvVar {
   }
 }
 
-Write-Host "=== RunaWay: Automatización local ===" -ForegroundColor Cyan
+Write-Host "=== ServSoftBagm: Automatización local ===" -ForegroundColor Cyan
 
 # 0) Verificar versión de Node compatible con frontend y backend
 $nv = Get-NodeVersion
@@ -51,7 +51,7 @@ if (-Not (Test-Path $envPath)) {
 $envContent = Get-Content $envPath -Raw
 $envContent = Ensure-EnvVar -Content $envContent -Key 'DATA_DIR' -Value $DataDir
 $envContent = Ensure-EnvVar -Content $envContent -Key 'JWT_SECRET' -Value 'supersecreto_local'
-$envContent = Ensure-EnvVar -Content $envContent -Key 'DEFAULT_ADMIN_PASSWORD' -Value 'runaway123'
+$envContent = Ensure-EnvVar -Content $envContent -Key 'DEFAULT_ADMIN_PASSWORD' -Value 'CambiaEstaClave2026!'
 $envContent = Ensure-EnvVar -Content $envContent -Key 'MASTER_ENABLE' -Value 'true'
 $envContent = Ensure-EnvVar -Content $envContent -Key 'MASTER_PASSWORD' -Value $MasterPassword
 $origins = "http://localhost:$FrontendPort,http://localhost:5174"
@@ -96,5 +96,5 @@ $loginUrl = "http://localhost:$FrontendPort/login"
 Write-Host "Abriendo: $loginUrl" -ForegroundColor Yellow
 Start-Process $loginUrl | Out-Null
 
-Write-Host "Listo. Credenciales: admin / runaway123" -ForegroundColor Cyan
-Write-Host "Si ves 401, repite con -Disable2FA o borra localStorage ('runaway_token')." -ForegroundColor DarkCyan
+Write-Host "Listo. Credenciales: admin / (la contraseña definida en DEFAULT_ADMIN_PASSWORD)" -ForegroundColor Cyan
+Write-Host "Si ves 401, repite con -Disable2FA o borra localStorage ('servsoftbagm_token')." -ForegroundColor DarkCyan

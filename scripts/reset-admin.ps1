@@ -1,13 +1,13 @@
 param(
   [string]$Uri = 'http://localhost:3001/api/auth/reset-admin',
   [Parameter(Mandatory = $true)][string]$MasterPassword,
-  [string]$NewPassword = 'runaway123',
+  [string]$NewPassword = 'CambiaEstaClave2026!',
   [bool]$Disable2FA = $true
 )
 
 # Script para resetear el admin y opcionalmente desactivar 2FA.
 # Uso local:
-#   .\scripts\reset-admin.ps1 -MasterPassword 'TU_MASTER' -NewPassword 'runaway123'
+#   .\scripts\reset-admin.ps1 -MasterPassword 'TU_MASTER' -NewPassword 'CambiaEstaClave2026!'
 # Uso en Render:
 #   .\scripts\reset-admin.ps1 -Uri 'https://TU-BACKEND/api/auth/reset-admin' -MasterPassword 'TU_MASTER'
 

@@ -352,7 +352,7 @@ export default function Dashboard() {
     try {
       const res = await fetch(`${API_URL}/leads`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}`
+          Authorization: `Bearer ${localStorage.getItem('servsoftbagm_token') || ''}`
         }
       })
       if (res.ok) {
@@ -372,7 +372,7 @@ export default function Dashboard() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}`
+          Authorization: `Bearer ${localStorage.getItem('servsoftbagm_token') || ''}`
         },
         body: JSON.stringify({ status: newStatus })
       })
@@ -397,7 +397,7 @@ export default function Dashboard() {
 
       const res = await fetch(`${API_URL}/leads/${id}/photos`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem('servsoftbagm_token') || ''}` },
         body: formData
       })
 
@@ -422,7 +422,7 @@ export default function Dashboard() {
     try {
       const res = await fetch(`${API_URL}/leads`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${localStorage.getItem('runaway_token') || ''}` }
+        headers: { Authorization: `Bearer ${localStorage.getItem('servsoftbagm_token') || ''}` }
       })
 
       if (res.ok) {
@@ -442,7 +442,7 @@ export default function Dashboard() {
   const loadTelemetry = async () => {
     setIsLoadingTelemetry(true)
     try {
-      const token = localStorage.getItem('runaway_token')
+      const token = localStorage.getItem('servsoftbagm_token')
       const res = await fetch(`${API_URL}/leads/telemetry`, {
         headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       })
@@ -469,7 +469,7 @@ export default function Dashboard() {
     setIsAskingIA(true)
     setIaResponse(null)
     try {
-      const token = localStorage.getItem('runaway_token')
+      const token = localStorage.getItem('servsoftbagm_token')
       const res = await fetch(`${API_URL}/leads/telemetry/ask`, {
         method: 'POST',
         headers: {
@@ -507,7 +507,7 @@ export default function Dashboard() {
 
   const logout = () => {
     // Limpieza completa de sesión
-    localStorage.removeItem('runaway_token')
+    localStorage.removeItem('servsoftbagm_token')
     localStorage.removeItem('servsoftbagm_leads') // opcional: limpiar leads de prueba también
 
     // Forzar recarga completa para limpiar cualquier estado en memoria

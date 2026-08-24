@@ -2,7 +2,7 @@ Param(
   [string]$Version = '20.19.0'
 )
 
-Write-Host "=== RunaWay: Instalación de Node.js $Version ===" -ForegroundColor Cyan
+Write-Host "=== ServSoftBagm: Instalación de Node.js $Version ===" -ForegroundColor Cyan
 
 function Has-Command($name) { Get-Command $name -ErrorAction SilentlyContinue }
 

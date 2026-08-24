@@ -5,7 +5,7 @@ dist/
 
 # Server
 server/.env
-server/runaway.db*
+server/servsoftbagm.db*
 
 # Client build
 client/dist/

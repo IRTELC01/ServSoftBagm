@@ -4,7 +4,7 @@ const fs = require('fs');
 
 const dataDir = process.env.DATA_DIR || __dirname;
 try { if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true }); } catch {}
-const dbPath = path.join(dataDir, 'runaway.db');
+const dbPath = path.join(dataDir, 'servsoftbagm.db');
 const db = new Database(dbPath);
 
 db.pragma('journal_mode = WAL');

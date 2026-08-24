@@ -103,7 +103,7 @@ apps/client/src/assets/images/personal/
 *.db-journal
 *.db-shm
 *.db-wal
-apps/server/runaway.db*
+apps/server/servsoftbagm.db*
 apps/server/*.sqlite*
 apps/server/*.sqlite3*
 

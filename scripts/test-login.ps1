@@ -1,7 +1,7 @@
 Param(
   [string]$Api = 'http://localhost:3001/api',
   [string]$Username = 'admin',
-  [string]$Password = 'runaway123'
+  [string]$Password = 'CambiaEstaClave2026!'
 )
 
 Write-Host "Probando login contra: $Api" -ForegroundColor Cyan

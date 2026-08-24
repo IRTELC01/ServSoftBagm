@@ -26,7 +26,7 @@ export function resolvePhotoUrl(photo) {
 // Helper: manejar 401 borrando token y redirigiendo a /login
 async function jsonWithAuth(response) {
   if (response.status === 401) {
-    try { localStorage.removeItem('runaway_token') } catch { void 0 }
+    try { localStorage.removeItem('servsoftbagm_token') } catch { void 0 }
     // Intentar leer mensaje de error, pero no bloquear si falla
     let body = null
     try { body = await response.json() } catch { void 0 }
@@ -84,8 +84,8 @@ export async function loginPhone(phone, code) {
   return r.json();
 }
 
-export function setToken(token) { localStorage.setItem('runaway_token', token); }
-export function getToken() { return localStorage.getItem('runaway_token'); }
+export function setToken(token) { localStorage.setItem('servsoftbagm_token', token); }
+export function getToken() { return localStorage.getItem('servsoftbagm_token'); }
 
 export async function createInvoice(payload) {
   const r = await fetch(`${API_URL}/invoices`, {

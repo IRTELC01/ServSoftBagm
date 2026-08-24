@@ -3,7 +3,7 @@ Param(
   [string]$FrontendUrl
 )
 
-Write-Host "=== RunaWay: Verificación Render ===" -ForegroundColor Cyan
+Write-Host "=== ServSoftBagm: Verificación Render ===" -ForegroundColor Cyan
 $health = "$BackendUrl/api/auth/health"
 try {
   Write-Host "Health: $health" -ForegroundColor Yellow
@@ -31,4 +31,4 @@ if ($FrontendUrl) {
   Start-Process "$FrontendUrl/login" | Out-Null
 }
 
-Write-Host "Usa admin / runaway123. Si el login falla, borra 'runaway_token' en el Storage del navegador." -ForegroundColor Cyan
+Write-Host "Usa admin / la contraseña definida en DEFAULT_ADMIN_PASSWORD. Si el login falla, borra 'servsoftbagm_token' en el Storage del navegador." -ForegroundColor Cyan
