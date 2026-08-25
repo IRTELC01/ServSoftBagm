@@ -117,7 +117,7 @@ router.patch('/:id', requireAuth, async (req, res) => {
 
     values.push(id);
 
-    db.prepare(`UPDATE leads SET ${updates.join(', ')} WHERE id = ?`).run(...values);
+    await db.prepare(`UPDATE leads SET ${updates.join(', ')} WHERE id = ?`).run(...values);
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar lead' });
@@ -162,7 +162,7 @@ router.post('/verify', async (req, res) => {
   }
 
   try {
-    const lead = db.prepare(`
+    const lead = await db.prepare(`
       SELECT * FROM leads 
       WHERE phone = ? AND ticket_number = ?
     `).get(phone, ticket_number);
@@ -176,7 +176,7 @@ router.post('/verify', async (req, res) => {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); // 10 minutos
 
     // Guardar el OTP en la tabla lead_otps
-    db.prepare(`
+    await db.prepare(`
       INSERT INTO lead_otps (lead_id, code, expires_at, used)
       VALUES (?, ?, ?, false)
     `).run(lead.id, otp, expiresAt);
@@ -271,7 +271,7 @@ router.post('/confirm-otp', async (req, res) => {
   }
 
   try {
-    const lead = db.prepare(`
+    const lead = await db.prepare(`
       SELECT id FROM leads 
       WHERE phone = ? AND ticket_number = ?
     `).get(phone, ticket_number);
@@ -281,7 +281,7 @@ router.post('/confirm-otp', async (req, res) => {
     }
 
     // Buscar OTP válido y no usado
-    const otpRecord = db.prepare(`
+    const otpRecord = await db.prepare(`
       SELECT * FROM lead_otps 
       WHERE lead_id = ? 
         AND code = ? 
@@ -294,10 +294,10 @@ router.post('/confirm-otp', async (req, res) => {
     }
 
     // Marcar OTP como usado
-    db.prepare('UPDATE lead_otps SET used = true WHERE id = ?').run(otpRecord.id);
+    await db.prepare('UPDATE lead_otps SET used = true WHERE id = ?').run(otpRecord.id);
 
     // Devolver datos del lead (sin información sensible)
-    const fullLead = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id);
+    const fullLead = await db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id);
 
     res.json({
       success: true,
