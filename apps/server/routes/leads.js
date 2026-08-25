@@ -178,7 +178,7 @@ router.post('/verify', async (req, res) => {
     // Guardar el OTP en la tabla lead_otps
     db.prepare(`
       INSERT INTO lead_otps (lead_id, code, expires_at, used)
-      VALUES (?, ?, ?, 0)
+      VALUES (?, ?, ?, false)
     `).run(lead.id, otp, expiresAt);
 
     // ============================================================
@@ -285,16 +285,16 @@ router.post('/confirm-otp', async (req, res) => {
       SELECT * FROM lead_otps 
       WHERE lead_id = ? 
         AND code = ? 
-        AND used = 0 
-        AND expires_at > datetime('now')
-    `).get(lead.id, code);
+        AND used = false
+        AND expires_at > ?
+    `).get(lead.id, code, new Date().toISOString());
 
     if (!otpRecord) {
       return res.status(401).json({ error: 'Código inválido o expirado' });
     }
 
     // Marcar OTP como usado
-    db.prepare('UPDATE lead_otps SET used = 1 WHERE id = ?').run(otpRecord.id);
+    db.prepare('UPDATE lead_otps SET used = true WHERE id = ?').run(otpRecord.id);
 
     // Devolver datos del lead (sin información sensible)
     const fullLead = db.prepare('SELECT * FROM leads WHERE id = ?').get(lead.id);
