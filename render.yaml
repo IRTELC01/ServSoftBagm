@@ -46,9 +46,7 @@ services:
         # true = acceso público sin login (solo demo)
         # false = obliga login (obligatorio en producción)
       - key: FRONTEND_ORIGIN
-        sync: false
-        # Después del deploy del frontend, pon aquí su URL completa
-        # Ejemplo: https://servsoftbagm-web-xxxx.onrender.com
+        value: https://servsoftbagm-web.onrender.com
 
   # ============================================
   # FRONTEND - React + Vite + Tailwind (Static Site)
@@ -71,7 +69,7 @@ services:
       # Ejemplo correcto:
       # https://servsoftbagm-api-abc123.onrender.com/api
       - key: VITE_API_URL
-        value: https://REEMPLAZAR-CON-URL-DEL-API.onrender.com/api
+        value: https://servsoftbagm-api.onrender.com/api
 
       # false = obliga login (obligatorio en producción)
       - key: VITE_OPEN_ACCESS

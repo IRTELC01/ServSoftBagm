@@ -21,7 +21,7 @@ const OPEN_ACCESS = String(process.env.OPEN_ACCESS || 'false') === 'true';
 // Soporta múltiples orígenes vía FRONTEND_ORIGIN separados por comas.
 const envOrigins = (process.env.FRONTEND_ORIGIN || '')
   .split(',')
-  .map((s) => s.trim())
+  .map((s) => s.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
 const allowedOrigins = [
@@ -29,6 +29,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
 ].filter(Boolean);
+console.log('[CORS] Orígenes permitidos:', allowedOrigins.length ? allowedOrigins.join(', ') : '(solo locales)');
 
 app.use(cors({
   origin: (origin, callback) => {
