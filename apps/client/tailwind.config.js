@@ -8,15 +8,15 @@ export default {
     extend: {
       colors: {
         neon: {
-          pink: '#ff3cac',
+          pink: '#E85050',
           blue: '#784ba0',
           cyan: '#2b86c5',
-          green: '#39ff14',
-          yellow: '#faff00',
+          green: '#98CA3F',
+          yellow: '#F0C040',
         },
       },
       boxShadow: {
-        glow: '0 0 24px rgba(57,255,20,0.45), 0 0 18px rgba(43,134,197,0.5), inset 0 0 12px rgba(255,60,172,0.45)'
+        glow: '0 0 8px rgba(152,202,63,0.15), 0 4px 12px rgba(0,0,0,0.3)'
       },
       backgroundImage: {
         grid: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0)'

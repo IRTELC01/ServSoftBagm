@@ -178,7 +178,7 @@ function InvoiceForm({ onCreated }) {
           </div>
           <div className="flex gap-2">
             <button type="button" onClick={clearForm} disabled={isSubmitting} className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-sm disabled:opacity-50">Limpiar</button>
-            <button type="submit" disabled={isSubmitting} className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-neon-green to-[#2aff4a] text-black font-bold text-sm active:scale-[0.985] transition disabled:opacity-50 disabled:cursor-not-allowed">
+            <button type="submit" disabled={isSubmitting} className="px-8 py-2.5 rounded-xl bg-gradient-to-r from-neon-green to-neon-yellow text-black font-bold text-sm active:scale-[0.985] transition disabled:opacity-50 disabled:cursor-not-allowed">
               {isSubmitting ? 'GUARDANDO...' : 'GUARDAR FACTURA'}
             </button>
           </div>
@@ -900,8 +900,8 @@ export default function Dashboard() {
             <div className="flex justify-center mb-6">
               <div className="relative flex flex-col items-center">
                 <div className="donut" style={{
-                  '--c1': '#39ff14',
-                  '--c2': '#ff3cac',
+                  '--c1': '#98CA3F',
+                  '--c2': '#E85050',
                   '--p1': incomeDeg + 'deg',
                   '--p2': '360deg'
                 }} />

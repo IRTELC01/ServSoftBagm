@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 /* ============================================
-   Tailwind v4 Custom Design Tokens
+   Tailwind v4 Custom Design Tokens — Platzi Green
    ============================================ */
 @theme {
-  --color-neon-pink: #ff3cac;
+  --color-neon-pink: #E85050;
   --color-neon-blue: #784ba0;
   --color-neon-cyan: #2b86c5;
-  --color-neon-green: #39ff14;
-  --color-neon-yellow: #faff00;
+  --color-neon-green: #98CA3F;
+  --color-neon-yellow: #F0C040;
 }
 
 /* Base */
@@ -22,9 +22,6 @@ html, body, #root {
 
 /* ============================================
    CUSTOM UTILITIES - Tailwind v4 @utility syntax
-   This is the correct way in Tailwind v4 to define
-   reusable component classes that can be used with
-   @apply and in className.
    ============================================ */
 
 @utility glass {
@@ -37,46 +34,46 @@ html, body, #root {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid rgba(57, 255, 20, 0.25);
-  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid rgba(152,202,63,0.2);
+  background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   transition: all 0.3s ease;
 
   &:hover {
-    border-color: rgba(57,255,20,0.55);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(57,255,20,0.15);
-    transform: translateY(-3px);
+    border-color: rgba(152,202,63,0.35);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
   }
 }
 
-/* Neon border accents */
-@utility neon-border-green { border-color: rgba(57,255,20,0.5); }
-@utility neon-border-pink  { border-color: rgba(255,60,172,0.5); }
-@utility neon-border-cyan  { border-color: rgba(43,134,197,0.5); }
-@utility neon-border-yellow{ border-color: rgba(250,255,0,0.5); }
+/* Border accents */
+@utility neon-border-green { border-color: rgba(152,202,63,0.35); }
+@utility neon-border-pink  { border-color: rgba(232,80,80,0.35); }
+@utility neon-border-cyan  { border-color: rgba(43,134,197,0.35); }
+@utility neon-border-yellow{ border-color: rgba(240,192,64,0.35); }
 
-/* Glow effects */
-@utility glow-green { box-shadow: 0 0 25px rgba(57,255,20,0.5), 0 10px 30px rgba(0,0,0,0.4); }
-@utility glow-pink  { box-shadow: 0 0 25px rgba(255,60,172,0.45), 0 10px 30px rgba(0,0,0,0.4); }
-@utility glow-cyan  { box-shadow: 0 0 25px rgba(43,134,197,0.45), 0 10px 30px rgba(0,0,0,0.4); }
+/* Glow effects — reduced 60-70% */
+@utility glow-green { box-shadow: 0 0 8px rgba(152,202,63,0.15), 0 4px 12px rgba(0,0,0,0.3); }
+@utility glow-pink  { box-shadow: 0 0 8px rgba(232,80,80,0.15), 0 4px 12px rgba(0,0,0,0.3); }
+@utility glow-cyan  { box-shadow: 0 0 8px rgba(43,134,197,0.15), 0 4px 12px rgba(0,0,0,0.3); }
 
-/* Stat cards - now defined properly without recursive @apply */
+/* Stat cards */
 @utility stat-card {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid rgba(57, 255, 20, 0.25);
-  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid rgba(152,202,63,0.2);
+  background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.2s;
 
   &:hover {
-    border-color: rgba(57,255,20,0.55);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(57,255,20,0.15);
-    transform: translateY(-4px) scale(1.01);
+    border-color: rgba(152,202,63,0.35);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    transform: translateY(-3px) scale(1.005);
   }
 }
 
@@ -87,9 +84,9 @@ html, body, #root {
   letter-spacing: -0.04em;
 }
 
-/* Neon text glow */
+/* Text glow — subtle */
 @utility neon-text {
-  text-shadow: 0 0 8px rgba(255,60,172,0.6), 0 0 18px rgba(43,134,197,0.6);
+  text-shadow: 0 0 4px rgba(152,202,63,0.3);
 }
 
 /* Badge */
@@ -104,9 +101,9 @@ html, body, #root {
   font-size: 0.75rem;
   line-height: 1rem;
   border-radius: 9999px;
-  border: 1px solid rgba(57,255,20,0.6);
+  border: 1px solid rgba(152,202,63,0.4);
   background-color: rgba(0,0,0,0.30);
-  color: #faff00;
+  color: #F0C040;
   transition: background-color 0.2s;
 
   &:hover {
@@ -114,18 +111,10 @@ html, body, #root {
   }
 }
 
-/* Neon title with animation */
+/* Title — clean, no animation */
 @utility neon-title-green {
-  color: var(--color-neon-green);
-  text-shadow: 0 0 6px rgba(57,255,20,0.9),
-               0 0 12px rgba(57,255,20,0.7),
-               0 0 24px rgba(57,255,20,0.5);
-  animation: neonFloat 3s ease-in-out infinite;
-}
-
-@keyframes neonFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  color: #98CA3F;
+  font-weight: 700;
 }
 
 /* Premium inputs */
@@ -146,20 +135,19 @@ html, body, #root {
 
   &:focus {
     outline: none;
-    border-color: rgba(57,255,20,0.6);
+    border-color: rgba(152,202,63,0.5);
     background-color: rgba(255,255,255,0.1);
   }
 }
 
-/* Big glowing total display */
+/* Big total display */
 @utility total-glow {
   font-size: 2.35rem;
   font-weight: 800;
   line-height: 1;
-  background: linear-gradient(90deg, #39ff14, #faff00, #39ff14);
+  background: linear-gradient(90deg, #98CA3F, #F0C040, #98CA3F);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 30px rgba(57,255,20,0.5);
 }
 
 /* Progress bars */
@@ -202,9 +190,9 @@ html, body, #root {
   position: relative;
   overflow: hidden;
   border-radius: 1rem;
-  border: 1px solid rgba(57, 255, 20, 0.25);
-  background: linear-gradient(145deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.025) 100%);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid rgba(152,202,63,0.2);
+  background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -212,8 +200,8 @@ html, body, #root {
   transition: all 0.3s ease;
 
   &:hover {
-    border-color: rgba(255,60,172,0.4);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,60,172,0.15);
+    border-color: rgba(232,80,80,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   }
 }
 
@@ -229,16 +217,14 @@ html, body, #root {
   border: 1px solid;
 }
 
-.pay-efectivo    { background: rgba(57,255,20,0.15); border-color: rgba(57,255,20,0.5); color: #39ff14; }
+.pay-efectivo    { background: rgba(152,202,63,0.15); border-color: rgba(152,202,63,0.5); color: #98CA3F; }
 .pay-tarjeta     { background: rgba(43,134,197,0.15); border-color: rgba(43,134,197,0.5); color: #2b86c5; }
-.pay-transferencia { background: rgba(255,60,172,0.15); border-color: rgba(255,60,172,0.5); color: #ff3cac; }
+.pay-transferencia { background: rgba(232,80,80,0.15); border-color: rgba(232,80,80,0.5); color: #E85050; }
 
-/* Fix for dark theme select options: native <option> ignores the parent's
-   dark background and renders white-on-white until hovered. Applies to
-   every <select> in the app (all of them live on the dark/neon theme). */
+/* Fix for dark theme select options */
 select {
-  background-color: #0f172a; /* dark background */
-  color: #f1f5f9; /* light text */
+  background-color: #0f172a;
+  color: #f1f5f9;
 }
 
 select option {
@@ -246,7 +232,6 @@ select option {
   color: #f1f5f9;
 }
 
-/* When the select is focused, keep consistent */
 select:focus option {
   background-color: #1e2937;
   color: white;

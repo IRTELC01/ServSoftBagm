@@ -319,6 +319,23 @@ export default function ClientPortal() {
         </div>
       )}
 
+      {/* Apoya el desarrollo */}
+      <div className="mt-6 card-float p-5">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="flex-1 text-center sm:text-left">
+            <h3 className="text-sm font-medium text-neon-green mb-1">Apoya el desarrollo de ServSoftBagm</h3>
+            <p className="text-xs text-white/50">
+              Plataforma independiente en evolución. Si esta herramienta te resulta útil
+              y deseas apoyar su mantenimiento y crecimiento, puedes hacerlo
+              mediante una contribución voluntaria.
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-2 shrink-0">
+            <img src={BANK_QR_PATH} alt="QR BreB – Contribución voluntaria" className="w-20 h-20 object-contain" style={{ imageRendering: 'pixelated' }} />
+          </div>
+        </div>
+      </div>
+
       <div className="mt-6 text-center text-sm text-white/60">
         ¿Necesitas actualizar tu información o tienes dudas? Escríbenos al WhatsApp <span className="text-neon-green">301 504 5982</span>
       </div>

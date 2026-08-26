@@ -12,6 +12,7 @@ import WhatsAppButton from './components/WhatsAppButton'
 import Chatbot from './components/Chatbot'
 import ClientPortal from './pages/ClientPortal'
 import { BRAND_NAME, CONTACT_EMAIL, CONTACT_WHATSAPP } from './config'
+import { BANK_QR_PATH } from './config/bank'
 
 function Navbar() {
   return (
@@ -47,6 +48,22 @@ function Footer() {
             servsoftbagm@gmail.com
           </a>
           {CONTACT_WHATSAPP && <a href={`https://wa.me/${CONTACT_WHATSAPP}?text=Hola%20vi%20tu%20contacto%20en%20${encodeURIComponent(BRAND_NAME)}`} target="_blank" rel="noreferrer" className="neon-text text-neon-green hover:underline text-sm">WhatsApp</a>}
+        </div>
+      </div>
+
+      {/* Apoya el desarrollo */}
+      <div className="border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center gap-4 text-xs text-white/50">
+          <div className="flex-1 text-center sm:text-left">
+            <span className="text-neon-green font-medium">Apoya el desarrollo de {BRAND_NAME}</span>
+            <p className="mt-0.5">
+              Plataforma independiente en evolución. Si esta herramienta te resulta útil
+              y deseas apoyar su mantenimiento y crecimiento, puedes hacerlo mediante una contribución voluntaria.
+            </p>
+          </div>
+          <div className="bg-white rounded-xl p-2 shrink-0">
+            <img src={BANK_QR_PATH} alt="QR BreB – Contribución voluntaria" className="w-16 h-16 object-contain" style={{ imageRendering: 'pixelated' }} />
+          </div>
         </div>
       </div>
     </footer>
