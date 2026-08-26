@@ -56,7 +56,7 @@ services:
     name: servsoftbagm-web
     rootDir: apps/client
     buildCommand: npm ci && npm run build
-    staticPublishPath: apps/client/dist
+    staticPublishPath: dist
     autoDeploy: true
     envVars:
       # =====================================================
