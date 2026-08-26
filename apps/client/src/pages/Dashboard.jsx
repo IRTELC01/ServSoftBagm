@@ -207,6 +207,7 @@ export default function Dashboard() {
   const [iaResponse, setIaResponse] = useState(null)
   const [isAskingIA, setIsAskingIA] = useState(false)
   const [facturaSearch, setFacturaSearch] = useState('') // Filtro local para tabla compacta de facturas
+  const [qrState, setQrState] = useState('loading') // 'loading' | 'loaded' | 'error'
 
   // Cargar leads al montar el componente
   useEffect(() => {
@@ -612,19 +613,21 @@ export default function Dashboard() {
               <div className="flex flex-col items-center">
                 <h4 className="font-medium mb-2 text-sm text-white/80">Código QR para Pagos</h4>
                 <div className="border border-white/20 rounded-2xl p-2 bg-white/5">
-                  <img 
-                    src={BANK_QR_PATH} 
-                    alt="QR para transferencias bancarias" 
-                    className="w-48 h-48 object-contain rounded-xl"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.parentElement.innerHTML = 
-                        '<div class="w-48 h-48 flex items-center justify-center text-white/50 text-xs text-center leading-tight p-2">' +
-                        'Coloca tu QR en:<br/>' +
-                        '<span class="font-mono text-neon-cyan">public/assets/bank/QRBanco.jpeg</span>' +
-                        '</div>';
-                    }}
-                  />
+                  {qrState !== 'error' && (
+                    <img 
+                      src={BANK_QR_PATH} 
+                      alt="QR para transferencias bancarias" 
+                      className={`w-48 h-48 object-contain rounded-xl ${qrState === 'loading' ? '' : ''}`}
+                      onLoad={() => setQrState('loaded')}
+                      onError={() => setQrState('error')}
+                    />
+                  )}
+                  {qrState === 'error' && (
+                    <div className="w-48 h-48 flex items-center justify-center text-white/50 text-xs text-center leading-tight p-2">
+                      Coloca tu QR en:<br/>
+                      <span className="font-mono text-neon-cyan">public/assets/bank/QRBanco.jpeg</span>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs text-white/60 mt-2 text-center">Escanea para pagar</p>
               </div>
