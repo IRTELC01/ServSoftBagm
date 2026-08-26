@@ -61,7 +61,7 @@ function Footer() {
               y deseas apoyar su mantenimiento y crecimiento, puedes hacerlo mediante una contribución voluntaria.
             </p>
           </div>
-          <div className="bg-white rounded-xl p-2 shrink-0">
+          <div className="bg-white rounded-xl p-2 shrink-0 sm:mr-28">
             <img src={BANK_QR_PATH} alt="QR BreB – Contribución voluntaria" className="w-16 h-16 object-contain" style={{ imageRendering: 'pixelated' }} />
           </div>
         </div>
