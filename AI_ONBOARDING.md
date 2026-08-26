@@ -51,8 +51,9 @@ El frontend tiene un God Component real: `apps/client/src/pages/Dashboard.jsx`
 OK del usuario).
 
 No hay CI/CD automatizado más allá de lo que ofrezca el propio host de
-despliegue. La rama de trabajo actual (`chore/pre-deploy-hardening`) tiene
-**16 commits locales sin pushear** — ver sección 3 para el porqué.
+despliegue. La rama de trabajo (`chore/pre-deploy-hardening`) está
+**desplegada en producción**: Render (web + static) y Neon operativos desde
+2026-08-24 — estado completo y verificado en la sección 7.
 
 ---
 
@@ -119,19 +120,20 @@ Trabajo organizado en fases dentro de una auditoría de seguridad iniciada
   única función `savePhoto()` pensada para que migrar de disco local a un
   proveedor persistente (ej. Cloudinary) sea solo reescribir ese archivo.
 
-**Estado real de las 4 ramas (verificado esta sesión, `git fetch origin` +
-comparación de hashes):**
+**Estado de las ramas (2026-08-25, post-deploy):**
 
-| Rama | Commits vs `main` | Sync con `origin` |
-|---|---|---|
-| `main` | — | en sync |
-| `chore/auditoria-2026` | 0 adelante / 5 detrás | en sync |
-| `chore/pre-deploy-hardening` (actual) | **16 adelante** / 0 detrás | **diverge** — `origin` sigue en el commit de SSL de Postgres (mismo hash que `main` actual), todo el trabajo de endurecimiento de esta sesión y las anteriores está **solo local, sin pushear** |
-| `feature/secure-billing-2fa-monetizacion` | 1 adelante / 17 detrás | en sync |
+| Rama | Estado |
+|---|---|
+| `main` | base histórica |
+| `chore/auditoria-2026` | fusionada como base de pre-deploy |
+| `chore/pre-deploy-hardening` (actual) | **rama de producción** — endurecimiento + rebranding + fixes post-deploy; desplegada en Render |
+| `feature/secure-billing-2fa-monetizacion` | histórica |
 
-Esto es intencional, no un descuido: la regla vigente es no pushear
-`chore/pre-deploy-hardening` hasta resolver el bloqueo de WhatsApp OTP (ver
-sección 7).
+El push y deploy de esta rama fue **autorizado explícitamente por el
+propietario** para lanzar la demo (agosto 2026). La regla anti-push ligada al
+OTP quedó superada: hoy el flujo OTP funciona a nivel servidor/Make; solo
+pende del lado Meta (sección 7). Los pushes nuevos siguen requiriendo OK del
+propietario por regla general.
 
 Para el detalle línea por línea, ver el propio `git log` y `CLAUDE.md` (que
 también lleva bitácora de esta auditoría, más detallada que este documento).
@@ -166,9 +168,10 @@ también lleva bitácora de esta auditoría, más detallada que este documento).
    se reescribió el historial por eso, solo se consolidó la vista con
    mailmap. No confundir esto con la purga de datos bancarios (sección 3),
    que sí reescribió historial, por una razón distinta y mucho más seria.
-7. **No hacer push ni deploy de `chore/pre-deploy-hardening` hasta resolver
-   el bloqueo de WhatsApp OTP** (sección 7) — es la regla activa ahora
-   mismo, ver esa sección antes de proponer saltarla.
+7. **Push/deploy solo con autorización explícita del propietario.** La
+   demo ya está desplegada en Render+Neon (LIVE). Cualquier push nuevo
+   sigue necesitando OK. Fotografía definitiva del hito (2026-08-26):
+   `C:\Users\BagmDev\DevIRTELC01\Documentacion\HITO_SERVSOFTBAGM_2026_08_26.md`.
 
 ---
 
@@ -274,58 +277,49 @@ docker-compose.yml          — servicio "db" (Postgres local), volumen servsoft
 
 ---
 
-## 7. Próxima acción inmediata — desbloquear WhatsApp OTP
+## 7. Próxima acción inmediata — cierre de hito (2026-08-26)
 
-El despliegue (Render + Neon) está **completamente listo técnicamente** pero
-**bloqueado** por la integración de WhatsApp OTP — no se hace push ni deploy
-hasta resolver esto (regla 7 de la sección 4).
+> **Fuente única y completa:** `C:\Users\BagmDev\DevIRTELC01\Documentacion\HITO_SERVSOFTBAGM_2026_08_26.md`
+> + estado del día anterior `ESTADO_SERVSOFTBAGM_2026_08_25.md`
+> + dossier `META_COEXISTENCE_BLOQUEO_3015045982.md`.
+> Este resumen basta para no repetir investigación; los detalles viven ahí.
 
-**Ya hecho:**
-- Escenario en Make.com creado ("Integration Webhooks",
-  `us2.make.com/2670443/scenarios/5900302`), módulo Webhooks guardado (URL
-  en `_local/secretos/make-otp-webhook.txt`), módulo WhatsApp Business
-  Cloud agregado pero sin conexión guardada.
-- En Meta: Portfolio "Servsoftbagm" creado, número real 3015045982 (Tigo)
-  con WhatsApp Business instalado y perfil básico completo desde
-  **2026-08-09**. El usuario necesita seguir usando ese número desde el
-  celular además de la API, por eso el modo correcto es **Coexistence**, no
-  Regular.
+**Lo que YA funciona (no volver a diagnosticar):**
+- Demo desplegada: https://servsoftbagm-web.onrender.com (frontend) +
+  https://servsoftbagm-api.onrender.com (backend) + Neon conectada.
+- Login admin OK · Portal Cliente OK · OTP se genera, persiste en
+  `lead_otps` y se valida OK · CORS/Postgres/trust-proxy corregidos.
+- Render → webhook de Make funciona: payload `{phone, otp, ticket,
+  client_name, message}` verificado con webhook.site. Webhook activo:
+  **otp-servsoftbagm-v2** (el anterior fue borrado por inactividad — las
+  URLs viejas de Make mueren; siempre copiar la URL desde el módulo Custom
+  webhook actual).
 
-**Bloqueado, con causa raíz identificada:** tanto Coexistence como Regular
-fallan con *"Este número ya está registrado con una cuenta de WhatsApp"* al
-conectar desde Make/navegador. Meta impone un **período de espera de 7 días**
-desde que un número se instala en WhatsApp Business antes de habilitar
-Coexistence — el número se instaló el 2026-08-09, así que el bloqueo se
-levanta naturalmente **a partir del 2026-08-16**. La plantilla de mensaje de
-autenticación (categoría "Authentication" en Meta WhatsApp Manager) tiene la
-misma dependencia: no se puede crear/aprobar hasta que la cuenta esté
-correctamente conectada.
+**Lo que NO funciona:** el último salto del OTP — enviar el código por
+WhatsApp real. Causa única: Portfolio "Servsoftbgm", WABA `898040542954309`,
+Phone Number ID `1231921603341123`. Error: *"Este número de teléfono ya está
+registrado con una cuenta de WhatsApp"*. Meta NO envía SMS ni llega a
+verificar el número. Es el bloqueo de **Coexistence/migración** del número
+que vive en la app WhatsApp Business del celular. Business Verification
+INICIADA (RUT cargado), pendiente.
 
-**Próximo paso a probar (cuando se cumpla el plazo):** iniciar el flujo de
-Coexistence **desde la app del celular** (WhatsApp Business → Ajustes →
-Cuenta → "Plataforma empresarial"/"Business Platform"), no solo desde la
-ventana web de Meta — eso no se había probado todavía la última vez que se
-intentó.
+**Qué NO repetir (investigación ya pagada):**
+- No reintentar registro/embedded signup del número en bucle — límite 10
+  registros/72h (error `133016`); un intento limpio por sesión.
+- No buscar Application ID/QR/códigos históricos — nunca existieron.
+- No re-diagnosticar CORS, Postgres (`lead_otps`), ni el adaptador pg — ya
+  están corregidos y desplegados (commits `59c6cfa`, `58692d9`, `7247986`,
+  `d30a730`).
+- No reutilizar URLs antiguas del webhook de Make.
 
-**Después de resolver eso, en orden:**
-1. Crear la plantilla de mensaje de autenticación en Meta WhatsApp Manager.
-2. Cablear `MAKE_LEAD_OTP_WEBHOOK_URL` en `.env.example` y `render.yaml`
-   (verificado esta sesión: **todavía no existe en ningún lado del repo**,
-   ni servidor ni cliente ni `render.yaml` — es trabajo pendiente real, no
-   solo documentado como pendiente).
-3. Probar el envío real de OTP de punta a punta.
-4. Solo entonces: push de `chore/pre-deploy-hardening` a GitHub (los 16
-   commits locales pendientes, ver sección 3) + deploy en Render, usando la
-   `DATABASE_URL` de Neon ya guardada en `_local/secretos/`.
-
-**No se pierde nada mientras se espera:** Neon, el escenario de Make, el
-Portfolio de Meta y el número con WhatsApp Business instalado quedan
-intactos — no hay que repetir nada de lo ya hecho, solo esperar el plazo y
-retomar el flujo de Coexistence desde el celular.
-
-**No escribas ni pushees nada de despliegue sin confirmar primero que el
-bloqueo de Meta ya se resolvió realmente** (no solo que "ya pasaron 7
-días") — probar la conexión real antes de asumir que se puede avanzar.
+**Siguiente paso exacto (orden P1–P4):**
+1. **P1:** QR bancario visible en producción (decisión de hosting por propietario).
+2. **P2:** Completar módulo WhatsApp Business Cloud en Make (requiere P4).
+3. **P3:** Business Verification Meta (seguimiento del RUT).
+4. **P4:** Resolver Coexistence/migración del número desde la app del celular
+   (Plataforma empresas → "No compartir chats" → QR/código), un intento limpio
+   por sesión. Si falla 2 veces: Plan B número dedicado nuevo.
+- **Cadena de dependencias:** P4 → P2 → Prueba OTP WhatsApp real.
 
 ---
 
@@ -349,13 +343,13 @@ ramas para purgar el historial de verdad, verificar con búsquedas exhaustivas
 que no quedó rastro, y solo entonces hacer el force-push — más trabajo,
 pero sin nada "resuelto a medias" en la base de git.
 
-Lo mismo aplica al despliegue: aunque todo el trabajo técnico de Render +
-Neon está listo desde hace tiempo, el deploy sigue **deliberadamente
-pospuesto** porque el flujo de OTP por WhatsApp (verificación real de
-identidad de clientes) todavía no funciona de punta a punta. No se lanza
-con OTP roto, así como no se lanzó (ni se lanzará) con datos sensibles
-expuestos en el historial — aunque eso signifique posponer semanas el
-`git push` de `chore/pre-deploy-hardening`.
+Lo mismo aplica al despliegue: aunque había una regla antigua de "no lanzar
+sin OTP completo", la decisión del propietario (agosto 2026) fue **lanzar la
+demo pública** con el OTP funcionando a nivel servidor/Make y el acceso por
+WhatsApp real pendiente del lado Meta. La demo opera así de forma consciente
+y documentada; lo que NO se negocia es no ocultar ni maquillar el estado real
+frente a un cliente: el portal indica correctamente el estado del envío del
+código.
 
 **Pero ojo con el límite correcto de esto — es importante no confundirlo:**
 esto no es licencia para sobre-construir features que nadie pidió. Las

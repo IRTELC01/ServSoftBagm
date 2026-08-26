@@ -99,101 +99,86 @@ desactualizado — confía en el código, no en el doc.
 
 **Fase 1 completa.** Pendiente: OK explícito del usuario antes de iniciar Fase 2.
 
-## ⚠️ Despliegue — orden obligatorio
+## ✅ Despliegue — ESTADO REAL (2026-08-25)
 
-> **El despliegue SIEMPRE sale de una rama de fixes, NUNCA directamente de
-> decisiones sin verificar.** Ver estado real de `main` abajo.
+> **La demo ya está desplegada y funcionando en producción.** Fuente única y
+> completa: `C:\Users\BagmDev\DevIRTELC01\Documentacion\ESTADO_SERVSOFTBAGM_2026_08_25.md`
+> (fuera del repo, workspace-level). Resumen:
 
-Orden pendiente:
-1. **[EN CURSO]** Endurecer para producción en `chore/pre-deploy-hardening`
-   (partió de `chore/auditoria-2026`): `render.yaml` corregido a rutas
-   monorepo + Postgres/Neon + acceso cerrado por defecto, auto-login
-   inseguro eliminado del cliente, variables de deploy documentadas
-   (`.env.example`, `DEPLOY_RENDER.md`).
-2. **[COMPLETADO]** Resolver `main`: se hizo backup mirror completo
-   (`../ServSoftBagm-backup-pre-filter-repo`), se corrió `git filter-repo`
-   sobre las 4 ramas (purga de número de cuenta, cédula y `QRBanco.jpeg` del
-   historial completo — el nombre del titular se dejó intacto a propósito,
-   ver detalle en el historial de esta conversación), verificado con
-   búsquedas `-S`/`--objects` en cero resultados, y se hizo force-push de
-   `main`, `chore/auditoria-2026` y `chore/pre-deploy-hardening` a
-   `origin`. `feature/secure-billing-2fa-monetizacion` no necesitó push
-   (nunca tuvo el contenido filtrado). **Nota:** los datos ya estuvieron
-   públicos antes del force-push — si alguien clonó el repo antes de eso,
-   todavía los tiene.
-3. **[BLOQUEADO]** Desplegar (Render + Neon) — bloqueado por la integración
-   WhatsApp OTP, ver sección de abajo.
+1. **[COMPLETADO]** Endurecimiento en `chore/pre-deploy-hardening` (rama de
+   trabajo actual; push y deploy autorizados por el propietario para la demo).
+2. **[COMPLETADO]** Purga de historial bancario (`git filter-repo` + force-push,
+   backup mirror previo en `../ServSoftBagm-backup-pre-filter-repo`).
+3. **[COMPLETADO]** Desplegado en Render + Neon:
+   - Frontend: https://servsoftbagm-web.onrender.com (static site, gratis)
+   - Backend: https://servsoftbagm-api.onrender.com (web service free, spin-down 15 min)
+   - Neon conectada como Postgres (`DB_DRIVER=pg`), esquema auto-migrado por
+     `initSchema()` al arranque.
+   - Login admin funciona · Portal Cliente funciona · OTP se genera y valida OK.
+   - Fixes post-deploy aplicados y commiteados: CORS (normalización de
+     orígenes + `FRONTEND_ORIGIN`/`VITE_API_URL` fijados en `render.yaml`),
+     booleanos/fecha compatibles con Postgres en `lead_otps`, `await` faltantes
+     en el adaptador pg (flujo leads/OTP), `trust proxy` para express-rate-limit.
+   - Blueprint validado (el static site NO lleva campo `plan`).
 
-> ⚠️ **Antes de ir a producción en Render:** migrar el almacenamiento de
-> fotos de leads (`apps/server/services/photoStorage.js`) de disco local a
-> un proveedor persistente (ej. Cloudinary free tier) — el disco de Render
-> es efímero y las fotos subidas se perderían en cada redeploy. El módulo
-> ya está detrás de una interfaz (`savePhoto()`) pensada para que este
-> cambio sea solo reescribir ese archivo, sin tocar rutas ni frontend.
+> ⚠️ **Fotos de leads siguen en disco efímero** (`photoStorage.js`) — se
+> pierden en cada redeploy. Migrar a Cloudinary antes de clientes reales
+> (solo hay que reescribir ese archivo; interfaz `savePhoto()` ya existe).
+>
+> ⚠️ **QR bancario invisible en producción (P1):** `bank.ts` apunta a
+> `/assets/bank/QRBanco.jpeg`, pero ese archivo está gitignoreado a propósito
+> (nunca se versiona) → no existe en el build de Render → 404. Opciones:
+> alojarlo externamente, servirlo desde el backend, o decisión del propietario
+> de incluirlo (el QR codifica datos de cuenta).
 
-## ⚠️ Integración WhatsApp OTP — en curso
+## ⚠️ Integración WhatsApp OTP — servidor LISTO, Meta BLOQUEADA (2026-08-26, cierre de hito)
 
-> Bloqueante para el paso 3 de "Despliegue — orden obligatorio" (desplegar en
-> Render + Neon). No hacer push ni deploy hasta resolver esto.
+> El flujo OTP funciona de punta a punta EXCEPTO el último salto: enviar el
+> código por WhatsApp real. Fotografía completa del hito:
+> `C:\Users\BagmDev\DevIRTELC01\Documentacion\HITO_SERVSOFTBAGM_2026_08_26.md`.
+> Dossier detallado del bloqueo Meta:
+> `C:\Users\BagmDev\DevIRTELC01\Documentacion\META_COEXISTENCE_BLOQUEO_3015045982.md`.
 
-**Hecho:**
-- Escenario en Make.com creado: "Integration Webhooks"
-  (`us2.make.com/2670443/scenarios/5900302`), módulo Webhooks guardado con la
-  URL en `_local/secretos/make-otp-webhook.txt`, módulo WhatsApp Business
-  Cloud ("Send a Message") agregado pero sin conexión guardada aún.
-- En Meta: Portfolio "Servsoftbagm" creado. Número real 3015045982 (Tigo) con
-  la app WhatsApp Business instalada y perfil básico completo. El usuario
-  necesita seguir usando este número normal desde el celular además de la
-  API — por eso el modo correcto es **Coexistence**, no Regular.
+**Funcionando (verificado con webhook.site y Make):**
+- `/api/leads/verify` genera OTP, lo persiste en `lead_otps` y lo envía vía
+  webhook a Make (`MAKE_LEAD_OTP_WEBHOOK_URL`). Payload validado:
+  `{phone, otp, ticket, client_name, message}`.
+- Escenario Make "Integration Webhooks", webhook **otp-servsoftbagm-v2**
+  operativo (el anterior fue eliminado por inactividad — no reutilizar URLs viejas).
+- Portal Cliente muestra "WhatsApp enviado" y valida el OTP correctamente.
 
-**Bloqueado:** tanto en modo Regular como Coexistence, Meta devuelve *"Este
-número ya está registrado con una cuenta de WhatsApp"* al conectar desde
-Make/navegador.
+**Bloqueado en Meta (único bloqueo restante del OTP real):**
+- Portfolio "Servsoftbgm". WABA `1211100693873790` vacía (residuo); WABA
+  `898040542954309` contiene el número `+57 3015045982`, Phone Number ID
+  `1231921603341123`. Perfil completo (nombre/correo/dirección/categoría/web Render).
+- Business Verification INICIADA (RUT cargado), solicitud pendiente.
+- Conectar el número falla siempre con *"Este número de teléfono ya está
+  registrado con una cuenta de WhatsApp"*; Meta NO envía SMS ni llega a la
+  fase de verificación del número. Causa: Coexistence/migración del
+  número existente. NO insistir con registros repetidos (límite 10/72h, error 133016).
 
-**Próximo paso a probar:** iniciar el flujo de Coexistence DESDE la app del
-celular (WhatsApp Business → Ajustes → Cuenta → buscar "Plataforma
-empresarial"/"Business Platform"), no solo desde la ventana web de Meta.
+**Pendientes abiertos (orden P1–P4):**
+- **P1:** QR bancario visible en producción (`QRBanco.jpeg` gitignoreado, ausente del build).
+- **P2:** Completar módulo WhatsApp Business Cloud en Make (token System User, auth completa).
+- **P3:** Business Verification Meta (seguimiento del RUT).
+- **P4:** Resolver coexistence del `3015045982` (app celular → Plataforma empresas → QR/código).
+- **Cadena:** P4 → P2 → Prueba OTP WhatsApp real.
 
-**Después de resolver eso, en orden:**
-1. Crear la plantilla de mensaje categoría "Authentication" en Meta WhatsApp
-   Manager para el texto del OTP (necesaria porque el negocio inicia la
-   conversación, el cliente no escribe primero).
-2. Cablear `MAKE_LEAD_OTP_WEBHOOK_URL` en `.env.example` y `render.yaml`.
-3. Probar el envío real de OTP de punta a punta.
-4. Solo entonces: push de `chore/pre-deploy-hardening` a GitHub + deploy en
-   Render, usando la `DATABASE_URL` de Neon ya guardada en
-   `_local/secretos/neon-servsoftbagm.txt`.
-
-**No perdido:** Neon, el escenario de Make, el Portfolio de Meta y el número
-con WhatsApp Business instalado quedan intactos — no hay que repetir nada de
-lo ya hecho.
-
-### Fase pre-deploy — endurecimiento (EN CURSO en `chore/pre-deploy-hardening`)
+### Fase pre-deploy — endurecimiento (COMPLETADA y DESPLEGADA)
 1. ✅ `render.yaml`: `rootDir` corregido a `apps/server` / `apps/client`;
-   backend movido a Postgres/Neon (`DB_DRIVER=pg`, `DATABASE_URL` con
-   `sync: false`); `OPEN_ACCESS`/`VITE_OPEN_ACCESS` a `"false"`;
-   `DEFAULT_ADMIN_PASSWORD` sin valor por defecto (`sync: false`,
-   obligatorio manual); `MASTER_ENABLE="false"` explícito.
-2. ✅ Eliminado el auto-login inseguro (`admin`/`servsoft123`) de
-   `apps/client/src/App.jsx`; quitados los valores por defecto de
-   usuario/contraseña en `Login.jsx` y `Register.jsx`. El flujo manual de
-   `/login` sigue intacto.
-3. ✅ Documentación de variables de deploy actualizada en
-   `apps/server/.env.example`, `apps/client/.env.production.example` y
-   `DEPLOY_RENDER.md` (ya no recomienda `OPEN_ACCESS=true` ni credenciales
-   por defecto como flujo normal).
-4. ✅ SSL habilitado en el pool de Postgres (`db-pg.js`) para conectar con
-   Neon (condicionado a que el host no sea localhost, para no romper
-   Postgres local vía docker-compose).
-5. ✅ Bugs de QA manual encontrados y corregidos: `<option>` invisibles en
-   selects del tema oscuro; enlaces externos de relleno quitados de las
-   tarjetas de servicio (`Service.jsx`); Telemetría y Asistente IA
-   etiquetados como Beta/demo; `POST /api/leads/verify` estaba roto (500
-   siempre, variable `clientMessage` no definida) y el `PATCH /:id` de
-   leads tenía un handler duplicado inalcanzable que impedía guardar
-   imágenes — ambos corregidos en `routes/leads.js`. Subida de fotos de
-   evidencia construida de punta a punta (admin sube, cliente ve tras OTP)
-   — ver advertencia de storage arriba.
+   backend movido a Postgres/Neon (`DB_DRIVER=pg`); `OPEN_ACCESS`/
+   `VITE_OPEN_ACCESS="false"`; `DEFAULT_ADMIN_PASSWORD` manual;
+   `MASTER_ENABLE="false"` explícito; static site SIN campo `plan`
+   (Render 2026 lo rechaza); URLs de producción fijadas.
+2. ✅ Auto-login inseguro eliminado del cliente (App.jsx, Login.jsx, Register.jsx).
+3. ✅ Variables de deploy documentadas (`.env.example`, DEPLOY_RENDER.md).
+4. ✅ SSL Postgres condicionado a host no-localhost (Neon OK, compose local OK).
+5. ✅ Bugs de QA corregidos (selects oscuros, enlaces relleno, Beta/demo,
+   verify 500, PATCH duplicado) + fotos de evidencia punta a punta.
+6. ✅ Rebranding interno RunaWay→ServSoftBagm (30 rastros → 2 históricos,
+   commit `3396153`; ver `Documentacion/RUNAWAY_CLEANUP_REPORT.md` fuera del repo).
+7. ✅ Fixes producción: trust proxy rate-limit (`d30a730`), CORS + URLs
+   (`59c6cfa`), booleanos pg (`58692d9`), awaits adaptador pg (`7247986`).
 
 ### Fase 2 — NO ejecutar aún (pendiente de OK del usuario)
 Partir `apps/client/src/pages/Dashboard.jsx` (~1.121 líneas, God Component) en
@@ -209,6 +194,10 @@ Recorrer `docs/PRODUCTION_CHECKLIST.md` de cara a producción.
 
 ## Cómo continuar
 
-Trabajo actual vive en la rama `chore/auditoria-2026` (creada a partir de
-`main`, que coincidía con `origin/main` al momento de iniciar). Nada se ha
-pusheado. Antes de avanzar a Fase 2, se debe pedir OK explícito al usuario.
+Rama de trabajo y deploy: `chore/pre-deploy-hardening`. La demo está LIVE;
+los cambios nuevos siguen entrando por esta rama con push autorizado por el
+propietario. Fotografía definitiva del hito (2026-08-26):
+`C:\Users\BagmDev\DevIRTELC01\Documentacion\HITO_SERVSOFTBAGM_2026_08_26.md`.
+Fuente única del estado completo (Render/Neon/OTP/Make/Meta):
+`C:\Users\BagmDev\DevIRTELC01\Documentacion\ESTADO_SERVSOFTBAGM_2026_08_25.md`.
+Fases 2/3/4 siguen pendientes de OK explícito del usuario.

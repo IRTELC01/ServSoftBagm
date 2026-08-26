@@ -144,3 +144,24 @@ grok http 3000 (o el puerto real del backend) para probar WhatsApp Cloud.
 - **Próximo**: Cuando se desee, integrar Make.com/n8n para orquestar acciones automáticas basadas en las métricas de telemetría.
 - [Dashboard.jsx](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/client/src/pages/Dashboard.jsx)
 - [whatsapp.js](file:///c:/Users/Bernardo%20G%C3%B3mez/workspace/ServSoftBagm/ServSoftBagm/apps/server/routes/whatsapp.js)
+
+## Actualización 2026-08-25 — PRODUCCIÓN LIVE + estado OTP/Meta
+
+> **Fuente única y vigente:** `C:\Users\BagmDev\DevIRTELC01\Documentacion\ESTADO_SERVSOFTBAGM_2026_08_25.md`.
+> Este anexo corrige cualquier afirmación anterior de este documento.
+
+- **Demo desplegada:** frontend https://servsoftbagm-web.onrender.com ·
+  backend https://servsoftbagm-api.onrender.com · Neon conectada
+  (`DB_DRIVER=pg`). Login admin, Portal Cliente y flujo OTP servidor OK.
+- **OTP:** `/api/leads/verify` genera/persiste/valida el código; envío a Make
+  vía webhook `otp-servsoftbagm-v2` verificado con webhook.site (payload:
+  phone, otp, ticket, client_name, message). Pendiente solo el salto final:
+  módulo WhatsApp Business Cloud autenticado en Make + desbloquear el número
+  en Meta (Coexistence/migración — ver dossier del bloqueo).
+- **Meta:** Portfolio "Servsoftbagm"; WABA `898040542954309`; Phone Number ID
+  `1231921603341123`; perfil completo; Business Verification INICIADA (RUT
+  cargado). Bloqueo: "número ya registrado" sin SMS ni fase de verificación.
+- **Correcciones post-deploy ya aplicadas:** CORS, booleanos pg, awaits del
+  adaptador pg, trust proxy, blueprint static sin `plan`, rebranding RunaWay.
+- **Pendientes P1–P5:** QR bancario visible · OTP→WhatsApp real · auth módulo
+  WhatsApp Cloud en Make · coexistence del número · Business Verification.
