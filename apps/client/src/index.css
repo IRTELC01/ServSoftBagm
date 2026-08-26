@@ -236,3 +236,29 @@ select:focus option {
   background-color: #1e2937;
   color: white;
 }
+
+/* ============================================
+   AUTO-HIDE SUPPORT BAR
+   "Apoya el desarrollo" — hidden by default,
+   slides up on footer hover (desktop only).
+   Mobile: always visible.
+   ============================================ */
+.auto-hide-bar {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.footer-group:hover .auto-hide-bar {
+  max-height: 200px;
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .auto-hide-bar {
+    max-height: 200px;
+    opacity: 1;
+  }
+}

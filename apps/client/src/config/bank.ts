@@ -18,6 +18,7 @@ export interface BankTransferDetails {
   numeroCuenta: string;
   titular: string;
   cc: string;
+  llaveBreB: string;
   instrucciones?: string;
 }
 
@@ -27,6 +28,7 @@ export const BANK_TRANSFER: BankTransferDetails = {
   numeroCuenta: import.meta.env.VITE_BANK_ACCOUNT_NUMBER || '',
   titular: import.meta.env.VITE_BANK_HOLDER_NAME || '',
   cc: import.meta.env.VITE_BANK_HOLDER_ID || '',
+  llaveBreB: import.meta.env.VITE_BANK_BREB_KEY || '',
   instrucciones: import.meta.env.VITE_BANK_INSTRUCTIONS || 'Realiza la transferencia y envía el comprobante por WhatsApp.',
 };
 
