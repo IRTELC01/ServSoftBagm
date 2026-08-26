@@ -74,6 +74,27 @@ services:
       # false = obliga login (obligatorio en producción)
       - key: VITE_OPEN_ACCESS
         value: "false"
+
+      # QR Bancario — imagen alojada externamente.
+      # QRBanco.jpeg está gitignoreado y NO existe en el build de Render.
+      # Sube la imagen a un servicio (imgur, CDN, etc.) y pega la URL aquí.
+      # Si se omite, el Dashboard muestra fallback con instrucciones.
+      # - key: VITE_BANK_QR_URL
+      #   value: https://i.imgur.com/tuQRBanco.jpeg
+
+      # Datos bancarios (texto, NO imagen) — también sensibles, configurar manualmente.
+      # - key: VITE_BANK_NAME
+      #   value: TuBanco
+      # - key: VITE_BANK_ACCOUNT_TYPE
+      #   value: Ahorros
+      # - key: VITE_BANK_ACCOUNT_NUMBER
+      #   value: 000-000000-00
+      # - key: VITE_BANK_HOLDER_NAME
+      #   value: Nombre Apellido
+      # - key: VITE_BANK_HOLDER_ID
+      #   value: 00000000
+      # - key: VITE_BANK_INSTRUCTIONS
+      #   value: Realiza la transferencia y envía el comprobante por WhatsApp.
     routes:
       - type: rewrite
         source: /*

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { API_URL, resolvePhotoUrl } from '../api'
+import { BANK_TRANSFER, BANK_QR_PATH, BANK_TRANSFER_TEXT } from '../config/bank'
 
 export default function ClientPortal() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -283,6 +284,40 @@ export default function ClientPortal() {
         </a>
         <p className="text-xs text-white/50 mt-2">Tu factura está disponible una vez finalizado el servicio.</p>
       </div>
+
+      {/* Cómo pagar */}
+      {BANK_TRANSFER.numeroCuenta && (
+        <div className="mt-6 card-float p-5">
+          <h2 className="text-xl font-semibold mb-4">Cómo pagar</h2>
+          <div className="grid md:grid-cols-2 gap-6 items-start">
+            {/* QR */}
+            <div className="flex flex-col items-center">
+              <div className="bg-white rounded-2xl p-3 shadow-lg shadow-black/30">
+                <img
+                  src={BANK_QR_PATH}
+                  alt="QR BreB – Pago por transferencia"
+                  className="w-52 h-52 object-contain rounded-xl"
+                  style={{ imageRendering: 'pixelated' }}
+                />
+              </div>
+              <p className="text-xs text-white/50 mt-2 text-center">
+                Abre tu app bancaria → Escanear → Apunta al QR
+              </p>
+            </div>
+
+            {/* Datos de la cuenta */}
+            <div>
+              <h3 className="font-medium mb-3 text-sm text-white/80">Datos de la cuenta</h3>
+              <pre className="bg-black/40 p-4 rounded-xl text-sm whitespace-pre-wrap font-mono border border-white/10 min-h-[110px]">
+{BANK_TRANSFER_TEXT}
+              </pre>
+              <p className="text-xs text-white/50 mt-3 italic">
+                Realiza la transferencia y envía el comprobante por WhatsApp al <strong>301 504 5982</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="mt-6 text-center text-sm text-white/60">
         ¿Necesitas actualizar tu información o tienes dudas? Escríbenos al WhatsApp <span className="text-neon-green">301 504 5982</span>

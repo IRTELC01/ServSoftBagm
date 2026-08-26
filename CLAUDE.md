@@ -125,11 +125,12 @@ desactualizado — confía en el código, no en el doc.
 > pierden en cada redeploy. Migrar a Cloudinary antes de clientes reales
 > (solo hay que reescribir ese archivo; interfaz `savePhoto()` ya existe).
 >
-> ⚠️ **QR bancario invisible en producción (P1):** `bank.ts` apunta a
-> `/assets/bank/QRBanco.jpeg`, pero ese archivo está gitignoreado a propósito
-> (nunca se versiona) → no existe en el build de Render → 404. Opciones:
-> alojarlo externamente, servirlo desde el backend, o decisión del propietario
-> de incluirlo (el QR codifica datos de cuenta).
+> ⚠️ **QR bancario en producción (P1 — fix aplicado, falta deploy):** `bank.ts`
+> ahora lee `VITE_BANK_QR_URL` (env var) con fallback a
+> `/assets/bank/QRBanco.jpeg` (local). En Render, `QRBanco.jpeg` está
+> gitignoreado y no existe en el build →404. Fix: propietario sube QR a
+> servicio externo (imgur, CDN) y configura `VITE_BANK_QR_URL` en Render
+> dashboard. Raíz documentada: `Documentacion/P1_2_QR_ROOT_CAUSE.md`.
 
 ## ⚠️ Integración WhatsApp OTP — servidor LISTO, Meta BLOQUEADA (2026-08-26, cierre de hito)
 
@@ -158,7 +159,7 @@ desactualizado — confía en el código, no en el doc.
   número existente. NO insistir con registros repetidos (límite 10/72h, error 133016).
 
 **Pendientes abiertos (orden P1–P4):**
-- **P1:** QR bancario visible en producción (`QRBanco.jpeg` gitignoreado, ausente del build).
+- **P1:** QR bancario visible en producción — fix aplicado (`VITE_BANK_QR_URL` env var en `bank.ts`). Raíz documentada: `P1_2_QR_ROOT_CAUSE.md`. Falta: propietario sube QR a servicio externo + configura env var en Render.
 - **P2:** Completar módulo WhatsApp Business Cloud en Make (token System User, auth completa).
 - **P3:** Business Verification Meta (seguimiento del RUT).
 - **P4:** Resolver coexistence del `3015045982` (app celular → Plataforma empresas → QR/código).

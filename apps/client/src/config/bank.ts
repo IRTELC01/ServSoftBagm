@@ -2,16 +2,14 @@
  * Bank Transfer Configuration
  *
  * Configuración de cuenta para pagos por transferencia.
- * Esta información se muestra únicamente en el Panel Administrativo.
+ * Esta información se muestra en el Panel Administrativo y el Portal del Cliente.
  *
  * Los valores reales viven en variables de entorno (VITE_BANK_*), nunca en
  * este archivo, para que no queden datos personales/bancarios en el repo.
  * Configúralas en apps/client/.env (ver apps/client/.env.example).
  *
- * Principios aplicados:
- * - Datos de configuración centralizados (no dispersos en componentes)
- * - Fácil de actualizar sin tocar UI
- * - Separación clara entre datos y presentación
+ * El QR oficial (QRBreB_ServSoftBagm.jpeg) está en public/assets/
+ * (NO en bank/) para que se commitee y llegue al build de Render.
  */
 
 export interface BankTransferDetails {
@@ -33,14 +31,18 @@ export const BANK_TRANSFER: BankTransferDetails = {
 };
 
 /**
- * Ruta pública del código QR.
- * Archivo físico: apps/client/public/assets/bank/QRBanco.jpeg
+ * Ruta del código QR oficial BreB.
+ *
+ * Ubicación: apps/client/public/assets/QRBreB_ServSoftBagm.jpeg
+ * (fuera del directorio bank/ para evitar gitignore; se commitea y llega a Render).
+ *
+ * Override: VITE_BANK_QR_URL permite apuntar a una URL externa si se desea.
  */
-export const BANK_QR_PATH = '/assets/bank/QRBanco.jpeg' as const;
+export const BANK_QR_PATH =
+  import.meta.env.VITE_BANK_QR_URL || '/assets/QRBreB_ServSoftBagm.jpeg';
 
 /**
- * Texto formateado listo para mostrar en el Dashboard (para el <pre>).
- * Esto evita lógica de formateo en el componente de UI.
+ * Texto formateado listo para mostrar en el Dashboard y Portal del Cliente.
  */
 export const BANK_TRANSFER_TEXT = `Banco: ${BANK_TRANSFER.banco}
 Tipo de cuenta: ${BANK_TRANSFER.tipoCuenta}

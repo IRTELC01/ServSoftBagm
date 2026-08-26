@@ -599,7 +599,7 @@ export default function Dashboard() {
           {/* Datos Bancarios para Transferencias - Configuración limpia */}
           <div className="mb-8 card-float p-5 border border-white/15">
             <h3 className="text-lg font-semibold mb-4">Datos para Transferencias</h3>
-            <div className="grid md:grid-cols-2 gap-6 items-center">
+            <div className="grid md:grid-cols-2 gap-6 items-start">
               <div>
                 <h4 className="font-medium mb-2 text-sm text-white/80">Información de la Cuenta</h4>
                 <pre className="bg-black/40 p-4 rounded-xl text-sm whitespace-pre-wrap font-mono border border-white/10 min-h-[110px]">
@@ -611,25 +611,28 @@ export default function Dashboard() {
               </div>
 
               <div className="flex flex-col items-center">
-                <h4 className="font-medium mb-2 text-sm text-white/80">Código QR para Pagos</h4>
-                <div className="border border-white/20 rounded-2xl p-2 bg-white/5">
-                  {qrState !== 'error' && (
+                <h4 className="font-medium mb-3 text-sm text-white/80">Código QR BreB – Escanea para pagar</h4>
+                <div className="bg-white rounded-2xl p-3 shadow-lg shadow-black/30">
+                  {qrState !== 'error' ? (
                     <img 
                       src={BANK_QR_PATH} 
-                      alt="QR para transferencias bancarias" 
-                      className={`w-48 h-48 object-contain rounded-xl ${qrState === 'loading' ? '' : ''}`}
+                      alt="QR BreB – Pago por transferencia" 
+                      className="w-56 h-56 object-contain rounded-xl"
+                      style={{ imageRendering: 'pixelated' }}
                       onLoad={() => setQrState('loaded')}
                       onError={() => setQrState('error')}
                     />
-                  )}
-                  {qrState === 'error' && (
-                    <div className="w-48 h-48 flex items-center justify-center text-white/50 text-xs text-center leading-tight p-2">
-                      Coloca tu QR en:<br/>
-                      <span className="font-mono text-neon-cyan">public/assets/bank/QRBanco.jpeg</span>
+                  ) : (
+                    <div className="w-56 h-56 flex items-center justify-center text-black/50 text-xs text-center leading-tight p-3 bg-gray-100 rounded-xl">
+                      QR no disponible.<br/>
+                      Coloca el archivo en:<br/>
+                      <span className="font-mono text-blue-600">public/assets/QRBreB_ServSoftBagm.jpeg</span>
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-white/60 mt-2 text-center">Escanea para pagar</p>
+                <p className="text-xs text-white/50 mt-2 text-center">
+                  Abre tu app bancaria → Escanear → Apunta al QR
+                </p>
               </div>
             </div>
           </div>

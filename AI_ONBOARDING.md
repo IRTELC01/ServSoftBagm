@@ -313,7 +313,7 @@ INICIADA (RUT cargado), pendiente.
 - No reutilizar URLs antiguas del webhook de Make.
 
 **Siguiente paso exacto (orden P1–P4):**
-1. **P1:** QR bancario visible en producción (decisión de hosting por propietario).
+1. **P1:** QR bancario en producción — fix aplicado (`VITE_BANK_QR_URL` en `bank.ts`). Falta: propietario sube QR a servicio externo + configura env var en Render.
 2. **P2:** Completar módulo WhatsApp Business Cloud en Make (requiere P4).
 3. **P3:** Business Verification Meta (seguimiento del RUT).
 4. **P4:** Resolver Coexistence/migración del número desde la app del celular
